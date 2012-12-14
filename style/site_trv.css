@@ -1,0 +1,99 @@
+
+body {
+    background-color: #cfcfcf;
+    font-family:      Georgia, "Times New Roman", Times, serif;
+    font-size:        medium;
+    margin:           0px;
+}
+
+h1 {
+    font-size:        150%;
+}
+
+h1#mainHeader{
+    font-size: 150%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+h2 { font-size: 130%; }
+
+div#tableContainer {
+    display: table;
+    border-spacing: 10px;
+}
+
+div#tableRow {
+    display: table-row;
+}
+
+header{
+    background-color: #fefefe;
+    margin: 10px 10px 0px 10px;
+    height: 108px;
+}
+
+a:link {
+    color:            #b76666;
+    text-decoration:  none;
+}
+
+a:visited {
+    color:            #675c47;
+    text-decoration:  none;
+}
+
+li.selected {
+    background-color: #cfcfcf;
+}
+
+nav {
+    background-color: #fefefe;
+    margin: 10px 10px 0px 10px;
+}
+nav ul {
+    margin: 0px;
+    list-style-type: none;
+    padding: 5px 0px 5px 0px;
+}
+
+nav ul li {
+    display: inline;
+    padding: 5px 10px 5px 10px;
+    font-size: 130%;
+}
+
+section#searchFood {
+    display: table-cell;
+    height: 800px;
+    background-color: #fefefe;
+    width: 20%;
+    padding: 15px;
+    vertical-align: top;
+}
+
+section#consumedToday{
+    display: table-cell;
+    height: 800px;
+    background-color: #fefefe;
+    padding: 15px;
+    vertical-align: top
+}
+
+aside{
+    display: table-cell;
+    height: 800px;
+    background-color: #fefefe;
+    padding: 15px;
+    vertical-align: top
+}
+
+footer {
+    background-color: #fefefe;
+    color: #000000;
+    text-align:       center;
+    padding:          15px;
+    margin: 0px 10px 10px 10px;
+    font-size:        90%;
+}
