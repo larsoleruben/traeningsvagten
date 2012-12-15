@@ -8,8 +8,13 @@
     <meta charset="utf-8">
 </head>
 <body>
+<div id="all">
     <header id="header">
-        <h1 id="mainHeader">Træningsvagten & Kalorievagten</h1>
+        <div id="box1"></div>
+        <div id="box2"></div>
+        <h1 id="head1">Træningsvagten</h1>
+        <h1 id="head2">Kalorievagten</h1>
+        <img src="">
     </header>
     <nav id="mainMenu">
         <ul>
@@ -23,11 +28,24 @@
         <div id="tableRow">
             <section id="searchFood">
                 <h2>Hvad har du spist</h2>
-                <input id="search" type="text" size="80px" name="searchField" placeholder="Skriv hvad du leder efter her">
+                <input id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her">
+                <p>
+                    <label id="consumedLabel">Vælg og klik eller dobbeltklik</label>
+                    <br><br>
+                    <textarea id="result" rows="20" cols="33">Test</textarea>
+                </p>
             </section>
             <section id="consumedToday">
-                <h2>Hvad har du spist i dag den </h2>
-                <input id="datepicker" type="text" name="searchField" placeholder="Skriv dato her">
+                <h2>Hvad har du spist i dag</h2>
+                <form id="dailyConsumption" name="daily">
+                    Dato:&nbsp;
+                    <input id="datepicker" type="text" name="searchField" placeholder="Skriv dato her"/>
+                    <p>
+                        <label id="totalLabel">Spist i dag :-)</label>
+                        <br><br>
+                        <textarea id="totalConsumed" rows="20" cols="33">Test</textarea>
+                    </p>
+                </form>
             </section>
             <aside id="consumptionInfo">
                 <h2>Info om hvad der er sket i dag</h2>
@@ -43,6 +61,6 @@
     <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-1.8.3.js"></script>
     <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="scripts/site_trv.js"></script>
-
+</div>
 </body>
 </html>

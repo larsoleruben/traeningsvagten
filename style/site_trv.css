@@ -10,12 +10,59 @@ h1 {
     font-size:        150%;
 }
 
-h1#mainHeader{
+#head1{
     font-size: 150%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
+    position: absolute;
+    top: 30px;
+    left: 30px;
 }
+
+#head2{
+    font-size: 150%;
+    position: absolute;
+    top: 30px;
+    left: 285px;
+}
+
+#box1{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 230px;
+    height: 88px;
+    background-color: #efe5d0;
+    transition: transform 1s;
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    -o-transition: -o-transform 1s;
+    -ms-transition: ms-transform 1s;
+}
+
+#box2{
+    position: absolute;
+    top: 20px;
+    left: 260px;
+    width: 230px;
+    height: 88px;
+    background-color: #efe5d0;
+    transition: transform 1s;
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    -o-transition: -o-transform 1s;
+    -ms-transition: ms-transform 1s;
+}
+
+
+
+#box1:hover, #box2:hover{
+    transform: rotate(10deg);
+    -webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -o-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+}
+
+
 
 h2 { font-size: 130%; }
 
@@ -66,27 +113,27 @@ nav ul li {
 
 section#searchFood {
     display: table-cell;
-    height: 800px;
     background-color: #fefefe;
     width: 20%;
     padding: 15px;
     vertical-align: top;
+    height: 700px;
 }
 
 section#consumedToday{
     display: table-cell;
-    height: 800px;
     background-color: #fefefe;
     padding: 15px;
-    vertical-align: top
+    vertical-align: top;
+    height:  700px;
 }
 
 aside{
     display: table-cell;
-    height: 800px;
     background-color: #fefefe;
     padding: 15px;
-    vertical-align: top
+    vertical-align: top;
+    height: 700px;
 }
 
 footer {
@@ -96,4 +143,9 @@ footer {
     padding:          15px;
     margin: 0px 10px 10px 10px;
     font-size:        90%;
+}
+
+.form_pad{
+    padding-left: 15px;
+    padding-right: 15px;
 }
