@@ -34,6 +34,14 @@ h1 {
     z-index: 1;
 }
 
+#loginFB{
+    font-size: 150%;
+    position: relative;
+    top: -245px;
+    left: 800px;
+    z-index: 1;
+}
+
 #box1{
     position: relative;
     top: -78px;

@@ -8,11 +8,17 @@
 
 $(document).ready(function()    {
     //add the datepicker to the consumed day
+    var dag = new Date();
+    $('#datepicker').val(dag.getDate()+'/'+dag.getMonth()+'/'+dag.getFullYear());
     $("#datepicker").datepicker();
 
-
+    //get the food search
     $('#search').change(function(){
         queryFood( $('#search').val() );
+    });
+
+    $('#searchBtn').click(function(){
+        queryFood($('#search').val());
     });
 
     function queryFood( searchString ){
