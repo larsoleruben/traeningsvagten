@@ -9,16 +9,15 @@
 </head>
 <body>
 <div id="all">
-    <header id="header">
-        <h1 id="head1">Træningsvagten</h1>
-        <h1 id="head2">Kalorievagten</h1>
-        <div id="box1"></div>
-
-        <div id="box2"></div>
+    <header id="header" class="roundConers">
+        <h1 id="head1">Kalorievagten</h1>
+        <h1 id="head2">Træningsvagten</h1>
+        <div id="box1" class="roundConers"></div>
+        <div id="box2" class="roundConers"></div>
 
         <img src="">
     </header>
-    <nav id="mainMenu">
+    <nav id="mainMenu" class="roundConers">
         <ul>
             <li><a href="">Dashboard</a></li>
             <li class="selected"><a href="">Food</a></li>
@@ -28,40 +27,46 @@
 
     <div id="tableContainer">
         <div id="tableRow">
-            <section id="searchFood">
+            <section id="searchFood" class="roundConers">
 
                 <h2>Hvad har du spist</h2>
 
                 <input id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her">
+                <button id="searchBtn">Find</button>
                 <p>
-                    <label id="consumedLabel">Vælg og klik eller dobbeltklik</label>
+                    <label id="consumedLabel">Vælg og dobbeltklik for at tilføje</label>
                     <br><br>
-                    <textarea id="result" rows="20" cols="33">Test</textarea>
+                    <select id="result" name="rtResult" multiple="multiple" >
+
+                    </select>
+                    <button id="addButton">Tilføj til dag</button>
                 </p>
 
             </section>
-            <section id="consumedToday">
+            <section id="consumedToday" class="roundConers">
                 <h2>Alt hvad du har spist idag</h2>
 
                 <form id="dailyConsumption" name="daily">
-                    Dato:&nbsp;
+                    Dato: &nbsp;
                     <input id="datepicker" type="text" name="searchField" placeholder="Skriv dato her"/>
                     <p>
                         <label id="totalLabel">Spist i dag :-)</label>
                         <br><br>
-                        <textarea id="totalConsumed" rows="20" cols="33">Test</textarea>
+                        <select id="totalConsumed" multiple="multiple" name="rtConsumed"></select>
+                        <button id="saveDayButton">Gem/Opdater dag</button>
                     </p>
+
                 </form>
 
             </section>
-            <aside>
+            <aside class="roundConers">
 
                 <h2>Information og total indtag</h2>
             </aside>
         </div>
     </div>
-    <footer>
-        &copy; 2012, Starbuzz Coffee
+    <footer class="roundConers">
+        &copy; 2012, Kalorievagten v. Lars Christoffersen
         <br>
         All trademarks and registered trademarks appearing on
         this site are the property of their respective owners.
