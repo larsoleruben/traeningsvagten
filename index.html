@@ -9,13 +9,12 @@
     <link rel="stylesheet" type="text/css" href="style/site_trv.css">
 </head>
 <body>
-<div id="dialog-form" title="Create new user">
-    <p class="validateTips">All form fields are required.</p>
+<div id="dialog-form" title="Tilføj til dag">
+    <p id="popTextAdd">Skriv hvor mange gram af:</p>
 
     <form>
         <fieldset>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all"/>
+            <input type="text" name="amount" id="amount" class="text ui-widget-content ui-corner-all"/>
         </fieldset>
     </form>
 </div>
@@ -43,24 +42,24 @@
 
                 <h2>Hvad har du spist</h2>
 
-                <input class="sections" id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her">
+                <input class="sections" id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her"/>
                 <button id="searchBtn">Find</button>
                 <p>
                     <label id="consumedLabel">Vælg og dobbeltklik for at tilføje</label>
                     <br><br>
                     <select id="result" name="rtResult" multiple="multiple" >
                     </select>
-                    <button id="create-user">Tilføj til dag</button>
+                    <button id="addSelected">Tilføj til dag</button>
                 </p>
             </section>
             <section id="consumedToday" class="roundConers">
                 <h2>Alt hvad du har spist idag</h2>
 
                 <form id="dailyConsumption" name="daily">
-                    Dato: &nbsp;
-                    <input class="sections" id="datepicker" type="text" name="searchField" placeholder="Skriv dato her"/>
+                    <label id="dp" for="datepicker">Dato</label>
+                    <input class="sections" id="datepicker" type="text" name="searchField"/>
                     <p>
-                        <label id="totalLabel">Spist i dag :-)</label>
+                        <label id="totalLabel">Spist i dag</label>
                         <br><br>
                         <select id="totalConsumed" multiple="" name="rtConsumed"></select>
                         <button id="saveDayButton">Gem/Opdater dag</button>

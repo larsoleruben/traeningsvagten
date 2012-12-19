@@ -11,12 +11,16 @@ $(document).ready(function () {
     $(function () {
         $("#dialog-form").dialog({
             autoOpen:false,
-            height:300,
-            width:350,
+            height:250,
+            width:250,
             modal:true,
             buttons:{
                 "Tilføj:":function () {
 
+                    $('#totalConsumed')
+                        .append($("<option></option>")
+                        .attr("value", $("#result option:selected").val())
+                        .text($("#result option:selected").text()));
                     $(this).dialog("close");
 
                 },
@@ -25,8 +29,11 @@ $(document).ready(function () {
                 }
             }
         });
-        $("#create-user").button()
+        $("#addSelected").button()
             .click(function () {
+                //change the text in the popup dialog
+                $('p#popTextAdd').html( "Skriv hvor mange gram af:<br>" + $("#result option:selected").text() );
+                //open the dialog
                 $("#dialog-form").dialog("open");
             });
     });
@@ -47,7 +54,9 @@ $(document).ready(function () {
     $('#saveDayButton').button();
 
     $("#result").dblclick(function () {
-        //alert($("#result option:selected").val() + " " + $("#result option:selected").text());
+        //change the text in the popup dialog
+        $('p#popTextAdd').html( "Skriv hvor mange gram af:<br>" + $("#result option:selected").text() );
+        //open the dialog
         $("#dialog-form").dialog("open");
     });
 
@@ -67,8 +76,6 @@ $(document).ready(function () {
         }
 
     }
-
-
 });
 
 
@@ -89,7 +96,7 @@ function updateFood(foodValues) {
     }
 }
 
-/*
- * test code for finding food items, with associated values
- * */
+
+
+
 
