@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+
     <!--This is a first attempt of some html5 application-->
     <title>Træningsvagten/Kalorievagten</title>
     <link rel="stylesheet" type="text/css" href="scripts/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css">
     <link rel="stylesheet" type="text/css" href="style/site_trv.css">
-    <meta charset="utf-8">
 </head>
 <body>
+<div id="dialog-form" title="Create new user">
+    <p class="validateTips">All form fields are required.</p>
+
+    <form>
+        <fieldset>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all"/>
+        </fieldset>
+    </form>
+</div>
+
 <div id="all">
+
     <header id="header" class="roundConers">
         <h1 id="head1">Kalorievagten</h1>
         <h1 id="head2">Træningsvagten</h1>
         <div id="box1" class="roundConers"></div>
         <div id="box2" class="roundConers"></div>
         <h1 id="loginFB">Log in with Facebook</h1>
-
-        <img src="">
     </header>
     <nav id="mainMenu" class="roundConers">
         <ul>
@@ -32,28 +43,26 @@
 
                 <h2>Hvad har du spist</h2>
 
-                <input id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her">
+                <input class="sections" id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her">
                 <button id="searchBtn">Find</button>
                 <p>
                     <label id="consumedLabel">Vælg og dobbeltklik for at tilføje</label>
                     <br><br>
                     <select id="result" name="rtResult" multiple="multiple" >
-
                     </select>
-                    <button id="addButton">Tilføj til dag</button>
+                    <button id="create-user">Tilføj til dag</button>
                 </p>
-
             </section>
             <section id="consumedToday" class="roundConers">
                 <h2>Alt hvad du har spist idag</h2>
 
                 <form id="dailyConsumption" name="daily">
                     Dato: &nbsp;
-                    <input id="datepicker" type="text" name="searchField" placeholder="Skriv dato her"/>
+                    <input class="sections" id="datepicker" type="text" name="searchField" placeholder="Skriv dato her"/>
                     <p>
                         <label id="totalLabel">Spist i dag :-)</label>
                         <br><br>
-                        <select id="totalConsumed" multiple="multiple" name="rtConsumed"></select>
+                        <select id="totalConsumed" multiple="" name="rtConsumed"></select>
                         <button id="saveDayButton">Gem/Opdater dag</button>
                     </p>
 
