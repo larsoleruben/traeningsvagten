@@ -198,3 +198,21 @@ button {
 #datapicker {
     disabled: disabled;
 }
+
+table#consumedTable {
+    caption-side: bottom;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: thin solid #696969;
+    border-collapse: collapse;
+}
+
+td, th {
+    border:  thin dotted gray;
+    padding: 5px;
+}
+
+caption {
+    font-style: italic;
+    padding-top: 8px;
+}

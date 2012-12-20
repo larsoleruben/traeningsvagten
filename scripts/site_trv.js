@@ -7,7 +7,18 @@
  */
 
 $(document).ready(function () {
-    //add the datepicker to the consumed day
+
+
+    /* Start Global Declarations */
+
+    var dag = new Date();
+    var consumed = [];  //array to hold daily consumption of food
+
+    /*End Global Declarations*/
+
+
+    /*The pop up dialog modal form A lot of trouble to get this looking right, must be at the top*/
+
     $(function () {
         $("#dialog-form").dialog({
             autoOpen:false,
@@ -21,6 +32,10 @@ $(document).ready(function () {
                         .append($("<option></option>")
                         .attr("value", $("#result option:selected").val())
                         .text($("#result option:selected").text()));
+                    var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val() );
+                    consumed.push(objDC );
+                    //$("#consumedTable > tbody").append("<tr><td>"+ objDC.food_id  + "</td><td>" + objDC.food_name +"</td><td>"+ objDC.food_amount + "</td></tr>" );
+                    updateConsumedTbl();
                     $(this).dialog("close");
 
                 },
@@ -38,7 +53,10 @@ $(document).ready(function () {
             });
     });
 
-    var dag = new Date();
+    /*End modal popup form*/
+
+
+
     $('#datepicker').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
     $("#datepicker").datepicker();
 
@@ -60,7 +78,7 @@ $(document).ready(function () {
         $("#dialog-form").dialog("open");
     });
 
-
+    /*Start JSONP to get food values from the other site*/
     function queryFood(searchString) {
         var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetFoodInfoJson?nameLike=" + searchString +
             "&random=" + (new Date()).getTime();
@@ -74,7 +92,23 @@ $(document).ready(function () {
         } else {
             head.replaceChild(newScriptElement, oldScriptElement);
         }
+    }
 
+    /*function to update the total consumed table*/
+    function updateConsumedTbl(){
+        var totAmount = 0;
+        for( var i = 0; i < consumed.length; i++){
+             totAmount = totAmount + parseInt(consumed[i].food_amount);
+        }
+        $('#totalAmount').html(totAmount.toString());
+    }
+
+
+    /* object to contain all the stuff from one days consumption. */
+    function objDailyConsumed( food_id, food_name, food_amount ){
+        this.food_id = food_id;
+        this.food_name = food_name;
+        this.food_amount = food_amount;
     }
 });
 
