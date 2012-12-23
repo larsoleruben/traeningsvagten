@@ -220,8 +220,8 @@ caption {
 #underConstruction {
     position: fixed;
     padding: 5px;
-    top: 200px;
-    left: 700px;
+    top: 100px;
+    left: 600px;
     background-color: red;
     -webkit-transform: rotate(45deg);
     z-index: 2;
