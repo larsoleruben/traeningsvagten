@@ -34,6 +34,8 @@ $(document).ready(function () {
 
     /*End Global Declarations*/
 
+    $( document ).tooltip();
+
     $('#search').focus();
 
     $("#dialog-form").dialog({
@@ -112,7 +114,7 @@ $(document).ready(function () {
 
             getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
             $('#dialog-form').dialog("close");
-            $('#search').focus();
+            $('#search').focus().val("");
         }
 
     });
@@ -126,29 +128,14 @@ $(document).ready(function () {
 
     $("#result").dblclick(function () {
         openDialogCust();
-        /*
-        //change the text in the popup dialog
-        $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
-        //open the dialog
-        $('#amount').val("");
-        $("#dialog-form").dialog("open");
-        */
     });
 
     $("#result").keypress(function(e){
 
         if(e.keyCode == $.ui.keyCode.ENTER ){
             openDialogCust();
-            /*
-            //change the text in the popup dialog
-            $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
-            //open the dialog
-            $('#amount').val("");
-            $("#dialog-form").dialog("open");
-            */
         }
     });
-
 
     //Remove the selected objects by doublecliking
     $('#totalConsumed').dblclick(function () {

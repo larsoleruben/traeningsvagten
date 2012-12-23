@@ -46,9 +46,8 @@
                 <input class="sections" id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her"/>
                 <button id="searchBtn">Find</button>
                 <p>
-                    <label id="consumedLabel">Vælg og dobbeltklik for at tilføje</label>
                     <br><br>
-                    <select id="result" name="rtResult" multiple="multiple" >
+                    <select id="result" name="rtResult" multiple="multiple" title="Dobbelt-klik eller enter den valgte option for at tilføje eller brug knap">
                     </select>
                     <button id="addSelected">Tilføj til dag</button>
                 </p>
@@ -62,7 +61,7 @@
                     <p>
                         <label id="totalLabel">Spist i dag</label>
                         <br><br>
-                        <select id="totalConsumed" multiple="" name="rtConsumed"></select>
+                        <select id="totalConsumed" multiple="" name="rtConsumed" title="Dobbelt-klik for at fjerne fra listen"></select>
                         <button id="saveDayButton">Gem/Opdater dag</button>
                     </p>
 
