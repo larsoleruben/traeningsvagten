@@ -34,12 +34,40 @@ $(document).ready(function () {
 
     /*End Global Declarations*/
 
+    /*initialize visibility setting*/
+    $('#personalDetails').hide();
+    $('#measurements').hide();
+    $('#weigtGraph').hide();
+
+
+
     $( document ).tooltip();
 
     $('#search').focus();
 
+    $('#dashboard').click(function(){
+        $('#searchFood').hide();
+        $('#consumedToday').hide();
+        $('#tableDigesting').hide();
+        $('#personalDetails').show();
+        $('#measurements').show();
+        $('#weigtGraph').show();
+
+
+    });
+
+    $('#food').click(function(){
+        $('#searchFood').show();
+        $('#consumedToday').show();
+        $('#tableDigesting').show();
+        $('#personalDetails').hide();
+        $('#measurements').hide();
+        $('#weigtGraph').hide();
+    });
+
     $("#dialog-form").dialog({
         autoOpen:false,
+        hide: "explode",
         height:300,
         width:250,
         modal:true,
