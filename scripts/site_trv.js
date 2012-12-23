@@ -34,6 +34,8 @@ $(document).ready(function () {
 
     /*End Global Declarations*/
 
+    $('#search').focus();
+
     $("#dialog-form").dialog({
         autoOpen:false,
         height:300,
@@ -45,7 +47,8 @@ $(document).ready(function () {
                  * Must add already present foodid's to the foodid which is alredy in the list. This is important, otherwise
                  * removal leads to negative numbers and user might not get the result whished for.
                  * */
-                if (checkInput($('#amount').val(), "Num")) {
+
+                 if (checkInput($('#amount').val(), "num")) {
                     var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
                     $('#totalConsumed')
                         .append($("<option></option>")
@@ -58,23 +61,24 @@ $(document).ready(function () {
 
                     var dateString = $('#datepicker').val().split("/");
                     getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
+                    $('#search').focus().val("");
                     $(this).dialog("close");
                 }
+
+
 
             },
             Cancel:function () {
                 $('.validateTips').html("");
+                $('#search').focus().val("");
                 $(this).dialog("close");
             }
         }
     });
+
     $("#addSelected").button()
         .click(function () {
-            //change the text in the popup dialog
-            $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
-            //open the dialog
-            $('#amount').val("");
-            $("#dialog-form").dialog("open");
+            openDialogCust();
         });
 
 
@@ -89,8 +93,11 @@ $(document).ready(function () {
         queryFood($('#search').val());
     });
     //Add the food by hitting enter.
-    $('#amount').change(function () {
-        if (checkInput($('#amount').val(), "num" )) {
+
+
+    $('#amount').keypress(function(e){
+
+        if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num" ) ) {
             var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
             $('#totalConsumed')
                 .append($("<option></option>")
@@ -104,23 +111,42 @@ $(document).ready(function () {
             var dateString = $('#datepicker').val().split("/");
 
             getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
-
             $('#dialog-form').dialog("close");
+            $('#search').focus();
         }
+
     });
 
     $('#searchBtn').button().click(function () {
         queryFood($('#search').val());
+        $('#result').focus();
     });
 
     $('#saveDayButton').button();
 
     $("#result").dblclick(function () {
+        openDialogCust();
+        /*
         //change the text in the popup dialog
         $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
         //open the dialog
         $('#amount').val("");
         $("#dialog-form").dialog("open");
+        */
+    });
+
+    $("#result").keypress(function(e){
+
+        if(e.keyCode == $.ui.keyCode.ENTER ){
+            openDialogCust();
+            /*
+            //change the text in the popup dialog
+            $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
+            //open the dialog
+            $('#amount').val("");
+            $("#dialog-form").dialog("open");
+            */
+        }
     });
 
 
@@ -189,6 +215,14 @@ $(document).ready(function () {
         this.food_name = food_name;
         this.food_amount = food_amount;
     }
+
+    function openDialogCust(){
+        //change the text in the popup dialog
+        $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
+        //open the dialog
+        $('#amount').val("");
+        $("#dialog-form").dialog("open");
+    }
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
@@ -230,6 +264,7 @@ function updateFood(foodValues) {
             .attr("value", singleObject.FoodId)
             .text(singleObject.DanName));
     }
+    $('#result:first').focus();
 }
 
 
