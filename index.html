@@ -21,14 +21,14 @@
 
 <div id="all">
 
-    <header id="header" class="roundConers">
+    <header id="header" class="roundCorners">
         <h1 id="head1">Kalorievagten</h1>
         <h1 id="head2">Træningsvagten</h1>
-        <div id="box1" class="roundConers"></div>
-        <div id="box2" class="roundConers"></div>
+        <div id="box1" class="roundCorners"></div>
+        <div id="box2" class="roundCorners"></div>
         <h1 id="loginFB">Log in with Facebook</h1>
     </header>
-    <nav id="mainMenu" class="roundConers">
+    <nav id="mainMenu" class="roundCorners">
         <ul>
             <li><a href="">Dashboard</a></li>
             <li class="selected"><a href="">Food</a></li>
@@ -38,7 +38,7 @@
 
     <div id="tableContainer">
         <div id="tableRow">
-            <section id="searchFood" class="roundConers">
+            <section id="searchFood" class="roundCorners">
 
                 <h2>Hvad har du spist</h2>
 
@@ -52,7 +52,7 @@
                     <button id="addSelected">Tilføj til dag</button>
                 </p>
             </section>
-            <section id="consumedToday" class="roundConers">
+            <section id="consumedToday" class="roundCorners">
                 <h2>Alt hvad du har spist idag</h2>
 
                 <form id="dailyConsumption" name="daily">
@@ -68,7 +68,7 @@
                 </form>
 
             </section>
-            <aside class="roundConers">
+            <aside class="roundCorners">
                 <h2>Information og total indtag</h2>
                 <table id="consumedTable">
                     <caption>
@@ -81,68 +81,73 @@
                     </tr>
                     <tr>
                         <td>Energi </td>
-                        <td>0</td>
+                        <td id="energy">0</td>
                         <td>kJ</td>
                     </tr>
                     <tr>
                         <td>Fedt</td>
-                        <td>0</td>
+                        <td id="fat">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Kulhydrater</td>
-                        <td>0</td>
+                        <td id="carbohydrates">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Protein</td>
-                        <td>0</td>
+                        <td id="protein">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Alkohol</td>
-                        <td>0</td>
+                        <td id="alcohol">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Fibre</td>
-                        <td>0</td>
+                        <td id="fiber">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
-                        <td>Kollesterol</td>
-                        <td>0</td>
+                        <td>Cholesterol</td>
+                        <td id="cholesterol">0</td>
                         <td>milli-gram</td>
                     </tr>
                     <tr>
                         <td>Mættede fedtsyrer</td>
-                        <td>0</td>
+                        <td id="satfat">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Monoumætt. fedtsyrer</td>
-                        <td>0</td>
+                        <td id="monounsatfat">0</td>
                         <td>gram</td>
                     </tr>
                     <tr>
                         <td>Natrium</td>
-                        <td>0</td>
+                        <td id="sodium">0</td>
                         <td>milli-gram</td>
                     </tr>
                     <tr>
                         <td>Kalium</td>
-                        <td>0</td>
+                        <td id="potassium">0</td>
                         <td>milli-gram</td>
                     </tr>
                     <tr>
                         <td>Magnesium</td>
-                        <td>0</td>
+                        <td id="magnesium">0</td>
                         <td>micro-gram</td>
                     </tr>
                     <tr>
                         <td>Jern</td>
-                        <td>0</td>
+                        <td id="iron">0</td>
                         <td>micro-gram</td>
+                    </tr>
+                    <tr>
+                        <td>Vand</td>
+                        <td id="water">0</td>
+                        <td>gram</td>
                     </tr>
                     <tr>
                         <td>Total mængde</td>
@@ -154,7 +159,7 @@
             </aside>
         </div>
     </div>
-    <footer class="roundConers">
+    <footer class="roundCorners">
         &copy; 2012, Kalorievagten v. Lars Christoffersen
         <br>
         All trademarks and registered trademarks appearing on

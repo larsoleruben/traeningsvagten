@@ -6,6 +6,25 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/*some global vars to hold object of the day*/
+var totEnergy = 0;
+var totFat = 0;
+var totCarbo = 0;
+var totProtein = 0;
+var totAlcohol = 0;
+var totFiber = 0;
+var totCholesterol = 0;
+var totSatFat = 0;
+var totMonoUnsatFat = 0;
+var totSodium = 0;
+var totPotassium = 0;
+var totMagnesium = 0;
+var totIron = 0;
+var totWater = 0;
+var totAmount = 0;
+
+
+
 $(document).ready(function () {
 
 
@@ -35,7 +54,11 @@ $(document).ready(function () {
                     var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val() );
                     consumed.push(objDC );
                     //$("#consumedTable > tbody").append("<tr><td>"+ objDC.food_id  + "</td><td>" + objDC.food_name +"</td><td>"+ objDC.food_amount + "</td></tr>" );
-                    updateConsumedTbl();
+                    //updateConsumedTbl();
+
+                    var dateString = $('#datepicker').val().split("/");
+
+                    getNutrients( objDC.food_id, objDC.food_amount, dateString[2]+dateString[1]+dateString[0] );
                     $(this).dialog("close");
 
                 },
@@ -94,6 +117,25 @@ $(document).ready(function () {
         }
     }
 
+    function getNutrients( food_id, FoodAmount, FoodDate ){
+        var url="http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetNutrientsJson?FoodInfoId="
+            +food_id
+            +"&FoodAmount=" + FoodAmount
+            +"&FoodDate=" + FoodDate
+            +"&random="+(new Date()).getTime();
+            var newScriptElement = document.createElement("script");
+            newScriptElement.setAttribute( "src", url );
+            newScriptElement.setAttribute( "id", "jsonp" );
+            var oldScriptElement = document.getElementById( "jsonp" );
+            var head = document.getElementsByTagName( "head")[0] ;
+            if( oldScriptElement == null ) {
+                head.appendChild( newScriptElement );
+            }else{
+                head.replaceChild( newScriptElement, oldScriptElement );
+            }
+    }
+
+
     /*function to update the total consumed table*/
     function updateConsumedTbl(){
         var totAmount = 0;
@@ -131,6 +173,70 @@ function updateFood(foodValues) {
 }
 
 
+function updateNutrients( nutrients, foodAmount, foodDate ){
+    var amount = parseFloat(foodAmount)/100; //forholdstal for mængden pr 100 gram.
+    for( i = 0; i < nutrients.length; i++){
+        switch ( nutrients[i].compid)
+        {
+            case "0000":
+                totEnergy += parseFloat(nutrients[i].BestLoc)* amount;
+                $('#energy').html(totEnergy.toString());
+                break;
+            case "0001":
+                totProtein += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#protein').html(totProtein.toString());
+                break;
+            case "0003":
+                totFat += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#fat').html(totFat.toString());
+                break;
+            case "0004":
+                totSatFat += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#satfat').html(totSatFat.toString());
+            case "0005":
+                 totMonoUnsatFat+= parseFloat(nutrients[i].BestLoc)*amount;
+                $('#monounsatfat').html(totSatFat.toString());
+                break;
+            case "0007":
+                totCarbo += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#carbohydrates').html(totMonoUnsatFat.toString());
+                break;
+            case "0010":
+                totFiber += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#fiber').html(totFiber.toString());
+                break
+            case "0011":
+                totAlcohol += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#alcohol').html(totAlcohol.toString());
+                break;
+            case "0013":
+                totWater += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#water').html(totWater.toString());
+                break;
+            case "0223":
+                totCholesterol += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#cholesterol').html(totCholesterol.toString());
+                break;
+            case "0056":
+                totSodium += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#sodium').html(totSodium.toString());
+                break;
+            case "0057":
+                totPotassium += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#potassium').html(totPotassium.toString());
+            case "0059":
+                totMagnesium += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#magnesium').html(totMagnesium.toString());
+                break;
+            case "0061":
+                totIron += parseFloat(nutrients[i].BestLoc)*amount;
+                $('#iron').html(totIron.toString());
+                break;
+        }
+    }
+    totAmount += parseFloat(foodAmount);
+    $('#totalAmount').html( totAmount.toString());
 
+}
 
 
