@@ -231,6 +231,10 @@ $(document).ready(function () {
         this.food_amount = food_amount;
     }
 
+    $('.invisible').keypress(function(e){
+        alert( "clicked");
+    });
+
     function openDialogCust(){
         //change the text in the popup dialog
         $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
@@ -278,6 +282,16 @@ function updateFood(foodValues) {
             .append($("<option></option>")
             .attr("value", singleObject.FoodId)
             .text(singleObject.DanName));
+        /*TODO: test of new style listbox*/
+        $('#list').append($("<li></li>")
+            .html( "<input  type='text' class='invisible' id="
+            + singleObject.FoodId +" value='"
+            +singleObject.DanName+"' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>" ));
+            /*
+            .attr("value", singleObject.FoodId)
+            .attr("onclick","showItem(this);")
+            .html(singleObject.DanName));
+            */
     }
     $('#result:first').focus();
 }
@@ -354,4 +368,15 @@ var lpad = function (value, padding) {
         zeroes += "0";
     }
     return (zeroes + value).slice(padding * -1);
+}
+
+ function addFunction( selectedObject ){
+     alert( $(selectedObject).attr("id") );
+ }
+
+function eventFunction( e ){
+    if(e.keyCode == $.ui.keyCode.ENTER ){
+        alert( $(e.target).attr("id") + $(e.target).val() );
+    }
+
 }

@@ -260,3 +260,39 @@ caption {
     cursor: pointer;
     cursor: hand;
 }
+/*test of alternative listboks*/
+#ulList {
+    border:1px solid #000000;
+    width:285px;
+    height:200px;
+    margin:5px;
+    padding:0px;
+    overflow:auto;
+    border-radius: 5px;
+}
+
+#list {
+    list-style:none none inside;
+    margin:0px;
+    padding:0px;
+    cursor:pointer;
+}
+
+.invisible:hover {
+    background-color: #77b8ff;
+    color: #ffffff;
+    font-size: 120%;
+}
+
+.invisible:focus {
+    background-color: #77b8ff;
+    color: #ffffff;
+}
+
+
+.invisible {
+    border: 0px;
+    background-color: #fefefe;
+    width: 285px;
+    disabled: disabled;
+}
