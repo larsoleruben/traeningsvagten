@@ -23,6 +23,8 @@ var totIron = 0;
 var totWater = 0;
 var totAmount = 0;
 
+/*Currently selected object when choosing the element of the day*/
+var curSelFoodObj = null;
 
 $(document).ready(function () {
 
@@ -40,12 +42,11 @@ $(document).ready(function () {
     $('#weigtGraph').hide();
 
 
-
-    $( document ).tooltip();
+    $(document).tooltip();
 
     $('#search').focus();
 
-    $('#dashboard').click(function(){
+    $('#dashboard').click(function () {
         $('#searchFood').hide();
         $('#consumedToday').hide();
         $('#tableDigesting').hide();
@@ -56,7 +57,7 @@ $(document).ready(function () {
 
     });
 
-    $('#food').click(function(){
+    $('#food').click(function () {
         $('#searchFood').show();
         $('#consumedToday').show();
         $('#tableDigesting').show();
@@ -67,7 +68,7 @@ $(document).ready(function () {
 
     $("#dialog-form").dialog({
         autoOpen:false,
-        hide: "explode",
+        hide:"explode",
         height:300,
         width:250,
         modal:true,
@@ -77,8 +78,7 @@ $(document).ready(function () {
                  * Must add already present foodid's to the foodid which is alredy in the list. This is important, otherwise
                  * removal leads to negative numbers and user might not get the result whished for.
                  * */
-
-                 if (checkInput($('#amount').val(), "num")) {
+                if (checkInput($('#amount').val(), "num")) {
                     var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
                     $('#totalConsumed')
                         .append($("<option></option>")
@@ -86,15 +86,17 @@ $(document).ready(function () {
                         .text(lpad(objDC.food_amount, 3) + " gram af: " + $("#result option:selected").text()));
 
                     consumed.push(objDC);
+                    //new way with ipad compatible list boxes
+                    addToDay(objDC.food_amount);
                     //$("#consumedTable > tbody").append("<tr><td>"+ objDC.food_id  + "</td><td>" + objDC.food_name +"</td><td>"+ objDC.food_amount + "</td></tr>" );
                     //updateConsumedTbl();
-
+                    /*
                     var dateString = $('#datepicker').val().split("/");
                     getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
+                    */
                     $('#search').focus().val("");
                     $(this).dialog("close");
                 }
-
 
 
             },
@@ -125,9 +127,9 @@ $(document).ready(function () {
     //Add the food by hitting enter.
 
 
-    $('#amount').keypress(function(e){
+    $('#amount').keypress(function (e) {
 
-        if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num" ) ) {
+        if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num")) {
             var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
             $('#totalConsumed')
                 .append($("<option></option>")
@@ -158,9 +160,9 @@ $(document).ready(function () {
         openDialogCust();
     });
 
-    $("#result").keypress(function(e){
+    $("#result").keypress(function (e) {
 
-        if(e.keyCode == $.ui.keyCode.ENTER ){
+        if (e.keyCode == $.ui.keyCode.ENTER) {
             openDialogCust();
         }
     });
@@ -205,24 +207,7 @@ $(document).ready(function () {
         }
     }
 
-    /*Start JSONP to get nutrients values from the other site and a specific food id*/
-    function getNutrients(food_id, FoodAmount, FoodDate) {
-        var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetNutrientsJson?FoodInfoId="
-            + food_id
-            + "&FoodAmount=" + FoodAmount
-            + "&FoodDate=" + FoodDate
-            + "&random=" + (new Date()).getTime();
-        var newScriptElement = document.createElement("script");
-        newScriptElement.setAttribute("src", url);
-        newScriptElement.setAttribute("id", "jsonp");
-        var oldScriptElement = document.getElementById("jsonp");
-        var head = document.getElementsByTagName("head")[0];
-        if (oldScriptElement == null) {
-            head.appendChild(newScriptElement);
-        } else {
-            head.replaceChild(newScriptElement, oldScriptElement);
-        }
-    }
+
 
     /* object to contain all the stuff from one days consumption. */
     function objDailyConsumed(food_id, food_name, food_amount) {
@@ -231,11 +216,11 @@ $(document).ready(function () {
         this.food_amount = food_amount;
     }
 
-    $('.invisible').keypress(function(e){
-        alert( "clicked");
+    $('.invisible').keypress(function (e) {
+        alert("clicked");
     });
 
-    function openDialogCust(){
+    function openDialogCust() {
         //change the text in the popup dialog
         $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
         //open the dialog
@@ -246,22 +231,47 @@ $(document).ready(function () {
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
 
+/*Start JSONP to get nutrients values from the other site and a specific food id*/
+function getNutrients(food_id, FoodAmount, FoodDate) {
+    var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetNutrientsJson?FoodInfoId="
+        + food_id
+        + "&FoodAmount=" + FoodAmount
+        + "&FoodDate=" + FoodDate
+        + "&random=" + (new Date()).getTime();
+    var newScriptElement = document.createElement("script");
+    newScriptElement.setAttribute("src", url);
+    newScriptElement.setAttribute("id", "jsonp");
+    var oldScriptElement = document.getElementById("jsonp");
+    var head = document.getElementsByTagName("head")[0];
+    if (oldScriptElement == null) {
+        head.appendChild(newScriptElement);
+    } else {
+        head.replaceChild(newScriptElement, oldScriptElement);
+    }
+}
+
+
+
 function checkInput(input, type) {
     var retVal = false;
     if (type === "num") {
         if (/^\d+$/.test(input)) {
-            if( parseFloat(input) < 1000) {
+            if (parseFloat(input) < 1000) {
                 retVal = true;
-            }else{
+            } else {
                 retVal = false;
             }
         } else {
             retVal = false;
         }
     }
-    if( !retVal ){
-        $('.validateTips').html("Input skal være et tal eller mindre en 1000!");
-    }else{
+    if (!retVal) {
+        if (input == "0" || input == "") {
+            $('.validateTips').html("");
+        } else {
+            $('.validateTips').html("Input skal være et tal og mindre en 1000!");
+        }
+    } else {
         $('.validateTips').html("");
     }
     return retVal;
@@ -284,14 +294,14 @@ function updateFood(foodValues) {
             .text(singleObject.DanName));
         /*TODO: test of new style listbox*/
         $('#list').append($("<li></li>")
-            .html( "<input  type='text' class='invisible' id="
-            + singleObject.FoodId +" value='"
-            +singleObject.DanName+"' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>" ));
-            /*
-            .attr("value", singleObject.FoodId)
-            .attr("onclick","showItem(this);")
-            .html(singleObject.DanName));
-            */
+            .html("<input  type='text' class='invisible' position=" + i + " id="
+            + singleObject.FoodId + " value='"
+            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>"));
+        /*
+         .attr("value", singleObject.FoodId)
+         .attr("onclick","showItem(this);")
+         .html(singleObject.DanName));
+         */
     }
     $('#result:first').focus();
 }
@@ -370,13 +380,61 @@ var lpad = function (value, padding) {
     return (zeroes + value).slice(padding * -1);
 }
 
- function addFunction( selectedObject ){
-     alert( $(selectedObject).attr("id") );
- }
 
-function eventFunction( e ){
-    if(e.keyCode == $.ui.keyCode.ENTER ){
-        alert( $(e.target).attr("id") + $(e.target).val() );
+/*Get the double click event from the results of the query*/
+function addFunction(selObj) {
+    //alert( $(selectedObject).attr("id") );
+    if($(selObj).attr("position") != null){
+        openDialog($(selObj));
+    }else{
+        //Remove the element and li from the DOM
+        var dateString = $('#datepicker').val().split("/");
+        getNutrients($(selObj).attr("id"),"-"+parseInt($(selObj).val().substr(0,3)),dateString[2] + dateString[1] + dateString[0]);
+        $("#remove_"+$(selObj).attr("id")).remove();
     }
 
+}
+
+
+/*catch the keykodes from the results of the query*/
+function eventFunction(e) {
+    var curpos = parseInt($(e.target).attr("position"));
+    switch (e.keyCode) {
+        case $.ui.keyCode.ENTER:
+            //alert( $(e.target).attr("id") + $(e.target).val() );
+            openDialog($(e.target));
+            break;
+        case $.ui.keyCode.DOWN: //the down arrow
+            $("*[position=" + (curpos + 1).toString() + "]").focus();
+            break;
+        case $.ui.keyCode.UP: //the up arrow
+            $("*[position=" + (curpos - 1).toString() + "]").focus();
+            break;
+    }
+}
+
+function openDialog(selObj) {
+    //change the text in the popup dialog
+    curSelFoodObj = selObj;
+    if ($(selObj).attr("position") != null) {
+        $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + selObj.val());
+        //open the dialog
+        $('#amount').val("");
+        $("#dialog-form").dialog("open");
+    }
+}
+
+function addToDay(amount) {
+    /*TODO: test of new style listbox*/
+    if (curSelFoodObj != null) {
+        $(curSelFoodObj).removeAttr("position").attr("amount", amount);
+        var foodText = $(curSelFoodObj).val();
+        foodText = lpad(amount,3) + "g " + foodText;
+        $(curSelFoodObj).val(foodText);
+        $('#listDay').append($("<li id=remove_"+$(curSelFoodObj).attr("id")+"></li>")
+            .html(curSelFoodObj));
+        var dateString = $('#datepicker').val().split("/");
+        getNutrients($(curSelFoodObj).attr("id"),amount,dateString[2] + dateString[1] + dateString[0]);
+        curSelFoodObj = null;
+    }
 }
