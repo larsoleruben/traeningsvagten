@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
 
     <!--This is a first attempt of some html5 application-->
     <title>Træningsvagten/Kalorievagten</title>
-    <link rel="stylesheet" type="text/css" href="scripts/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="scripts/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css">
     <link rel="stylesheet" type="text/css" href="style/site_trv.css">
 </head>
 <body>
@@ -14,17 +15,20 @@
 </div>
 <div id="dialog-form" title="Tilføj til dag">
     <p class="validateTips"></p>
+
     <p id="popTextAdd">Skriv hvor mange gram af:</p>
     <fieldset>
-            <input type="text" name="amount" id="amount" class="text ui-widget-content ui-corner-all"/>
-        </fieldset>
+        <input type="text" name="amount" id="amount" class="text ui-widget-content ui-corner-all"/>
+    </fieldset>
 </div>
 
 <div id="all">
 
     <header id="header" class="roundCorners">
         <h1 id="head1">Kalorievagten</h1>
+
         <h1 id="head2">Træningsvagten</h1>
+
         <div id="box1" class="roundCorners"></div>
         <div id="box2" class="roundCorners"></div>
         <h1 id="loginFB">Log in with Facebook</h1>
@@ -35,7 +39,7 @@
             <li id="food">Food</li>
             <li>Training</li>
         </ul>
-   </nav>
+    </nav>
 
     <div id="tableContainer">
         <div id="tableRow">
@@ -44,42 +48,38 @@
             </section>
             <section id="searchFood" class="roundCorners">
                 <h2>Hvad har du spist</h2>
-                <input class="sections" id="search" type="text" size="50px" name="searchField" placeholder="Skriv hvad du leder efter her"/>
+                <input class="sections" id="search" type="text" size="50px" name="searchField"
+                       placeholder="Skriv hvad du leder efter her"/>
                 <button id="searchBtn">Find</button>
                 <p>
-                    <select id="result" name="rtResult" multiple="multiple" title="Dobbelt-klik eller enter den valgte option for at tilføje eller brug knap">
-                    </select>
-                    <button id="addSelected">Tilføj til dag</button>
+                    <div id="ulList">
+                        <ul id="list">
+                        </ul>
+                    </div>
                 </p>
-
-                <!--testing area -->
-                <div id="ulList">
-                    <ul id="list">
-
-                    </ul>
-                </div>
-
+                <!--
+                <button id="addSelected">Tilføj</button>
+                -->
             </section>
             <section id="measurements" class="roundCorners">
                 <p>Measurements</p>
             </section>
             <section id="consumedToday" class="roundCorners">
                 <h2>Alt hvad du har spist idag</h2>
-                    <label id="dp" for="datepicker">Dato</label>
-                    <input class="sections" id="datepicker" type="text" name="searchField"/>
-                    <p>
-                        <label id="totalLabel">Spist i dag</label>
-                        <br><br>
-                        <select id="totalConsumed" multiple="" name="rtConsumed" title="Dobbelt-klik for at fjerne fra listen"></select>
-                        <button id="saveDayButton">Gem/Opdater dag</button>
-                    </p>
+                <label id="dp" for="datepicker">Dato</label>
+                <input class="sections" id="datepicker" type="text" name="searchField"/>
 
-                <!--testing area -->
-                <div id="ulDay">
-                    <ul id="listDay">
+                <p>
+                    <label id="totalLabel">Spist i dag</label>
+                    <br><br>
+                    <div id="ulDay">
+                        <ul id="listDay">
+                        </ul>
+                    </div>
+                </p>
 
-                    </ul>
-                </div>
+                    <button id="saveDayButton">Gem/Opdater dag</button>
+
             </section>
             <aside id="weigtGraph" class="roundCorners">
                 <p>Weight graph</p>
@@ -96,7 +96,7 @@
                         <th>Enhed</th>
                     </tr>
                     <tr>
-                        <td>Energi </td>
+                        <td>Energi</td>
                         <td id="energy">0</td>
                         <td>kJ</td>
                     </tr>

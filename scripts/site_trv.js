@@ -26,13 +26,15 @@ var totAmount = 0;
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
 
+var consumed = [];  //array to hold daily consumption of food
+
 $(document).ready(function () {
 
 
     /* Start Global Declarations */
 
     var dag = new Date();
-    var consumed = [];  //array to hold daily consumption of food
+
 
     /*End Global Declarations*/
 
@@ -79,26 +81,11 @@ $(document).ready(function () {
                  * removal leads to negative numbers and user might not get the result whished for.
                  * */
                 if (checkInput($('#amount').val(), "num")) {
-                    var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
-                    $('#totalConsumed')
-                        .append($("<option></option>")
-                        .attr("value", $("#result option:selected").val())
-                        .text(lpad(objDC.food_amount, 3) + " gram af: " + $("#result option:selected").text()));
-
-                    consumed.push(objDC);
                     //new way with ipad compatible list boxes
-                    addToDay(objDC.food_amount);
-                    //$("#consumedTable > tbody").append("<tr><td>"+ objDC.food_id  + "</td><td>" + objDC.food_name +"</td><td>"+ objDC.food_amount + "</td></tr>" );
-                    //updateConsumedTbl();
-                    /*
-                    var dateString = $('#datepicker').val().split("/");
-                    getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
-                    */
+                    addToDay(parseFloat($('#amount').val()));
                     $('#search').focus().val("");
                     $(this).dialog("close");
                 }
-
-
             },
             Cancel:function () {
                 $('.validateTips').html("");
@@ -110,7 +97,10 @@ $(document).ready(function () {
 
     $("#addSelected").button()
         .click(function () {
-            openDialogCust();
+            alert($('input.item:last').val());
+            if($("*:focus").attr("position") != null){
+               openDialog( $("*:focus") );
+            }
         });
 
 
@@ -125,74 +115,25 @@ $(document).ready(function () {
         queryFood($('#search').val());
     });
     //Add the food by hitting enter.
-
-
     $('#amount').keypress(function (e) {
-
         if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num")) {
-            var objDC = new objDailyConsumed($("#result option:selected").val(), $("#result option:selected").text(), $('#amount').val());
-            $('#totalConsumed')
-                .append($("<option></option>")
-                .attr("value", $("#result option:selected").val())
-                .text(lpad(objDC.food_amount, 3) + " gram af: " + $("#result option:selected").text()));
-
-            consumed.push(objDC);
-            //$("#consumedTable > tbody").append("<tr><td>"+ objDC.food_id  + "</td><td>" + objDC.food_name +"</td><td>"+ objDC.food_amount + "</td></tr>" );
-            //updateConsumedTbl();
-
             var dateString = $('#datepicker').val().split("/");
-
-            getNutrients(objDC.food_id, objDC.food_amount, dateString[2] + dateString[1] + dateString[0]);
+            addToDay(parseFloat($('#amount').val()));
             $('#dialog-form').dialog("close");
             $('#search').focus().val("");
         }
-
     });
 
     $('#searchBtn').button().click(function () {
         queryFood($('#search').val());
-        $('#result').focus();
     });
 
     $('#saveDayButton').button();
 
-    $("#result").dblclick(function () {
-        openDialogCust();
-    });
-
-    $("#result").keypress(function (e) {
-
-        if (e.keyCode == $.ui.keyCode.ENTER) {
-            openDialogCust();
-        }
-    });
-
-    //Remove the selected objects by doublecliking
-    $('#totalConsumed').dblclick(function () {
-        var tobeRemoved = [];
-        var foodId = $("#totalConsumed option:selected").val();
-        var dateString = $('#datepicker').val().split("/");
-        //loop all the objects from this day and subtract the selected
-        for (i = 0; i < consumed.length; i++) {
-            switch (consumed[i].food_id) {
-                //remove them from the totals
-                case foodId:
-                    getNutrients(foodId, "-" + consumed[i].food_amount, dateString[2] + dateString[1] + dateString[0])
-                    //remove it from the listbox
-                    $("#totalConsumed option[value='" + foodId + "']").remove();
-                    //add it to the array
-                    tobeRemoved.push(i);
-            }
-        }
-        /*remove the indexes marked for removal*/
-        for (i = 0; i < tobeRemoved.length; i++) {
-
-            consumed.splice(tobeRemoved[i], 1);
-        }
-    });
-
     /*Start JSONP to get food values from the other site*/
     function queryFood(searchString) {
+        //empty the list
+        $('#list').empty();
         var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetFoodInfoJson?nameLike=" + searchString +
             "&random=" + (new Date()).getTime();
         var newScriptElement = document.createElement("script");
@@ -206,30 +147,17 @@ $(document).ready(function () {
             head.replaceChild(newScriptElement, oldScriptElement);
         }
     }
-
-
-
-    /* object to contain all the stuff from one days consumption. */
-    function objDailyConsumed(food_id, food_name, food_amount) {
-        this.food_id = food_id;
-        this.food_name = food_name;
-        this.food_amount = food_amount;
-    }
-
-    $('.invisible').keypress(function (e) {
-        alert("clicked");
-    });
-
-    function openDialogCust() {
-        //change the text in the popup dialog
-        $('p#popTextAdd').html("Skriv hvor mange gram af:<br>" + $("#result option:selected").text());
-        //open the dialog
-        $('#amount').val("");
-        $("#dialog-form").dialog("open");
-    }
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
+
+/* object to contain all the stuff from one days consumption. */
+function objDailyConsumed(food_id, food_name, food_amount) {
+    this.food_id = food_id;
+    this.food_name = food_name;
+    this.food_amount = food_amount;
+}
+
 
 /*Start JSONP to get nutrients values from the other site and a specific food id*/
 function getNutrients(food_id, FoodAmount, FoodDate) {
@@ -280,30 +208,14 @@ function checkInput(input, type) {
 
 /*is automatically called by the return values from queryFood   */
 function updateFood(foodValues) {
-    //clear up
-    $('#result')
-        .find('option')
-        .remove()
-        .end();
     //add the new query result
     for (var i = 0; i < foodValues.length; i++) {
         var singleObject = foodValues[i];
-        $('#result')
-            .append($("<option></option>")
-            .attr("value", singleObject.FoodId)
-            .text(singleObject.DanName));
-        /*TODO: test of new style listbox*/
         $('#list').append($("<li></li>")
             .html("<input  type='text' class='invisible' position=" + i + " id="
             + singleObject.FoodId + " value='"
             + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>"));
-        /*
-         .attr("value", singleObject.FoodId)
-         .attr("onclick","showItem(this);")
-         .html(singleObject.DanName));
-         */
     }
-    $('#result:first').focus();
 }
 
 
