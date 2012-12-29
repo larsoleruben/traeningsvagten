@@ -22,6 +22,7 @@ var totMagnesium = 0;
 var totIron = 0;
 var totWater = 0;
 var totAmount = 0;
+var focusedInput = null;
 
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
@@ -97,9 +98,8 @@ $(document).ready(function () {
 
     $("#addSelected").button()
         .click(function () {
-            alert($('input.item:last').val());
-            if($("*:focus").attr("position") != null){
-               openDialog( $("*:focus") );
+            if(focusedInput != null){
+               openDialog( $(focusedInput) );
             }
         });
 
@@ -110,10 +110,10 @@ $(document).ready(function () {
     $('#datepicker').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
     $("#datepicker").datepicker();
 
-    //get the food search
-    //TODO: Make it an keypress event instead.
-    $('#search').change(function () {
-        queryFood($('#search').val());
+    $('#search').keypress(function (e) {
+        if (e.keyCode == $.ui.keyCode.ENTER ){
+            queryFood($('#search').val());
+        }
     });
     //Add the food by hitting enter.
     $('#amount').keypress(function (e) {
@@ -121,7 +121,7 @@ $(document).ready(function () {
             var dateString = $('#datepicker').val().split("/");
             addToDay(parseFloat($('#amount').val()));
             $('#dialog-form').dialog("close");
-            $('#search').focus().val("");
+            $('#search').focus();
         }
     });
 
@@ -215,7 +215,7 @@ function updateFood(foodValues) {
         $('#list').append($("<li></li>")
             .html("<input readonly type='text' class='invisible' position=" + i + " id="
             + singleObject.FoodId + " value='"
-            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>"));
+            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
 }
 
@@ -349,5 +349,10 @@ function addToDay(amount) {
         var dateString = $('#datepicker').val().split("/");
         getNutrients($(curSelFoodObj).attr("id"),amount,dateString[2] + dateString[1] + dateString[0]);
         curSelFoodObj = null;
+        focusedInput = null;
     }
+}
+
+function captureLastFocusedInput( fip ){
+    focusedInput = fip;
 }

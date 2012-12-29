@@ -134,7 +134,7 @@ nav ul li {
 section#searchFood {
     display: table-cell;
     background-color: #fefefe;
-    width: 34%;
+    width: 30%;
     padding: 15px;
     vertical-align: top;
 }
@@ -143,14 +143,13 @@ section#searchFood {
 section#consumedToday {
     display: table-cell;
     background-color: #fefefe;
-    width: 34%;
+    width: 30%;
     padding: 15px;
     vertical-align: top;
 }
 
 aside#tableDigesting {
     display: table-cell;
-    width: 32%;
     background-color: #fefefe;
     padding: 15px;
     vertical-align: top;
@@ -228,6 +227,7 @@ table#consumedTable {
     margin-right: 5px;
     border: thin solid #696969;
     border-collapse: collapse;
+    min-width: 200px;
 }
 
 td, th {
