@@ -27,7 +27,7 @@ fieldset {
 }
 
 #all {
-    width: 1200px;
+    width: 1000px;
     margin-left: auto;
     margin-right: auto;
 
@@ -134,7 +134,7 @@ nav ul li {
 section#searchFood {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    width: 34%;
     padding: 15px;
     vertical-align: top;
 }
@@ -143,13 +143,14 @@ section#searchFood {
 section#consumedToday {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    width: 34%;
     padding: 15px;
     vertical-align: top;
 }
 
 aside#tableDigesting {
     display: table-cell;
+    width: 32%;
     background-color: #fefefe;
     padding: 15px;
     vertical-align: top;
@@ -246,6 +247,9 @@ caption {
     left: 600px;
     background-color: red;
     -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
     z-index: 2;
     font-size: 20px;
 
@@ -313,5 +317,4 @@ caption {
     border: 0px;
     background-color: transparent;
     width: 285px;
-    disabled: disabled;
 }

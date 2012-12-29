@@ -111,6 +111,7 @@ $(document).ready(function () {
     $("#datepicker").datepicker();
 
     //get the food search
+    //TODO: Make it an keypress event instead.
     $('#search').change(function () {
         queryFood($('#search').val());
     });
@@ -212,7 +213,7 @@ function updateFood(foodValues) {
     for (var i = 0; i < foodValues.length; i++) {
         var singleObject = foodValues[i];
         $('#list').append($("<li></li>")
-            .html("<input  type='text' class='invisible' position=" + i + " id="
+            .html("<input readonly type='text' class='invisible' position=" + i + " id="
             + singleObject.FoodId + " value='"
             + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)';   ></input>"));
     }
