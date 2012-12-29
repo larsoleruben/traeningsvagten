@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8"/>
 
@@ -44,7 +44,54 @@
     <div id="tableContainer">
         <div id="tableRow">
             <section id="personalDetails" class="roundCorners">
-                <p>personal</p>
+                <h1>Personal data</h1>
+                <table id="personalData">
+                    <tr>
+                        <td><label id="lblEmail" for="email">Email:</label></td>
+                        <td><input id="email" type="email" placeholder="you@mail.com" class="sections personal"/></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblFname" for="fname">Fornavn:</label></td>
+                        <td><input id="fname" type="text" class="sections personal"/></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblLastname" for="lastname">Efternavn:</label></td>
+                        <td><input id="lastname" type="text" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblSports" for="sports">Primær Sport:</label></td>
+                        <td><input id="sports" type="text" placeholder="Din primær sportsgren" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblSex" for="sex">Køn</label></td>
+                        <td>
+                            <select name="sex" id="sex">
+                                <option id="male" value="male">Mand</option>
+                                <option id="female" value="female">Kvinde</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblHeight" for="height">Højde</label></td>
+                        <td><input id="height" type="text" placeholder="Højde i cm" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblCity" for="city">By</label></td>
+                        <td><input id="city" type="text" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblAddress" for="address">Adresse</label></td>
+                        <td><input id="address" type="text" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblPostalcode" for="postalcode">Postnummer</label></td>
+                        <td><input id="postalcode" type="text" class="sections personal"></td>
+                    </tr>
+                    <tr>
+                        <td><label id="lblSavePersonal" for="btnSavePersonal">Gem</label></td>
+                        <td><button id="btnSavePersonal">Gem persondata!</button></td>
+                    </tr>
+                </table>
             </section>
             <section id="searchFood" class="roundCorners">
                 <h2>Hvad har du spist</h2>
@@ -68,7 +115,7 @@
             <section id="consumedToday" class="roundCorners">
                 <h2>Alt hvad du har spist idag</h2>
                 <label id="dp" for="datepicker">Dato</label>
-                <input class="sections" id="datepicker" type="text" name="searchField"/>
+                <input class="sections" id="datepicker" type="text" name="searchField" readonly/>
 
                 <p>
                     <label id="totalLabel">Spist i dag</label>

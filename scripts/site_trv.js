@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-/*some global vars to hold object of the day*/
+/*some global vars of different kinds*/
 var totEnergy = 0;
 var totFat = 0;
 var totCarbo = 0;
@@ -23,26 +23,26 @@ var totIron = 0;
 var totWater = 0;
 var totAmount = 0;
 var focusedInput = null;
-
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
-
 var consumed = [];  //array to hold daily consumption of food
 
+/*Start the load function to set everything up*/
 $(document).ready(function () {
 
 
-    /* Start Global Declarations */
+    /* Start load function Declarations */
 
     var dag = new Date();
 
 
-    /*End Global Declarations*/
+    /*End load function Declarations*/
 
     /*initialize visibility setting*/
     $('#personalDetails').hide();
     $('#measurements').hide();
     $('#weigtGraph').hide();
+    $('#food').addClass("selected");
 
 
     $(document).tooltip();
@@ -56,6 +56,8 @@ $(document).ready(function () {
         $('#personalDetails').show();
         $('#measurements').show();
         $('#weigtGraph').show();
+        $('#dashboard').addClass("selected");
+        $('#food').removeClass("selected");
 
 
     });
@@ -67,6 +69,8 @@ $(document).ready(function () {
         $('#personalDetails').hide();
         $('#measurements').hide();
         $('#weigtGraph').hide();
+        $('#dashboard').removeClass("selected");
+        $('#food').addClass("selected");
     });
 
     $("#dialog-form").dialog({
@@ -102,13 +106,12 @@ $(document).ready(function () {
                openDialog( $(focusedInput) );
             }
         });
-
-
     /*End modal popup form*/
 
 
     $('#datepicker').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
     $("#datepicker").datepicker();
+    $('sex').select();
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){
@@ -338,7 +341,6 @@ function openDialog(selObj) {
 }
 
 function addToDay(amount) {
-    /*TODO: test of new style listbox*/
     if (curSelFoodObj != null) {
         $(curSelFoodObj).removeAttr("position").attr("amount", amount);
         var foodText = $(curSelFoodObj).val();

@@ -113,7 +113,9 @@ a:visited {
 
 li.selected {
     background-color: #efe5d0;
+    color: #fefefe;
 }
+
 
 nav {
     background-color: #fefefe;
@@ -158,7 +160,7 @@ aside#tableDigesting {
 section#personalDetails {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    width: 40%;
     padding: 15px;
     vertical-align: top;
 }
@@ -209,6 +211,15 @@ button {
     height: 17px;
 }
 
+.personal{
+    width: 200px;
+    border: thin solid gray;
+}
+
+#sex{
+    width: 200px;
+}
+
 #result, #totalConsumed {
     width: 285px;
     height: 300px;
@@ -217,15 +228,21 @@ button {
     border-radius: 5px;
 }
 
-#datapicker {
-    disabled: disabled;
-}
 
 table#consumedTable {
     caption-side: bottom;
     margin-left: 5px;
     margin-right: 5px;
     border: thin solid #696969;
+    border-collapse: collapse;
+    min-width: 200px;
+}
+
+table#personalData{
+    caption-side: bottom;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 0px;
     border-collapse: collapse;
     min-width: 200px;
 }
