@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
     <meta charset="utf-8"/>
 
@@ -24,214 +24,260 @@
 
 <div id="all">
 
-    <header id="header" class="roundCorners">
-        <h1 id="head1">Kalorievagten</h1>
+<header id="header" class="roundCorners">
+    <h1 id="head1">Kalorievagten</h1>
 
-        <h1 id="head2">Træningsvagten</h1>
+    <h1 id="head2">Træningsvagten</h1>
 
-        <div id="box1" class="roundCorners"></div>
-        <div id="box2" class="roundCorners"></div>
-        <h1 id="loginFB">Log in with Facebook</h1>
-    </header>
-    <nav id="mainMenu" class="roundCorners">
-        <ul>
-            <li id="dashboard">Dashboard</li>
-            <li id="food">Food</li>
-            <li>Training</li>
-        </ul>
-    </nav>
+    <div id="box1" class="roundCorners"></div>
+    <div id="box2" class="roundCorners"></div>
+    <h1 id="loginFB">Log in with Facebook</h1>
+</header>
+<nav id="mainMenu" class="roundCorners">
+    <ul>
+        <li id="dashboard">Dashboard</li>
+        <li id="food">Food</li>
+        <li>Training</li>
+    </ul>
+</nav>
 
-    <div id="tableContainer">
-        <div id="tableRow">
-            <section id="personalDetails" class="roundCorners">
-                <h1>Personal data</h1>
-                <table id="personalData">
-                    <tr>
-                        <td><label id="lblEmail" for="email">Email:</label></td>
-                        <td><input id="email" type="email" placeholder="you@mail.com" class="sections personal"/></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblFname" for="fname">Fornavn:</label></td>
-                        <td><input id="fname" type="text" class="sections personal"/></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblLastname" for="lastname">Efternavn:</label></td>
-                        <td><input id="lastname" type="text" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblSports" for="sports">Primær Sport:</label></td>
-                        <td><input id="sports" type="text" placeholder="Din primær sportsgren" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblSex" for="sex">Køn</label></td>
-                        <td>
-                            <select name="sex" id="sex">
-                                <option id="male" value="male">Mand</option>
-                                <option id="female" value="female">Kvinde</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblHeight" for="height">Højde</label></td>
-                        <td><input id="height" type="text" placeholder="Højde i cm" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblCity" for="city">By</label></td>
-                        <td><input id="city" type="text" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblAddress" for="address">Adresse</label></td>
-                        <td><input id="address" type="text" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblPostalcode" for="postalcode">Postnummer</label></td>
-                        <td><input id="postalcode" type="text" class="sections personal"></td>
-                    </tr>
-                    <tr>
-                        <td><label id="lblSavePersonal" for="btnSavePersonal">Gem</label></td>
-                        <td><button id="btnSavePersonal">Gem persondata!</button></td>
-                    </tr>
-                </table>
-            </section>
-            <section id="searchFood" class="roundCorners">
-                <h2>Hvad har du spist</h2>
-                <input class="sections" id="search" type="text" size="50px" name="searchField"
-                       placeholder="Skriv hvad du leder efter her"/>
-                <br>
-                <button id="searchBtn">Find</button>
-                <p>
-                    <div id="ulList">
-                        <ul id="list">
-                        </ul>
-                    </div>
-                </p>
+<div id="tableContainer">
+    <div id="tableRow">
+        <!--Personal left section starts here-->
+        <section id="personalDetails" class="roundCorners">
+            <h2>Personal data</h2>
+            <table id="personalData" class="tblForInputs">
+                <tr>
+                    <td><label id="lblEmail" for="email">Email:</label></td>
+                    <td><input id="email" type="email" placeholder="your@mail.com" class="sections personal"/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblFname" for="fname">Fornavn:</label></td>
+                    <td><input id="fname" type="text" class="sections personal"/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblLastname" for="lastname">Efternavn:</label></td>
+                    <td><input id="lastname" type="text" class="sections personal"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblSports" for="sports">Primær Sport:</label></td>
+                    <td><input id="sports" type="text" placeholder="Din primære sportsgren" class="sections personal">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label id="lblSex" for="sex">Køn</label></td>
+                    <td>
+                        <select name="sex" id="sex">
+                            <option id="male" value="male">Mand</option>
+                            <option id="female" value="female">Kvinde</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label id="lblHeight" for="height">Højde</label></td>
+                    <td><input id="height" type="text" placeholder="Højde i cm" class="sections personal"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblCity" for="city">By</label></td>
+                    <td><input id="city" type="text" class="sections personal"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblAddress" for="address">Adresse</label></td>
+                    <td><input id="address" type="text" class="sections personal"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblPostalcode" for="postalcode">Postnummer</label></td>
+                    <td><input id="postalcode" type="text" class="sections personal"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblSavePersonal" for="btnSavePersonal">Gem</label></td>
+                    <td>
+                        <button id="btnSavePersonal">Gem persondata!</button>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <!--Personal left section ends here-->
+        <!--Food left section starts here-->
+        <section id="searchFood" class="roundCorners">
+            <h2>Hvad har du spist</h2>
+            <input class="sections" id="search" type="text" name="searchField"
+                   placeholder="Skriv hvad du leder efter her"/>
+            <br>
+            <button id="searchBtn">Find</button>
+            <p>
 
-                <button id="addSelected">Tilføj</button>
+            <div id="ulList">
+                <ul id="list">
+                </ul>
+            </div>
+            </p>
 
-            </section>
-            <section id="measurements" class="roundCorners">
-                <p>Measurements</p>
-            </section>
-            <section id="consumedToday" class="roundCorners">
-                <h2>Alt hvad du har spist idag</h2>
-                <label id="dp" for="datepicker">Dato</label>
-                <input class="sections" id="datepicker" type="text" name="searchField" readonly/>
+            <button id="addSelected">Tilføj</button>
 
-                <p>
-                    <label id="totalLabel">Spist i dag</label>
-                    <br><br>
-                    <div id="ulDay">
-                        <ul id="listDay">
-                        </ul>
-                    </div>
-                </p>
+        </section>
+        <!--Food left section ends here-->
+        <!--Personal middle section starts here-->
+        <section id="measurements" class="roundCorners">
+            <h2>Personlige målinger</h2>
+            <table id="tblMeasurements" class="tblForInputs">
+                <tr>
+                    <td><label id="lblDatepicker1" for="datepicker1">Dato:</label></td>
+                    <td><input class="sections measurements" id="datepicker1" type="text" readonly/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblWeight" for="weight">Vægt:</label></td>
+                    <td><input class="sections measurements" id="weight" type="text" /></td>
+                </tr>
+                <tr>
+                    <td><label id="lblStomac" for="stomac">Taljemål:</label></td>
+                    <td><input class="sections measurements" id="stomac" type="text"/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblFatpercentage" for="fatPercentage">Fedt procent:</label></td>
+                    <td><input class="sections measurements" id="fatPercentage" type="text"></td>
+                </tr>
+            </table>
 
-                    <button id="saveDayButton">Gem/Opdater dag</button>
 
-            </section>
-            <aside id="weigtGraph" class="roundCorners">
-                <p>Weight graph</p>
-            </aside>
-            <aside id="tableDigesting" class="roundCorners">
-                <h2>Information og total indtag</h2>
-                <table id="consumedTable">
-                    <caption>
-                        Test på det du har spist.
-                    </caption>
-                    <tr>
-                        <th>Indtag af</th>
-                        <th>Sum</th>
-                        <th>Enhed</th>
-                    </tr>
-                    <tr>
-                        <td>Energi</td>
-                        <td id="energy">0.00</td>
-                        <td>kJ</td>
-                    </tr>
-                    <tr>
-                        <td>Fedt</td>
-                        <td id="fat">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Kulhydrater</td>
-                        <td id="carbohydrates">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Protein</td>
-                        <td id="protein">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Alkohol</td>
-                        <td id="alcohol">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Fibre</td>
-                        <td id="fiber">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Cholesterol</td>
-                        <td id="cholesterol">0.00</td>
-                        <td>milli-gram</td>
-                    </tr>
-                    <tr>
-                        <td>Mættede fedtsyrer</td>
-                        <td id="satfat">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Monoumætt. fedtsyrer</td>
-                        <td id="monounsatfat">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Natrium</td>
-                        <td id="sodium">0.00</td>
-                        <td>milli-gram</td>
-                    </tr>
-                    <tr>
-                        <td>Kalium</td>
-                        <td id="potassium">0.00</td>
-                        <td>milli-gram</td>
-                    </tr>
-                    <tr>
-                        <td>Magnesium</td>
-                        <td id="magnesium">0.00</td>
-                        <td>micro-gram</td>
-                    </tr>
-                    <tr>
-                        <td>Jern</td>
-                        <td id="iron">0.00</td>
-                        <td>micro-gram</td>
-                    </tr>
-                    <tr>
-                        <td>Vand</td>
-                        <td id="water">0.00</td>
-                        <td>gram</td>
-                    </tr>
-                    <tr>
-                        <td>Total mængde</td>
-                        <td id="totalAmount">0.00</td>
-                        <td>gram</td>
-                    </tr>
+        </section>
+        <!--Personal middle section endss here-->
+        <!--Food middle section starts here -->
+        <section id="consumedToday" class="roundCorners">
+            <h2>Alt hvad du har spist idag</h2>
+            <label id="dp" for="datepicker">Dato</label>
+            <input class="sections" id="datepicker" type="text" readonly/>
 
-                </table>
-            </aside>
-        </div>
+            <p>
+                <label id="totalLabel">Spist i dag</label>
+                <br><br>
+
+            <div id="ulDay">
+                <ul id="listDay">
+                </ul>
+            </div>
+            </p>
+
+            <button id="saveDayButton">Gem/Opdater dag</button>
+
+        </section>
+        <!--Food middle section ends here -->
+        <!--Personal right section starts here -->
+        <aside id="weigtGraph" class="roundCorners">
+            <h2>Grafer</h2>
+            Vægt:
+            <div id="graphWeight"></div>
+            <br>
+            Talje:
+            <div id="graphStomac"></div>
+            <br>
+            Fedprocent:
+            <div id="graphFat"></div>
+        </aside>
+        <!--Personal right section ends here -->
+        <!--Food right section starts here -->
+        <aside id="tableDigesting" class="roundCorners">
+            <h2>Information og total indtag</h2>
+            <table id="consumedTable">
+                <caption>
+                    Test på det du har spist.
+                </caption>
+                <tr>
+                    <th>Indtag af</th>
+                    <th>Sum</th>
+                    <th>Enhed</th>
+                </tr>
+                <tr>
+                    <td>Energi</td>
+                    <td id="energy">0.00</td>
+                    <td>kJ</td>
+                </tr>
+                <tr>
+                    <td>Fedt</td>
+                    <td id="fat">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Kulhydrater</td>
+                    <td id="carbohydrates">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Protein</td>
+                    <td id="protein">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Alkohol</td>
+                    <td id="alcohol">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Fibre</td>
+                    <td id="fiber">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Cholesterol</td>
+                    <td id="cholesterol">0.00</td>
+                    <td>milli-gram</td>
+                </tr>
+                <tr>
+                    <td>Mættede fedtsyrer</td>
+                    <td id="satfat">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Monoumætt. fedtsyrer</td>
+                    <td id="monounsatfat">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Natrium</td>
+                    <td id="sodium">0.00</td>
+                    <td>milli-gram</td>
+                </tr>
+                <tr>
+                    <td>Kalium</td>
+                    <td id="potassium">0.00</td>
+                    <td>milli-gram</td>
+                </tr>
+                <tr>
+                    <td>Magnesium</td>
+                    <td id="magnesium">0.00</td>
+                    <td>micro-gram</td>
+                </tr>
+                <tr>
+                    <td>Jern</td>
+                    <td id="iron">0.00</td>
+                    <td>micro-gram</td>
+                </tr>
+                <tr>
+                    <td>Vand</td>
+                    <td id="water">0.00</td>
+                    <td>gram</td>
+                </tr>
+                <tr>
+                    <td>Total mængde</td>
+                    <td id="totalAmount">0.00</td>
+                    <td>gram</td>
+                </tr>
+
+            </table>
+        </aside>
+        <!--Food right section ends here -->
     </div>
-    <footer class="roundCorners">
-        &copy; 2012, Kalorievagten v. Lars Christoffersen
-        <br>
-        All trademarks and registered trademarks appearing on
-        this site are the property of their respective owners.
-    </footer>
-    <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-1.8.3.js"></script>
-    <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
-    <script src="scripts/site_trv.js"></script>
+</div>
+<footer class="roundCorners">
+    &copy; 2012, Kalorievagten v. Lars Christoffersen
+    <br>
+    All trademarks and registered trademarks appearing on
+    this site are the property of their respective owners.
+</footer>
+<script src="scripts/jquery-ui-1.9.2.custom/js/jquery-1.8.3.js"></script>
+<script src="scripts/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="scripts/jquery.flot.js"></script>
+<script src="scripts/site_trv.js"></script>
 </div>
 </body>
 </html>

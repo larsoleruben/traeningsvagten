@@ -49,6 +49,7 @@ $(document).ready(function () {
 
     $('#search').focus();
 
+    /*Setting up the menu and the default pages*/
     $('#dashboard').click(function () {
         $('#searchFood').hide();
         $('#consumedToday').hide();
@@ -73,6 +74,37 @@ $(document).ready(function () {
         $('#food').addClass("selected");
     });
 
+    /*testing the graph interfacew*/
+    $(function () {
+        var d1 = [];
+        var d2 = [];
+        var d3 = [];
+        var test = 75;
+        for (var i = 0; i < 30; i += 1){
+            test -= Math.random();
+            d1.push([i, test]);
+            d2.push([i, 90 + 2*Math.random()])
+            d3.push([i, 15 + 2*Math.random()])
+        }
+
+        //var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+
+        // a null signifies separate line segments
+        //var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
+
+        $.plot($("#graphWeight"), [d1 ],{
+            grid:{borderWidth: 0}
+        });
+        $.plot($("#graphStomac"), [d2 ],{
+            grid:{borderWidth: 0}
+        });
+        $.plot($("#graphFat"), [d3 ],{
+            grid:{borderWidth: 0}
+        });
+
+    });
+
+    /*setting up the dialog popup form*/
     $("#dialog-form").dialog({
         autoOpen:false,
         hide:"explode",
@@ -111,7 +143,8 @@ $(document).ready(function () {
 
     $('#datepicker').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
     $("#datepicker").datepicker();
-    $('sex').select();
+    $('#datepicker1').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
+    $('#datepicker1').datepicker();
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){

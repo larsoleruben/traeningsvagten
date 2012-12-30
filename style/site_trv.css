@@ -82,7 +82,10 @@ h1 {
 }
 
 
-h2 { font-size: 130%; }
+h2 {
+    font-size: 130%;
+    margin-left: 5px;
+}
 
 div#tableContainer {
     display: table;
@@ -216,6 +219,15 @@ button {
     border: thin solid gray;
 }
 
+.measurements{
+    border: thin solid gray;
+}
+
+
+#search{
+    width: 285px;
+}
+
 #sex{
     width: 200px;
 }
@@ -238,18 +250,26 @@ table#consumedTable {
     min-width: 200px;
 }
 
-table#personalData{
+table.tblForInputs{
     caption-side: bottom;
     margin-left: 5px;
     margin-right: 5px;
     border: 0px;
     border-collapse: collapse;
-    min-width: 200px;
 }
 
 td, th {
     border:  thin dotted gray;
     padding: 5px;
+}
+
+tr:hover {
+    background-color: #dcdcdc;
+}
+
+#graphWeight, #graphStomac, #graphFat{
+    width:300px;
+    height:150px;
 }
 
 caption {
@@ -261,7 +281,7 @@ caption {
     position: fixed;
     padding: 5px;
     top: 100px;
-    left: 600px;
+    left: 800px;
     background-color: red;
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
