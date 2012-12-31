@@ -26,25 +26,56 @@ $(document).ready(function () {
      */
     $('#inputButton').click(function () {
         var person = {};
-        person['fname'] = "Peter Plys";
-        person['lname'] = "Plyssensens";
+        person['fname'] = "Peter Glad";
+        person['lname'] = "Klummesen";
         person['gender'] = "male";
-        person['prisport'] = "cyckling";
-        person['height'] = "182";
+        person['priSport'] = "Cyckling";
+        person['height'] = "185";
         person['city'] = "Copenhagen";
         person['address'] = "hovedgaden 4";
-        person['zipcode'] = "2280";
+        person['zipcode'] = "2380";
 
         var req;
-        req = gapi.client.traeningsvagten.insertPerson(person);
+        req = gapi.client.traeningsvagten.person.insert(person);
         req.execute(function (data) {
-            alert( data.id );
+            alert( data.id + " " + data.message );
         });
 
     });
 
+    $('#login').click(function(e){
+        handleAuthClick(e);
+    });
+
+    function handleClientLoad() {
+        gapi.client.setApiKey('AIzaSyCy1yKSG2gs4_Ub6D9hhv_WGq4BZxXXD5Y');
+        window.setTimeout(checkAuth,1);
+    }
+
 
 });
+
+function handleAuthClick(event) {
+    gapi.auth.authorize({client_id: "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com",
+        scope: "https://www.googleapis.com/auth/userinfo.email", immediate: false}, handleAuthResult);
+    return false;
+}
+
+function checkAuth() {
+    gapi.auth.authorize({client_id: "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com",
+        scope: "https://www.googleapis.com/auth/userinfo.email", immediate: true}, handleAuthResult);
+}
+
+function handleAuthResult(authResult) {
+    var authorizeButton = document.getElementById('login');
+    if (authResult) {
+        authorizeButton.style.visibility = 'hidden';
+        //insertComment();
+    } else {
+        authorizeButton.style.visibility = '';
+        //authorizeButton.onclick = handleAuthClick;
+    }
+}
 
 function showList(data) {
     for (i = 0; i < data.items.length; i++) {
