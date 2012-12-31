@@ -53,13 +53,22 @@ h1 {
     z-index: 1;
 }
 
-#loginFB{
-    font-size: 150%;
+#loginGoogle{
+    font-size: 90%;
     position: relative;
-    top: -245px;
+    top: -250px;
     left: 800px;
     z-index: 1;
 }
+
+#imgLoginGoogle{
+    position: relative;
+    top: -260px;
+    left: 780px;
+    z-index: 1;
+}
+
+
 
 #box1{
     position: relative;
@@ -280,7 +289,7 @@ caption {
 #underConstruction {
     position: fixed;
     padding: 5px;
-    top: 100px;
+    top: 300px;
     left: 800px;
     background-color: red;
     -webkit-transform: rotate(45deg);

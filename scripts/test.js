@@ -26,7 +26,7 @@ $(document).ready(function () {
      */
     $('#inputButton').click(function () {
         var person = {};
-        person['fname'] = "Peter Glad";
+        person['fname'] = "Lars Ole";
         person['lname'] = "Klummesen";
         person['gender'] = "male";
         person['priSport'] = "Cyckling";
@@ -79,7 +79,7 @@ function handleAuthResult(authResult) {
 
 function showList(data) {
     for (i = 0; i < data.items.length; i++) {
-        $('#dataList').append($("<li></li>").html(data.items[i].fname + " " + data.items[i].lname));
+        $('#dataList').append($("<li></li>").html(data.items[i].fname + " " + data.items[i].lname + " "+data.items[i].email + " "+data.items[i].id   ));
     }
 }
 
