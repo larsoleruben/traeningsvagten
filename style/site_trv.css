@@ -66,6 +66,7 @@ h1 {
     top: -260px;
     left: 780px;
     z-index: 1;
+    border: 0px;
 }
 
 
@@ -289,7 +290,7 @@ caption {
 #underConstruction {
     position: fixed;
     padding: 5px;
-    top: 300px;
+    top: 100px;
     left: 800px;
     background-color: red;
     -webkit-transform: rotate(45deg);

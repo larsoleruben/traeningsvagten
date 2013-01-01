@@ -141,9 +141,9 @@ $(document).ready(function () {
     /*End modal popup form*/
 
 
-    $('#datepicker').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
+    $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $("#datepicker").datepicker();
-    $('#datepicker1').val(dag.getDate() + '/' + dag.getMonth() + '/' + dag.getFullYear());
+    $('#datepicker1').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $('#datepicker1').datepicker();
 
     $('#search').keypress(function (e) {
@@ -251,7 +251,7 @@ function updateFood(foodValues) {
         $('#list').append($("<li></li>")
             .html("<input readonly type='text' class='invisible' position=" + i + " id="
             + singleObject.FoodId + " value='"
-            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+            + singleObject.DanName + "' ondblclick=addFunction(this); onkeypress='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
 }
 
@@ -338,7 +338,7 @@ function addFunction(selObj) {
     }else{
         //Remove the element and li from the DOM
         var dateString = $('#datepicker').val().split("/");
-        getNutrients($(selObj).attr("id"),"-"+parseInt($(selObj).val().substr(0,3)),dateString[2] + dateString[1] + dateString[0]);
+        getNutrients($(selObj).attr("id"),"-"+parseInt($(selObj).attr("amount")),dateString[2] + dateString[1] + dateString[0]);
         $("#remove_"+$(selObj).attr("id")).remove();
     }
 
@@ -374,15 +374,39 @@ function openDialog(selObj) {
 }
 
 function addToDay(amount) {
+    var ifExists = false;
     if (curSelFoodObj != null) {
-        $(curSelFoodObj).removeAttr("position").attr("amount", amount);
-        var foodText = $(curSelFoodObj).val();
-        foodText = lpad(amount,3) + "g " + foodText;
-        $(curSelFoodObj).val(foodText);
-        $('#listDay').append($("<li id=remove_"+$(curSelFoodObj).attr("id")+"></li>")
-            .html(curSelFoodObj));
-        var dateString = $('#datepicker').val().split("/");
-        getNutrients($(curSelFoodObj).attr("id"),amount,dateString[2] + dateString[1] + dateString[0]);
+        /*check if the id is already there, if it is add it to the existing*/
+        $(".inDayList").each(function (index) {
+            var inputField = this;
+            var id = $(this).attr("id");
+            if (id == $(curSelFoodObj).attr("id")) {
+                ifExists = true;
+                var oldAmount = parseFloat($(this).attr("amount"));
+                var newAmount = oldAmount + parseFloat(amount);
+                var foodText = $(this).val().substr(3);
+                foodText = lpad(newAmount, 3) + foodText;
+                $(this).attr("amount", newAmount);
+                $(this).val(foodText);
+                var dateString = $('#datepicker').val().split("/");
+                getNutrients(id, amount, dateString[2] + dateString[1] + dateString[0]);
+
+            }
+        });
+
+        /*a new one we add it*/
+        if (!ifExists) {
+            $(curSelFoodObj).removeAttr("position");
+            $(curSelFoodObj).attr("amount", amount);
+            var foodText = $(curSelFoodObj).val();
+            foodText = lpad(amount, 3) + "g " + foodText;
+            $(curSelFoodObj).val(foodText);
+            $(curSelFoodObj).addClass( "inDayList" );
+            $('#listDay').append($("<li id=remove_" + $(curSelFoodObj).attr("id") + "></li>")
+                .html(curSelFoodObj));
+            var dateString = $('#datepicker').val().split("/");
+            getNutrients($(curSelFoodObj).attr("id"), amount, dateString[2] + dateString[1] + dateString[0]);
+        }
         curSelFoodObj = null;
         focusedInput = null;
     }
