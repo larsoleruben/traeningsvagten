@@ -148,27 +148,23 @@ $(document).ready(function () {
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){
-            e.stopPropagation();
+            e.preventDefault();
             queryFood($('#search').val());
-            //$('#searchBtn').trigger("click");
-            return false; //for msis, otherwise events will fire unwanted
         }
     });
     //Add the food by hitting enter.
     $('#amount').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num")) {
-            e.stopPropagation();
+            e.preventDefault();
             var dateString = $('#datepicker').val().split("/");
             addToDay(parseFloat($('#amount').val()));
             $('#dialog-form').dialog("close");
-            //$('#search').focus();
         }
     });
 
     $('#findBtn').button().click(function () {
         queryFood($('#search').val());
         $('#search').focus();
-        return false; //for msie, otherwise events will fire unwanted!
     });
 
     $('#saveDayButton').button();
