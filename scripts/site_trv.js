@@ -148,42 +148,32 @@ $(document).ready(function () {
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){
+            e.stopPropagation();
             queryFood($('#search').val());
+            //$('#searchBtn').trigger("click");
+            return false; //for msis, otherwise events will fire unwanted
         }
     });
     //Add the food by hitting enter.
     $('#amount').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER && checkInput($('#amount').val(), "num")) {
+            e.stopPropagation();
             var dateString = $('#datepicker').val().split("/");
             addToDay(parseFloat($('#amount').val()));
             $('#dialog-form').dialog("close");
-            $('#search').focus();
+            //$('#search').focus();
         }
     });
 
-    $('#searchBtn').button().click(function () {
+    $('#findBtn').button().click(function () {
         queryFood($('#search').val());
+        $('#search').focus();
+        return false; //for msie, otherwise events will fire unwanted!
     });
 
     $('#saveDayButton').button();
 
-    /*Start JSONP to get food values from the other site*/
-    function queryFood(searchString) {
-        //empty the list
-        $('#list').empty();
-        var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetFoodInfoJson?nameLike=" + searchString +
-            "&random=" + (new Date()).getTime();
-        var newScriptElement = document.createElement("script");
-        newScriptElement.setAttribute("src", url);
-        newScriptElement.setAttribute("id", "jsonp");
-        var oldScriptElement = document.getElementById("jsonp");
-        var head = document.getElementsByTagName("head")[0];
-        if (oldScriptElement == null) {
-            head.appendChild(newScriptElement);
-        } else {
-            head.replaceChild(newScriptElement, oldScriptElement);
-        }
-    }
+
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
@@ -193,6 +183,24 @@ function objDailyConsumed(food_id, food_name, food_amount) {
     this.food_id = food_id;
     this.food_name = food_name;
     this.food_amount = food_amount;
+}
+
+/*Start JSONP to get food values from the other site*/
+function queryFood(searchString) {
+    //empty the list
+    $('#list').empty();
+    var url = "http://traeningsvagten.dk/Services/FoodInfoWebService.asmx/GetFoodInfoJson?nameLike=" + searchString +
+        "&random=" + (new Date()).getTime();
+    var newScriptElement = document.createElement("script");
+    newScriptElement.setAttribute("src", url);
+    newScriptElement.setAttribute("id", "jsonp");
+    var oldScriptElement = document.getElementById("jsonp");
+    var head = document.getElementsByTagName("head")[0];
+    if (oldScriptElement == null) {
+        head.appendChild(newScriptElement);
+    } else {
+        head.replaceChild(newScriptElement, oldScriptElement);
+    }
 }
 
 
@@ -251,7 +259,7 @@ function updateFood(foodValues) {
         $('#list').append($("<li></li>")
             .html("<input readonly type='text' class='invisible' position=" + i + " id="
             + singleObject.FoodId + " value='"
-            + singleObject.DanName + "' ondblclick=addFunction(this); onkeypress='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
 }
 
