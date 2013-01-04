@@ -27,6 +27,11 @@ var focusedInput = null;
 var curSelFoodObj = null;
 var consumed = [];  //array to hold daily consumption of food
 
+/*Google authentication stuff*/
+var clientId = "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com";
+var apiKey = 'AIzaSyCy1yKSG2gs4_Ub6D9hhv_WGq4BZxXXD5Y';
+var scopes = 'https://www.googleapis.com/auth/userinfo.profile';
+
 /*Start the load function to set everything up*/
 $(document).ready(function () {
 
@@ -169,7 +174,15 @@ $(document).ready(function () {
 
     $('#saveDayButton').button();
 
+    /*Autehnticate by clicking the Google logo image*/
+    $('a#loginAref').click(function(){
+        gapi.auth.authorize({client_id: clientId,
+            scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+    });
 
+    /*Authentication check on load*/
+    //handleClientLoad();
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
@@ -418,4 +431,43 @@ function addToDay(amount) {
 
 function captureLastFocusedInput( fip ){
     focusedInput = fip;
+}
+
+/*the authentication stuff first load the google authentication API*/
+
+function loadGapi() {
+    // Set the API key
+    gapi.client.setApiKey(apiKey);
+    window.setTimeout(checkAuth,1);
+    // Set: name of service, version and callback function
+    //gapi.client.load('traeningsvagten', 'v1', getPersons);
+}
+
+/*Check if we are autehnticated yet*/
+function checkAuth() {
+    gapi.auth.authorize({client_id: clientId,
+        scope: scopes, immediate: true}, handleAuthResult);
+}
+
+function handleAuthResult(authResult) {
+    var authorizeText = $('#loginGoogle');
+    if (authResult) {
+        authorizeText.html("Logget ind med Google!");
+        var token = gapi.auth.getToken();
+        $.ajax({
+            url: "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+token.access_token,
+            dataType: 'json',
+            data: "",
+            success: showData
+        });
+
+
+    } else {
+        authorizeText.html("Log ind med Google!");
+    }
+}
+
+function showData(data){
+    //alert( data.user_id );
+    return false;
 }

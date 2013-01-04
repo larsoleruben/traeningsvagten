@@ -57,7 +57,7 @@ $(document).ready(function () {
 
 function handleAuthClick(event) {
     gapi.auth.authorize({client_id: "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com",
-        scope: "https://www.googleapis.com/auth/userinfo.email", immediate: false}, handleAuthResult);
+        scope: "https://www.googleapis.com/auth/userinfo.email", immediate: true}, handleAuthResult);
     return false;
 }
 
