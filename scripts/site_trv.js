@@ -30,7 +30,8 @@ var consumed = [];  //array to hold daily consumption of food
 /*Google authentication stuff*/
 var clientId = "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com";
 var apiKey = 'AIzaSyCy1yKSG2gs4_Ub6D9hhv_WGq4BZxXXD5Y';
-var scopes = 'https://www.googleapis.com/auth/userinfo.profile';
+var scopes = ["https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile" ];
+var userId = null; //is set on the first log in and by authentication
 
 /*Start the load function to set everything up*/
 $(document).ready(function () {
@@ -181,8 +182,36 @@ $(document).ready(function () {
         return false;
     });
 
-    /*Authentication check on load*/
-    //handleClientLoad();
+    $('#btnSavePersonal').button().click(function(){
+        if( userId != null ){
+            var person = {};
+            person['id'] = userId;
+            person['fname'] =  $('#fname').val();
+            person['lname'] = $('#lastname').val();
+            person['gender'] =  $('#gender').val();
+            person['priSport'] = $('#sports').val();
+            person['height'] =  $('#height').val();
+            person['city'] = $('#city').val();;
+            person['address'] = $('#address').val();
+            person['zipcode'] = $('#zipcode').val();
+            person['email'] = $('#email').val();
+
+            var req;
+            req = gapi.client.traeningsvagten.person.insert(person);
+            req.execute(function (data) {
+                $('#email').val(data.email);
+                $('#fname').val(data.fname);
+                $('#lastname').val(data.lname);
+                $('#gender').val(data.gender);
+                $('#height').val(data.height);
+                $('#city').val( data.city);
+                $('#address').val(data.address);
+                $('#zipcode').val(data.zipcode);
+                $('#sports').val(data.priSport);
+            });
+        }
+    });
+
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
@@ -434,13 +463,13 @@ function captureLastFocusedInput( fip ){
 }
 
 /*the authentication stuff first load the google authentication API*/
-
 function loadGapi() {
     // Set the API key
     gapi.client.setApiKey(apiKey);
     window.setTimeout(checkAuth,1);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
+    gapi.client.load('traeningsvagten', 'v1');
 }
 
 /*Check if we are autehnticated yet*/
@@ -458,7 +487,11 @@ function handleAuthResult(authResult) {
             url: "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+token.access_token,
             dataType: 'json',
             data: "",
-            success: showData
+            success: function(data){
+                userId = data.user_id;
+                getPersonal( userId );
+
+            }
         });
 
 
@@ -467,7 +500,25 @@ function handleAuthResult(authResult) {
     }
 }
 
-function showData(data){
-    //alert( data.user_id );
-    return false;
+function getPersonal(user ){
+    var req = gapi.client.traeningsvagten.getPerson({'id':userId });
+    try{
+    req.execute(function (data) {
+        if( data.id ){
+            $('#email').val(data.email);
+            $('#fname').val(data.fname);
+            $('#lastname').val(data.lname);
+            $('#gender').val(data.gender);
+            $('#height').val(data.height);
+            $('#city').val( data.city);
+            $('#address').val(data.address);
+            $('#zipcode').val(data.zipcode);
+            $('#sports').val(data.priSport);
+        }
+    });
+    }catch ( err ){
+        console.error( err.toString());
+
+    }
+
 }
