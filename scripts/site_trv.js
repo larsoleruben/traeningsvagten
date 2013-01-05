@@ -197,7 +197,8 @@ $(document).ready(function () {
             person['email'] = $('#email').val();
 
             var req;
-            req = gapi.client.traeningsvagten.person.insert(person);
+            //req = gapi.client.traeningsvagten.person.insert(person);
+            req = gapi.client.traeningsvagten.insertPerson(person);
             req.execute(function (data) {
                 $('#email').val(data.email);
                 $('#fname').val(data.fname);
@@ -466,7 +467,7 @@ function captureLastFocusedInput( fip ){
 function loadGapi() {
     // Set the API key
     gapi.client.setApiKey(apiKey);
-    window.setTimeout(checkAuth,1);
+    window.setTimeout(checkAuth,20);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
     gapi.client.load('traeningsvagten', 'v1');

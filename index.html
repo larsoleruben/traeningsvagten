@@ -53,7 +53,7 @@
             <table id="personalData" class="tblForInputs">
                 <tr>
                     <td><label id="lblEmail" for="email">Email:</label></td>
-                    <td><input id="email" type="email" placeholder="your@mail.com" class="sections personal"/></td>
+                    <td><input id="email" readonly="readonly" type="email" placeholder="your@mail.com" class="sections personal"/></td>
                 </tr>
                 <tr>
                     <td><label id="lblFname" for="fname">Fornavn:</label></td>
@@ -281,10 +281,15 @@
 <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
 <script src="scripts/jquery.flot.js"></script>
 <script src="scripts/site_trv.js"></script>
+
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
 </script>
-
+<!--
+<script src="https://apis.google.com/js/client.js?onload=loadGapi">
+    { "client": {}, "googleapis.config": { root: "http://localhost:8888/_ah/api"  }  }
+</script>
+-->
 </div>
 </body>
 </html>
