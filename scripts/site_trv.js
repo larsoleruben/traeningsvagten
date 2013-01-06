@@ -36,6 +36,7 @@ var userId = null; //is set on the first log in and by authentication
 /*Start the load function to set everything up*/
 $(document).ready(function () {
 
+    var test =  { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
 
     /* Start load function Declarations */
 
@@ -467,7 +468,7 @@ function captureLastFocusedInput( fip ){
 function loadGapi() {
     // Set the API key
     gapi.client.setApiKey(apiKey);
-    window.setTimeout(checkAuth,20);
+    window.setTimeout(checkAuth,1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
     gapi.client.load('traeningsvagten', 'v1');
@@ -475,22 +476,28 @@ function loadGapi() {
 
 /*Check if we are autehnticated yet*/
 function checkAuth() {
-    gapi.auth.authorize({client_id: clientId,
-        scope: scopes, immediate: true}, handleAuthResult);
+        gapi.auth.authorize({client_id: clientId,
+            scope: scopes, immediate: true}, handleAuthResult);
 }
 
 function handleAuthResult(authResult) {
     var authorizeText = $('#loginGoogle');
     if (authResult) {
-        authorizeText.html("Logget ind med Google!");
+        //authorizeText.html("Logget ind med Google!");
         var token = gapi.auth.getToken();
         $.ajax({
             url: "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+token.access_token,
             dataType: 'json',
             data: "",
             success: function(data){
-                userId = data.user_id;
-                getPersonal( userId );
+                //userId = data.user_id;
+                if( clientId === data.audience  ){
+                    userId = data.user_id;
+                    authorizeText.html("Logget ind med Google!");
+                    getPersonal( userId );
+                }else{
+                    alert( "Something wrong in token identification!" )
+                }
 
             }
         });
