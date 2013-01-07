@@ -120,10 +120,6 @@ $(document).ready(function () {
         modal:true,
         buttons:{
             "Tilføj:":function () {
-                /*TODO
-                 * Must add already present foodid's to the foodid which is alredy in the list. This is important, otherwise
-                 * removal leads to negative numbers and user might not get the result whished for.
-                 * */
                 if (checkInput($('#amount').val(), "num")) {
                     //new way with ipad compatible list boxes
                     addToDay(parseFloat($('#amount').val()));
@@ -189,7 +185,7 @@ $(document).ready(function () {
             person['id'] = userId;
             person['fname'] =  $('#fname').val();
             person['lname'] = $('#lastname').val();
-            person['gender'] =  $('#gender').val();
+            person['gender'] =  $('#gender').prop("selectedIndex" );
             person['priSport'] = $('#sports').val();
             person['height'] =  $('#height').val();
             person['city'] = $('#city').val();;
@@ -204,7 +200,7 @@ $(document).ready(function () {
                 $('#email').val(data.email);
                 $('#fname').val(data.fname);
                 $('#lastname').val(data.lname);
-                $('#gender').val(data.gender);
+                $('#gender').prop("selectedIndex", parseInt(data.gender));
                 $('#height').val(data.height);
                 $('#city').val( data.city);
                 $('#address').val(data.address);
@@ -485,29 +481,24 @@ function handleAuthResult(authResult) {
     if (authResult) {
         //authorizeText.html("Logget ind med Google!");
         var token = gapi.auth.getToken();
-        $.ajax({
-            url: "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+token.access_token,
-            dataType: 'json',
-            data: "",
-            success: function(data){
-                //userId = data.user_id;
-                if( clientId === data.audience  ){
-                    userId = data.user_id;
-                    authorizeText.html("Logget ind med Google!");
-                    getPersonal( userId );
-                }else{
-                    alert( "Something wrong in token identification!" )
-                }
-
-            }
-        });
-
-
+        $.getJSON('https://www.googleapis.com/oauth2/v1/tokeninfo?&access_token='+token.access_token, loggedIn);
     } else {
         authorizeText.html("Log ind med Google!");
     }
 }
 
+//the JSONP call back method, seems to stabilize it, still will not work in ie9?
+function loggedIn( data ){
+    var authorizeText = $('#loginGoogle');
+    if( clientId === data.audience  ){
+        userId = data.user_id;
+        authorizeText.html("Logget ind med Google!");
+        getPersonal( userId );
+    }else{
+        alert( "Something wrong in token identification!" )
+    }
+}
+//get the user from the database if it exists
 function getPersonal(user ){
     var req = gapi.client.traeningsvagten.getPerson({'id':userId });
     try{
@@ -516,7 +507,7 @@ function getPersonal(user ){
             $('#email').val(data.email);
             $('#fname').val(data.fname);
             $('#lastname').val(data.lname);
-            $('#gender').val(data.gender);
+            $('#gender').prop("selectedIndex",parseInt(data.gender));
             $('#height').val(data.height);
             $('#city').val( data.city);
             $('#address').val(data.address);
