@@ -28,8 +28,8 @@ var curSelFoodObj = null;
 var consumed = [];  //array to hold daily consumption of food
 
 /*Google authentication stuff*/
-var clientId = "385810392059-h55aee1iei6b1an43jnuqsaepjnlb7g5.apps.googleusercontent.com";
-var apiKey = 'AIzaSyCy1yKSG2gs4_Ub6D9hhv_WGq4BZxXXD5Y';
+var clientId = "175552442718.apps.googleusercontent.com";
+var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile" ];
 var userId = null; //is set on the first log in and by authentication
 
@@ -172,6 +172,8 @@ $(document).ready(function () {
 
     $('#saveDayButton').button();
 
+    $('#saveMeasBtn').button();
+
     /*Autehnticate by clicking the Google logo image*/
     $('a#loginAref').click(function(){
         gapi.auth.authorize({client_id: clientId,
@@ -195,7 +197,7 @@ $(document).ready(function () {
 
             var req;
             //req = gapi.client.traeningsvagten.person.insert(person);
-            req = gapi.client.traeningsvagten.insertPerson(person);
+            req = gapi.client.trvagten.insertPerson(person);
             req.execute(function (data) {
                 $('#email').val(data.email);
                 $('#fname').val(data.fname);
@@ -467,7 +469,7 @@ function loadGapi() {
     window.setTimeout(checkAuth,1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
-    gapi.client.load('traeningsvagten', 'v1');
+    gapi.client.load('trvagten', 'v1');
 }
 
 /*Check if we are autehnticated yet*/
@@ -500,7 +502,7 @@ function loggedIn( data ){
 }
 //get the user from the database if it exists
 function getPersonal(user ){
-    var req = gapi.client.traeningsvagten.getPerson({'id':userId });
+    var req = gapi.client.trvagten.getPerson({'id':userId });
     try{
     req.execute(function (data) {
         if( data.id ){
