@@ -33,6 +33,9 @@ var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile" ];
 var userId = null; //is set on the first log in and by authentication
 
+//todays date
+var dag;
+
 /*Start the load function to set everything up*/
 $(document).ready(function () {
 
@@ -40,7 +43,7 @@ $(document).ready(function () {
 
     /* Start load function Declarations */
 
-    var dag = new Date();
+    dag = new Date();
 
 
     /*End load function Declarations*/
@@ -145,9 +148,9 @@ $(document).ready(function () {
 
 
     $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
-    $("#datepicker").datepicker();
+    $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
     $('#datepicker1').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
-    $('#datepicker1').datepicker();
+    $('#datepicker1').datepicker({ dateFormat: "dd/mm/yy" });
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){
@@ -496,6 +499,11 @@ function loggedIn( data ){
         userId = data.user_id;
         authorizeText.html("Logget ind med Google!");
         getPersonal( userId );
+        var dateFromObj = new Date();
+        dateFromObj.setDate(dag.getDate()-14);
+        var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
+        var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
+        getPersonalMeasurements(dateFrom, dateTo);
     }else{
         alert( "Something wrong in token identification!" )
     }
@@ -522,4 +530,17 @@ function getPersonal(user ){
 
     }
 
+}
+//get the measurements for the last 30 days, if they are available
+function getPersonalMeasurements( dateFrom, dateTo ){
+    var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+    req.execute( function(data ){
+        var d1 = [];
+        for( i=0; i < data.items.length; i++){
+            d1.push([i, data.items[i].weight]);
+        }
+        $.plot($("#graphWeight"), [d1 ],{
+            grid:{borderWidth: 0}
+        });
+    });
 }
