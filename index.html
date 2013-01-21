@@ -123,6 +123,8 @@
         <!--Personal middle section starts here-->
         <section id="measurements" class="roundCorners">
             <h2>Personlige målinger</h2>
+            <!--make a hidden field for the ID of the measurements -->
+            <input hidden="hidden" id="measId" type="text" />
             <table id="tblMeasurements" class="tblForInputs">
                 <tr>
                     <td><label id="lblDatepicker1" for="datepicker1">Dato:</label></td>
@@ -137,8 +139,8 @@
                     <td><input class="sections measurements" id="stomac" type="text"/></td>
                 </tr>
                 <tr>
-                    <td><label id="lblFatpercentage" for="fatPercentage">Fedt procent:</label></td>
-                    <td><input class="sections measurements" id="fatPercentage" type="text"></td>
+                    <td><label id="lblFatpercentage" for="fatPtc">Fedt procent:</label></td>
+                    <td><input class="sections measurements" id="fatPtc" type="text"></td>
                 </tr>
                 <tr>
                     <td><label id="lblSaveMeas" for="saveMeasBtn">Gem:</label></td>

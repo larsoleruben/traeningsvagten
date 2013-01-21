@@ -146,11 +146,37 @@ $(document).ready(function () {
         });
     /*End modal popup form*/
 
-
+    //setting up the datepicker
     $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
+
+    //setting up the datepicker1
     $('#datepicker1').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $('#datepicker1').datepicker({ dateFormat: "dd/mm/yy" });
+
+    //Catching the datepicker 1 change events
+    $('#datepicker1').change(function(){
+        var dateString = $('#datepicker1').val().split("/");
+        //The same date both to and from
+        var dateFrom = dateString[2] + dateString[1] + dateString[0];
+        var dateTo = dateString[2] + dateString[1] + dateString[0];
+        var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        req.execute(function (data) {
+           if( data.items.length > 0){
+               $('#measId').val(data.items[0].id);
+               $('#datepicker1').val(toNormalDate(data.items[0].measDate));
+               $('#weight').val(data.items[0].weight);
+               $('#stomac').val(data.items[0].stomac);
+               $('#fatPtc').val(data.items[0].fatPtc);
+           }else //reset everything to zero except the datepicker field
+           {
+               $('#measId').val("");
+               $('#weight').val("");
+               $('#stomac').val("");
+               $('#fatPtc').val("");
+           }
+        });
+    });
 
     $('#search').keypress(function (e) {
         if (e.keyCode == $.ui.keyCode.ENTER ){
@@ -175,7 +201,35 @@ $(document).ready(function () {
 
     $('#saveDayButton').button();
 
-    $('#saveMeasBtn').button();
+    //saving the personal measurements for one day
+    $('#saveMeasBtn').button().click(function(){
+        var dateString = $('#datepicker1').val().split("/");
+        var measurements = {};
+            measurements['id'] = $('#measId').val();
+            measurements['userId'] = userId;
+            measurements['measDate'] = dateString[2] + dateString[1] + dateString[0];
+            measurements['weight'] = $('#weight').val();
+            measurements['stomac'] = $('#stomac').val();
+            measurements['fatPtc'] = $('#fatPtc').val();
+
+        if($('#measId')== ""){
+            var req = gapi.client.trvagten.insertMeasurements(measurements );
+        }else{
+            var req = gapi.client.trvagten.updateMeasurements(measurements );
+        }
+        req.execute( function(measurements ){
+            $('#measId').val(measurements['id']);
+            $('#datepicker1').val( toNormalDate(measurements.measDate));
+            $('#weight').val( measurements.weight);
+            $('#stomac').val(measurements.stomac);
+            $('#fatPtc').val(measurements.fatPtc);
+        });
+        var dateFromObj = new Date();
+        dateFromObj.setDate(dag.getDate()-14);
+        var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
+        var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
+        getPersonalMeasurements(dateFrom, dateTo, false);
+    });
 
     /*Autehnticate by clicking the Google logo image*/
     $('a#loginAref').click(function(){
@@ -503,7 +557,7 @@ function loggedIn( data ){
         dateFromObj.setDate(dag.getDate()-14);
         var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
         var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
-        getPersonalMeasurements(dateFrom, dateTo);
+        getPersonalMeasurements(dateFrom, dateTo, true);
     }else{
         alert( "Something wrong in token identification!" )
     }
@@ -532,15 +586,44 @@ function getPersonal(user ){
 
 }
 //get the measurements for the last 30 days, if they are available
-function getPersonalMeasurements( dateFrom, dateTo ){
+function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
     var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
-    req.execute( function(data ){
+    req.execute(function (data) {
         var d1 = [];
-        for( i=0; i < data.items.length; i++){
+        var d2 = [];
+        var d3 = [];
+        for (i = 0; i < data.items.length; i++) {
             d1.push([i, data.items[i].weight]);
+            d2.push([i, data.items[i].stomac]);
+            d3.push([i, data.items[i].fatPtc]);
         }
-        $.plot($("#graphWeight"), [d1 ],{
-            grid:{borderWidth: 0}
+        $.plot($("#graphWeight"), [d1 ], {
+            grid:{borderWidth:0}
         });
+        $.plot($("#graphStomac"), [d2 ], {
+            grid:{borderWidth:0}
+        });
+        $.plot($("#graphFat"), [d3 ], {
+            grid:{borderWidth:0}
+        });
+
+        //should the personal measurements form be updated?
+        if (doUpdate) {
+            data.items.sort(function (a, b) {
+                return parseInt(a.measDate) - parseInt(b.measDate)
+            });
+            var latestMeas = data.items[data.items.length - 1];
+            //set the form with the latest figures if there are any for this day (maybe).
+            $('#measId').val(latestMeas.id);
+            $('#datepicker1').val(toNormalDate(latestMeas.measDate));
+            $('#weight').val(latestMeas.weight);
+            $('#stomac').val(latestMeas.stomac);
+            $('#fatPtc').val(latestMeas.fatPtc);
+        }
     });
+}
+
+
+function toNormalDate( storeDate ){
+    return storeDate.toString().substr(6, 2) +"/"+storeDate.toString().substr(4, 2)+"/"+storeDate.toString().substr(0, 4)
 }
