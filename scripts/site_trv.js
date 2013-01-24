@@ -84,35 +84,6 @@ $(document).ready(function () {
         $('#food').addClass("selected");
     });
 
-    /*testing the graph interfacew*/
-    $(function () {
-        var d1 = [];
-        var d2 = [];
-        var d3 = [];
-        var test = 75;
-        for (var i = 0; i < 30; i += 1){
-            test -= Math.random();
-            d1.push([i, test]);
-            d2.push([i, 90 + 2*Math.random()])
-            d3.push([i, 15 + 2*Math.random()])
-        }
-
-        //var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-
-        // a null signifies separate line segments
-        //var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
-
-        $.plot($("#graphWeight"), [d1 ],{
-            grid:{borderWidth: 0}
-        });
-        $.plot($("#graphStomac"), [d2 ],{
-            grid:{borderWidth: 0}
-        });
-        $.plot($("#graphFat"), [d3 ],{
-            grid:{borderWidth: 0}
-        });
-
-    });
 
     /*setting up the dialog popup form*/
     $("#dialog-form").dialog({
@@ -146,11 +117,12 @@ $(document).ready(function () {
         });
     /*End modal popup form*/
 
-    //setting up the datepicker
+    //setting up the datepicker for food
     $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
 
-    //setting up the datepicker1
+
+    //setting up the datepicker1 personal measurements
     $('#datepicker1').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $('#datepicker1').datepicker({ dateFormat: "dd/mm/yy" });
 
@@ -199,7 +171,26 @@ $(document).ready(function () {
         $('#search').focus();
     });
 
-    $('#saveDayButton').button();
+    $('#saveDayButton').button().click(function(){
+        //declaring the objects for the json string
+        var consumed = []; //array to hold the consumed objects
+        var food = {}; //object for hold the consumed array and other id's
+        var dateString = $('#datepicker').val().split("/");
+        food.id = dateString[2] + dateString[1] + dateString[0];
+        food.userId = userId;
+        food.foodDate = dateString[2] + dateString[1] + dateString[0];
+        $(".inDayList").each(function (index) {
+            var item = {};
+            item.foodId = $(this).attr("id");
+            item.foodWeight = $(this).attr("amount");
+            consumed.push( item );
+        });
+        food.consumed = JSON.stringify(consumed);
+        var req = gapi.client.trvagten.updateFood( food );
+        req.execute( function( foodData ){
+            var test = foodData;
+        });
+    });
 
     //saving the personal measurements for one day
     $('#saveMeasBtn').button().click(function(){
@@ -622,6 +613,12 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
         }
     });
 }
+
+//get food consumption for on day and fill the list and the consumption table.
+function getFood( date ){
+
+}
+
 
 
 function toNormalDate( storeDate ){
