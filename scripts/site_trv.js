@@ -625,16 +625,17 @@ function getFood(date) {
     $('#listDay').empty();
     var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
     req.execute(function (data) {
-        var a = data;
-        if (data != null) {
-            var cons =  JSON.parse(data.consumed.value);
-            for (i = 0; i < cons.length; i++) {
-                getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
+        if (data) {
+            var cons = JSON.parse(data.consumed.value);
+            if (cons) {
+                for (i = 0; i < cons.length; i++) {
+                    getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
 
-                $('#listDay').append($("<li id=remove_" +cons[i].foodId  + " ></li>")
-                    .html("<input readonly type='text' class='invisible' id="
-                    + cons[i].foodId + " amount="+cons[i].foodWeight+" value='"
-                    + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                    $('#listDay').append($("<li id=remove_" + cons[i].foodId + " ></li>")
+                        .html("<input readonly type='text' class='invisible, inDayList' id="
+                        + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
+                        + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                }
             }
         }
 
