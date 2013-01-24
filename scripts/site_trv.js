@@ -120,6 +120,11 @@ $(document).ready(function () {
     //setting up the datepicker for food
     $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
     $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
+    //Catching the datepicker change events
+    $('#datepicker').change(function(){
+        var dateString = $('#datepicker').val().split("/");
+        getFood(dateString[2] + dateString[1] + dateString[0]);
+    });
 
 
     //setting up the datepicker1 personal measurements
@@ -183,10 +188,11 @@ $(document).ready(function () {
             var item = {};
             item.foodId = $(this).attr("id");
             item.foodWeight = $(this).attr("amount");
+            item.foodName = $(this).val();
             consumed.push( item );
         });
         food.consumed = JSON.stringify(consumed);
-        var req = gapi.client.trvagten.updateFood( food );
+        var req = gapi.client.trvagten.insertFood( food );
         req.execute( function( foodData ){
             var test = foodData;
         });
@@ -615,10 +621,25 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
 }
 
 //get food consumption for on day and fill the list and the consumption table.
-function getFood( date ){
+function getFood(date) {
+    $('#listDay').empty();
+    var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
+    req.execute(function (data) {
+        var a = data;
+        if (data != null) {
+            var cons =  JSON.parse(data.consumed.value);
+            for (i = 0; i < cons.length; i++) {
+                getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
 
+                $('#listDay').append($("<li id=remove_" +cons[i].foodId  + " ></li>")
+                    .html("<input readonly type='text' class='invisible' id="
+                    + cons[i].foodId + " amount="+cons[i].foodWeight+" value='"
+                    + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+            }
+        }
+
+    });
 }
-
 
 
 function toNormalDate( storeDate ){
