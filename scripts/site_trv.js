@@ -55,6 +55,9 @@ $(document).ready(function () {
     $('#personalDetails').hide();
     $('#measurements').hide();
     $('#weigtGraph').hide();
+    $('#traeningLeft').hide();
+    $('#traeningCenter').hide();
+    $('#traeningGraph').hide();
     $('#food').addClass("selected");
 
 
@@ -63,15 +66,20 @@ $(document).ready(function () {
     $('#search').focus();
 
     /*Setting up the menu and the default pages*/
+    /*TODO Make this generic somehow. This is a little too error prone.*/
     $('#dashboard').click(function () {
         $('#searchFood').hide();
         $('#consumedToday').hide();
         $('#tableDigesting').hide();
+        $('#traeningLeft').hide();
+        $('#traeningCenter').hide();
+        $('#traeningGraph').hide();
         $('#personalDetails').show();
         $('#measurements').show();
         $('#weigtGraph').show();
         $('#dashboard').addClass("selected");
         $('#food').removeClass("selected");
+        $('#traening').removeClass("selected");
 
 
     });
@@ -81,10 +89,29 @@ $(document).ready(function () {
         $('#consumedToday').show();
         $('#tableDigesting').show();
         $('#personalDetails').hide();
+        $('#traeningLeft').hide();
+        $('#traeningCenter').hide();
+        $('#traeningGraph').hide();
         $('#measurements').hide();
         $('#weigtGraph').hide();
         $('#dashboard').removeClass("selected");
+        $('#traening').removeClass("selected");
         $('#food').addClass("selected");
+    });
+
+    $('#traening').click(function () {
+        $('#searchFood').hide();
+        $('#consumedToday').hide();
+        $('#tableDigesting').hide();
+        $('#personalDetails').hide();
+        $('#measurements').hide();
+        $('#weigtGraph').hide();
+        $('#traeningLeft').show();
+        $('#traeningCenter').show();
+        $('#traeningGraph').show();
+        $('#dashboard').removeClass("selected");
+        $('#food').removeClass("selected");
+        $('#traening').addClass("selected");
     });
 
 
@@ -633,7 +660,7 @@ function getFood(date) {
     $('#listDay').empty();
     var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
     req.execute(function (data) {
-        if (data) {
+        if (data.consumed) {
             var cons = JSON.parse(data.consumed.value);
             if (cons) {
                 for (i = 0; i < cons.length; i++) {

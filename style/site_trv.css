@@ -196,6 +196,30 @@ aside#weigtGraph {
 
 /*end the table cell section for dashboard*/
 
+/*start of the table cells for traening*/
+section#traeningLeft {
+    display: table-cell;
+    background-color: #fefefe;
+    width: 40%;
+    padding: 15px;
+    vertical-align: top;
+}
+
+section#traeningCenter {
+    display: table-cell;
+    background-color: #fefefe;
+    width: 30%;
+    padding: 15px;
+    vertical-align: top;
+}
+
+aside#traeningGraph {
+    display: table-cell;
+    background-color: #fefefe;
+    padding: 15px;
+    vertical-align: top;
+}
+/*end of the table cells for traening*/
 footer {
     background-color: #fefefe;
     color: #000000;
@@ -307,7 +331,7 @@ caption {
     color: red;
 }
 
-#dashboard, #food:hover {
+#dashboard,#traening, #food:hover {
     cursor: pointer;
     cursor: hand;
 }
