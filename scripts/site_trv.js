@@ -7,6 +7,7 @@
  */
 
 /*some global vars of different kinds*/
+/*
 var totEnergy = 0;
 var totFat = 0;
 var totCarbo = 0;
@@ -22,10 +23,12 @@ var totMagnesium = 0;
 var totIron = 0;
 var totWater = 0;
 var totAmount = 0;
+*/
 var focusedInput = null;
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
-var consumed = [];  //array to hold daily consumption of food
+var totConsumedOBJ = { 'totEnergy':0,'totFat':0, 'totCarbo':0, 'totProtein':0,'totAlcohol':0,'totFiber':0,'totCholesterol':0,'totSatFat':0,
+                       'totMonoUnsatFat':0,'totSodium':0,'totPotassium':0,'totMagnesium':0,'totIron':0, 'totWater':0,'totAmount':0 }  //array to hold daily consumption of food
 
 /*Google authentication stuff*/
 var clientId = "175552442718.apps.googleusercontent.com";
@@ -122,8 +125,18 @@ $(document).ready(function () {
     $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
     //Catching the datepicker change events
     $('#datepicker').change(function(){
+        var counter = 0;
+        var rows = $("#consumedTable tr:gt(0)"); // skip the header row
+        rows.each(function(index) {
+            this.cells[1].innerHTML = "0.00";
+        });
+        var keys = Object.keys(totConsumedOBJ);
+        for( var i=keys.length;i--;){
+            totConsumedOBJ[keys[i]] = 0;
+        }
         var dateString = $('#datepicker').val().split("/");
         getFood(dateString[2] + dateString[1] + dateString[0]);
+
     });
 
 
@@ -265,7 +278,6 @@ $(document).ready(function () {
             });
         }
     });
-
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
@@ -361,73 +373,66 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
     for (i = 0; i < nutrients.length; i++) {
         switch (nutrients[i].compid) {
             case "0000":
-                totEnergy += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#energy').html(totEnergy.toFixed(2).toString());
+                totConsumedOBJ.totEnergy += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#energy').html(totConsumedOBJ.totEnergy.toFixed(2).toString());
                 break;
             case "0001":
-                totProtein += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#protein').html(totProtein.toFixed(2).toString());
+                totConsumedOBJ.totProtein += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#protein').html(totConsumedOBJ.totProtein.toFixed(2).toString());
                 break;
             case "0003":
-                totFat += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#fat').html(totFat.toFixed(2).toString());
+                totConsumedOBJ.totFat += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#fat').html(totConsumedOBJ.totFat.toFixed(2).toString());
                 break;
             case "0004":
-                totSatFat += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#satfat').html(totSatFat.toFixed(2).toString());
+                totConsumedOBJ.totSatFat += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#satfat').html(totConsumedOBJ.totSatFat.toFixed(2).toString());
             case "0005":
-                totMonoUnsatFat += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#monounsatfat').html(totSatFat.toFixed(2).toString());
+                totConsumedOBJ.totMonoUnsatFat += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#monounsatfat').html(totConsumedOBJ.totSatFat.toFixed(2).toString());
                 break;
             case "0007":
-                totCarbo += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#carbohydrates').html(totMonoUnsatFat.toFixed(2).toString());
+                totConsumedOBJ.totCarbo += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#carbohydrates').html(totConsumedOBJ.totMonoUnsatFat.toFixed(2).toString());
                 break;
             case "0010":
-                totFiber += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#fiber').html(totFiber.toFixed(2).toString());
+                totConsumedOBJ.totFiber += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#fiber').html(totConsumedOBJ.totFiber.toFixed(2).toString());
                 break
             case "0011":
-                totAlcohol += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#alcohol').html(totAlcohol.toFixed(2).toString());
+                totConsumedOBJ.totAlcohol += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#alcohol').html(totConsumedOBJ.totAlcohol.toFixed(2).toString());
                 break;
             case "0013":
-                totWater += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#water').html(totWater.toFixed(2).toString());
+                totConsumedOBJ.totWater += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#water').html(totConsumedOBJ.totWater.toFixed(2).toString());
                 break;
             case "0223":
-                totCholesterol += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#cholesterol').html(totCholesterol.toFixed(2).toString());
+                totConsumedOBJ.totCholesterol += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#cholesterol').html(totConsumedOBJ.totCholesterol.toFixed(2).toString());
                 break;
             case "0056":
-                totSodium += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#sodium').html(totSodium.toFixed(2).toString());
+                totConsumedOBJ.totSodium += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#sodium').html(totConsumedOBJ.totSodium.toFixed(2).toString());
                 break;
             case "0057":
-                totPotassium += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#potassium').html(totPotassium.toFixed(2).toString());
+                totConsumedOBJ.totPotassium += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#potassium').html(totConsumedOBJ.totPotassium.toFixed(2).toString());
             case "0059":
-                totMagnesium += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#magnesium').html(totMagnesium.toFixed(2).toString());
+                totConsumedOBJ.totMagnesium += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#magnesium').html(totConsumedOBJ.totMagnesium.toFixed(2).toString());
                 break;
             case "0061":
-                totIron += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#iron').html(totIron.toFixed(2).toString());
+                totConsumedOBJ.totIron += parseFloat(nutrients[i].BestLoc) * amount;
+                $('#iron').html(totConsumedOBJ.totIron.toFixed(2).toString());
                 break;
         }
     }
-    totAmount += parseFloat(foodAmount);
-    $('#totalAmount').html(totAmount.toString());
+    totConsumedOBJ.totAmount += parseFloat(foodAmount);
+    $('#totalAmount').html(totConsumedOBJ.totAmount.toString());
 
 }
 
-var lpad = function (value, padding) {
-    var zeroes = "0";
-    for (var i = 0; i < padding; i++) {
-        zeroes += "0";
-    }
-    return (zeroes + value).slice(padding * -1);
-}
 
 
 /*Get the double click event from the results of the query*/
@@ -555,6 +560,9 @@ function loggedIn( data ){
         var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
         var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
         getPersonalMeasurements(dateFrom, dateTo, true);
+        //initialize the food selection for the actual day;
+        var initDateString = $('#datepicker').val().split("/");
+        getFood(initDateString[2] + initDateString[1] + initDateString[0]);
     }else{
         alert( "Something wrong in token identification!" )
     }
@@ -632,7 +640,7 @@ function getFood(date) {
                     getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
 
                     $('#listDay').append($("<li id=remove_" + cons[i].foodId + " ></li>")
-                        .html("<input readonly type='text' class='invisible, inDayList' id="
+                        .html("<input readonly type='text' class='invisible inDayList' id="
                         + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
                         + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
                 }
@@ -642,7 +650,20 @@ function getFood(date) {
     });
 }
 
+/************************************************************************************************************************/
+/*Utility functions*/
+/************************************************************************************************************************/
 
+//Convert a YYYYMMDD date to a DD/MM/YYYY date
 function toNormalDate( storeDate ){
     return storeDate.toString().substr(6, 2) +"/"+storeDate.toString().substr(4, 2)+"/"+storeDate.toString().substr(0, 4)
+}
+
+//utility function to pad a number with leading zero's
+var lpad = function (value, padding) {
+    var zeroes = "0";
+    for (var i = 0; i < padding; i++) {
+        zeroes += "0";
+    }
+    return (zeroes + value).slice(padding * -1);
 }
