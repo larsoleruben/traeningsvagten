@@ -389,3 +389,12 @@ caption {
     background-color: transparent;
     width: 285px;
 }
+
+select{
+    border: 0px;
+    width: 135px;
+    height: 30px;
+    border: thin solid #d3d3d3;
+    border-radius: 4px;
+    font-size: 110%;
+}

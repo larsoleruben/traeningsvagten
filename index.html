@@ -10,9 +10,11 @@
     <link rel="stylesheet" type="text/css" href="style/site_trv.css">
 </head>
 <body>
+<!--
 <div id="underConstruction">
     <h1 id="ucHeader">Under construction</h1>
 </div>
+-->
 <div id="dialog-form" title="Tilføj til dag">
     <p class="validateTips"></p>
 
@@ -48,7 +50,21 @@
 <div id="tableContainer">
     <div id="tableRow">
         <!--Traening left section starts here -->
-
+        <section id="traeningLeft" class="roundCorners">
+            <article id="instruction">
+                <h2>How to use this section</h2>
+                <p>Type: Hvilken type træning har du lavet</p>
+                <p>Total: Tiden i munutter</p>
+                <p>Max: Antal minutter i max område</p>
+                <p>AT: Antal minutter i Areobe Tærskel</p>
+                <p>Sub AT: Antal minutter lige under AT</p>
+                <p>IG: Minutter i intensiv grundtræning</p>
+                <p>Power: Antal power gentagelser (fra lav kadance til max i fx. 10 sek)</p>
+                <p>FS: Funktionel Styrketræning, antal minutter</p>
+                <p>Dist: Kørt eller løbet distance</p>
+                <p>Energi: beregnet energi forbrug ved tæningspas</p>
+            </article>
+        </section>
         <!--Traening left section ends here -->
         <!--Personal left section starts here-->
         <section id="personalDetails" class="roundCorners">
@@ -124,7 +140,79 @@
         </section>
         <!--Food left section ends here-->
         <!--Traening middle section starts here -->
+        <section id="traeningCenter" class="roundCorners">
+            <input hidden="hidden" id="traeningId" type="text" />
+            <table id="tblTraening" class="tblForInputs">
+                <tr>
+                    <td><label id="lblDatepicker2" for="datepicker2">Dato</label></td>
+                    <td><input id="datepicker2" class="sections" type="text" readonly></td>
+                </tr>
+                <tr>
+                    <td><label id="lblTraeningType" for="traeningType">Type</label></td>
+                    <td>
+                        <select name="trType" id="traeningType">
+                            <option id="cycling" value="cycling">Cykling</option>
+                            <option id="mtb" value="mtb">Cykling MTB</option>
+                            <option id="running" value="running">Løb</option>
+                            <option id="rollerskate" value="rollerskate">Inliners</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label id="lblTot" for="total">Total</label></td>
+                    <td><input id="total" class="sections" type="text"></td>
+                </tr>
+                 <tr>
+                    <td><label id="lblMax" for="max">Max</label></td>
+                    <td><input id="max" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblAt" for="at">AT</label></td>
+                    <td><input id="at" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblSubAt" for="subAt">Sub AT</label></td>
+                    <td><input id="subAt" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblIg" for="ig">Intensiv Grundtræning</label></td>
+                    <td><input id="ig" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblPower" for="power">Power</label></td>
+                    <td><input id="power" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblFs" for="fs">Funktionel Styrketræning</label></td>
+                    <td><input id="fs" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblDist" for="dist">Distance</label></td>
+                    <td><input id="dist" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblUsedEnergy" for="UsedEnergy">Energi</label></td>
+                    <td><input id="UsedEnergy" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblplace" for="place">Sted</label></td>
+                    <td><input id="place" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblPercievedIntensity" for="percievedIntensity">Intensitet (1 til 10)</label></td>
+                    <td><input id="percievedIntensity" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblcomments" for="comments">Kommentarer</label></td>
+                    <td><input id="comments" class="sections" type="text"></td>
+                </tr>
+                <tr>
+                    <td><label id="lblSaveTraening" for="saveTraeningBtn">Gem:</label></td>
+                    <td><Button  id="saveTraeningBtn">Gem Træning</button></td>
+                </tr>
 
+            </table>
+        </section>
         <!--Traening middle section ends here -->
         <!--Personal middle section starts here-->
         <section id="measurements" class="roundCorners">

@@ -305,6 +305,44 @@ $(document).ready(function () {
             });
         }
     });
+
+    /*All the save training stuff from here*/
+    $('#saveTraeningBtn').button().click(function(){
+        var dateString = $('#datepicker2').val().split("/");
+        var traening = {};
+        //traening.id = 61;
+        traening.userId = userId;
+        traening.doneDate = dateString[2] + dateString[1] + dateString[0];
+        traening.trainingType = $('#traeningType').prop("selectedIndex");
+        traening.totalTimeMin = $('#total').val();
+        traening.maxTime = $('#max').val();
+        traening.atTime = $('#at').val();
+        traening.subAtTime = $('#subAt').val();
+        traening.powerNumber = $('#ig').val();
+        traening.strengthTime = $('#power').val();
+        traening.baseTime = $('#fs').val();
+        traening.distance = $('#dist').val();
+        traening.energy = $('#UsedEnergy').val();
+        traening.comments = $('#place').val();
+        traening.place = $('#comments').val();
+        traening.percievedIntensity = $('#percievedIntensity').val();
+        var req;
+        req = gapi.client.trvagten.insertTraening(traening);
+        req.execute(function( data ){
+            $('#traeningId').val(data.id.id);
+            alert( data.id.id );
+        });
+    });
+
+    $('#trType').button();
+    //setting up the datepicker1 traening measurements
+    $('#datePicker2').datepicker();
+    $('#datepicker2').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
+    $('#datepicker2').datepicker({ dateFormat: "dd/mm/yy" });
+
+
+    /*End All the save training stuff from here*/
+
 });
 
 /*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
