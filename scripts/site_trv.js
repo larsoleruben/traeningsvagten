@@ -749,13 +749,13 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
         }
         $.plot($("#graphWeight"), [d1 ], {
             grid:{borderWidth:0}
-        });
+        }).draw();
         $.plot($("#graphStomac"), [d2 ], {
             grid:{borderWidth:0}
-        });
+        }).draw();
         $.plot($("#graphFat"), [d3 ], {
             grid:{borderWidth:0}
-        });
+        }).draw();
 
         //should the personal measurements form be updated?
         if (doUpdate) {
@@ -880,3 +880,7 @@ var lpad = function (value, padding) {
 }
 
 /*input validation made simple*/
+var validateInput;
+validateInput = function (input, type) {
+
+};
