@@ -310,7 +310,7 @@ $(document).ready(function () {
     $('#saveTraeningBtn').button().click(function(){
         var dateString = $('#datepicker2').val().split("/");
         var traening = {};
-        //traening.id = 61;
+        traening.id = $('#traeningId').val();
         traening.userId = userId;
         traening.doneDate = dateString[2] + dateString[1] + dateString[0];
         traening.trainingType = $('#traeningType').prop("selectedIndex");
@@ -318,27 +318,40 @@ $(document).ready(function () {
         traening.maxTime = $('#max').val();
         traening.atTime = $('#at').val();
         traening.subAtTime = $('#subAt').val();
-        traening.powerNumber = $('#ig').val();
-        traening.strengthTime = $('#power').val();
-        traening.baseTime = $('#fs').val();
+        traening.fs =  $('#fs').val();
+        traening.power = $('#power').val();
+        traening.ig = $('#ig').val();
         traening.distance = $('#dist').val();
         traening.energy = $('#UsedEnergy').val();
-        traening.comments = $('#place').val();
-        traening.place = $('#comments').val();
+        traening.comments = $('#comments').val();
+        traening.place = $('#place').val();
         traening.percievedIntensity = $('#percievedIntensity').val();
+        /*TODO make these two similar into one function for filling out the form*/
         var req;
         req = gapi.client.trvagten.insertTraening(traening);
         req.execute(function( data ){
-            $('#traeningId').val(data.id.id);
-            alert( data.id.id );
+            fillTraining(data);
         });
     });
 
     $('#trType').button();
     //setting up the datepicker1 traening measurements
     $('#datePicker2').datepicker();
-    $('#datepicker2').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
-    $('#datepicker2').datepicker({ dateFormat: "dd/mm/yy" });
+    $('#datepicker2').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
+    $('#datepicker2').datepicker({ dateFormat:"dd/mm/yy" });
+    $('#datepicker2').change(function () {
+        var dateString = $('#datepicker2').val().split("/");
+        var dateFrom = dateString[2] + dateString[1] + dateString[0];
+        var dateTo = dateString[2] + dateString[1] + dateString[0];
+        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        req.execute(test = function (data) {
+
+                fillTraining(data.items[0]);
+
+        });
+
+
+    });
 
 
     /*End All the save training stuff from here*/
@@ -628,6 +641,12 @@ function loggedIn( data ){
         //initialize the food selection for the actual day;
         var initDateString = $('#datepicker').val().split("/");
         getFood(initDateString[2] + initDateString[1] + initDateString[0]);
+        //initialize the traening section
+        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateTo, 'dateTo':dateTo });
+        req.execute(test = function (data) {
+                fillTraining(data.items[0]);
+        });
+
     }else{
         alert( "Something wrong in token identification!" )
     }
@@ -714,6 +733,55 @@ function getFood(date) {
 
     });
 }
+
+/*for download*/
+function getTraining( dateFrom, dateTo ){
+    var req = gapi.client.trvagten.listTraening( {'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo } );
+    req.execute(test = function(data){
+        alert( data.items.length);
+    });
+}
+
+function fillTraining(data) {
+    /*empty first*/
+    $('#traeningId').val("");
+    //$('#datepicker2').val(0);
+    $('#traeningType').prop("selectedIndex", 0);
+    $('#total').val(0);
+    $('#max').val(0);
+    $('#at').val(0);
+    $('#subAt').val(0);
+    $('#ig').val(0);
+    $('#power').val(0);
+    $('#ig').val(0);
+    $('#fs').val(0);
+    $('#dist').val(0);
+    $('#UsedEnergy').val(0);
+    $('#place').val("");
+    $('#comments').val("");
+    $('#percievedIntensity').val(0);
+    /*Fill in the collected values*/
+    if (data) {
+        $('#traeningId').val(data.id);
+        $('#datepicker2').val(toNormalDate(data.doneDate));
+        $('#traeningType').prop("selectedIndex", parseInt(data.trainingType));
+        $('#total').val(data.totalTimeMin);
+        $('#max').val(data.maxTime);
+        $('#at').val(data.atTime);
+        $('#subAt').val(data.subAtTime);
+        $('#ig').val(data.subAtTime);
+        $('#power').val(data.power);
+        $('#ig').val(data.ig);
+        $('#fs').val(data.fs);
+        $('#dist').val(data.distance);
+        $('#UsedEnergy').val(data.energy);
+        $('#place').val(data.place);
+        $('#comments').val(data.comments);
+        $('#percievedIntensity').val(data.percievedIntensity);
+    }
+}
+
+
 
 /************************************************************************************************************************/
 /*Utility functions*/
