@@ -162,7 +162,7 @@ $(document).ready(function () {
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
         req.execute(function (data) {
-           if( data.items.length > 0){
+           if( data.items && data.items.length > 0){
                $('#measId').val(data.items[0].id);
                $('#datepicker1').val(toNormalDate(data.items[0].measDate));
                $('#weight').val(data.items[0].weight);
@@ -287,7 +287,7 @@ $(document).ready(function () {
                 $('#sports').val(data.priSport);
             });
         }else{
-            alert( "bad input");
+            alert( "log ind først");
         }
     });
 
@@ -339,7 +339,12 @@ $(document).ready(function () {
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
         req.execute(function (data) {
+            if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
+            }else{
+                $('#traeningId').val("");
+                emptyTraining();
+            }
         });
     });
 
@@ -395,8 +400,17 @@ $(document).ready(function () {
         modal:true
     });
 
-
     /*End All the save training stuff from here*/
+
+    /*validation dialog*/
+
+    $('#inputValidatorDialog').dialog({
+        autoOpen:false,
+        hide:"explode",
+        height:300,
+        width:300,
+        modal:true
+    });
 
 });
 
@@ -448,7 +462,7 @@ function getNutrients(food_id, FoodAmount, FoodDate) {
 }
 
 
-
+/*works only for the pop up dialog when adding food :-( TODO improve*/
 function checkInput(input, type) {
     var retVal = false;
     if (type === "num") {
@@ -669,28 +683,33 @@ function handleAuthResult(authResult) {
 }
 
 //the JSONP call back method, seems to stabilize it, still will not work in ie9?
-function loggedIn( data ){
+function loggedIn(data) {
     var authorizeText = $('#loginGoogle');
-    if( clientId === data.audience  ){
+    if (clientId === data.audience) {
         userId = data.user_id;
         authorizeText.html("Logget ind med Google!");
-        getPersonal( userId );
+        getPersonal(userId);
         var dateFromObj = new Date();
-        dateFromObj.setDate(dag.getDate()-14);
-        var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
-        var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
+        dateFromObj.setDate(dag.getDate() - 14);
+        var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
+        var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
         getPersonalMeasurements(dateFrom, dateTo, true);
         //initialize the food selection for the actual day;
         var initDateString = $('#datepicker').val().split("/");
         getFood(initDateString[2] + initDateString[1] + initDateString[0]);
         //initialize the traening section
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateTo, 'dateTo':dateTo });
-        req.execute(test = function (data) {
+        req.execute(function (data) {
+            if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
+            }else{
+                $('#traeningId').val("");
+                emptyTraining();
+            }
         });
 
-    }else{
-        alert( "Something wrong in token identification!" )
+    } else {
+        alert("Something wrong in token identification!")
     }
 }
 //get the user from the database if it exists
@@ -823,6 +842,23 @@ function fillTraining(data) {
     }
 }
 
+function emptyTraining(){
+    $('#traeningId').val("");
+    $('#traeningType').prop("selectedIndex", 0);
+    $('#total').val(0);
+    $('#max').val(0);
+    $('#at').val(0);
+    $('#subAt').val(0);
+    $('#ig').val(0);
+    $('#power').val(0);
+    $('#ig').val(0);
+    $('#fs').val(0);
+    $('#dist').val(0);
+    $('#UsedEnergy').val(0);
+    $('#place').val("");
+    $('#comments').val("");
+    $('#percievedIntensity').val(0);
+}
 
 
 /************************************************************************************************************************/
@@ -842,3 +878,5 @@ var lpad = function (value, padding) {
     }
     return (zeroes + value).slice(padding * -1);
 }
+
+/*input validation made simple*/
