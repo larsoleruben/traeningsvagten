@@ -76,7 +76,7 @@
                 </tr>
                 <tr>
                     <td><label id="lblFname" for="fname">Fornavn:</label></td>
-                    <td><input id="fname" type="text" class="sections personal"/></td>
+                    <td><input id="fname" type="text" class="sections personal" /></td>
                 </tr>
                 <tr>
                     <td><label id="lblLastname" for="lastname">Efternavn:</label></td>
@@ -155,6 +155,7 @@
                             <option id="mtb" value="mtb">Cykling MTB</option>
                             <option id="running" value="running">Løb</option>
                             <option id="rollerskate" value="rollerskate">Inliners</option>
+                            <option id="strength" value="strength">Styrke træning</option>
                         </select>
                     </td>
                 </tr>
@@ -238,7 +239,7 @@
                 </tr>
                 <tr>
                     <td><label id="lblSaveMeas" for="saveMeasBtn">Gem:</label></td>
-                    <td><Button  id="saveMeasBtn">Gem Målinger</button</td>
+                    <td><Button  id="saveMeasBtn">Gem Målinger</button></td>
                 </tr>
             </table>
 
@@ -266,7 +267,44 @@
         </section>
         <!--Food middle section ends here -->
         <!--Traening right section starts here -->
-
+        <aside id="traeningGraph" class="roundCorners">
+            <h3>Download/se træninger</h3>
+            <table id="tblTraining">
+                <tr>
+                    <td><label id="lblDatepicker3" for="datepicker3">Fra:</label></td>
+                    <td><input class="sections measurements" id="datepicker3" type="text" readonly/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblDatepicker4" for="datepicker4">Til:</label></td>
+                    <td><input class="sections measurements" id="datepicker4" type="text" readonly/></td>
+                </tr>
+                <tr>
+                    <td><label id="lblGetTraning" for="getTraning">Hent</label></td>
+                    <td><Button  id="getTraning">Hent for at se</button></td>
+                </tr>
+            </table>
+            <div id="trSessions" title="Trænings pas">
+                <table id="tblTrSessions">
+                    <thead>
+                        <td>Dato</td>
+                        <td>Type</td>
+                        <td>Total</td>
+                        <td>Max</td>
+                        <td>AT</td>
+                        <td>SubAT</td>
+                        <td>Intensiv grundtr.</td>
+                        <td>Power</td>
+                        <td>Funktionel Styrketr.</td>
+                        <td>Distance</td>
+                        <td>Energi</td>
+                        <td>Sted</td>
+                        <td>Oplevet Intensitet</td>
+                        <td>Kommentar</td>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </aside>
         <!--Traening right section ends here -->
         <!--Personal right section starts here -->
         <aside id="weigtGraph" class="roundCorners">

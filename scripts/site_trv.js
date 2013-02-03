@@ -7,23 +7,6 @@
  */
 
 /*some global vars of different kinds*/
-/*
-var totEnergy = 0;
-var totFat = 0;
-var totCarbo = 0;
-var totProtein = 0;
-var totAlcohol = 0;
-var totFiber = 0;
-var totCholesterol = 0;
-var totSatFat = 0;
-var totMonoUnsatFat = 0;
-var totSodium = 0;
-var totPotassium = 0;
-var totMagnesium = 0;
-var totIron = 0;
-var totWater = 0;
-var totAmount = 0;
-*/
 var focusedInput = null;
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
@@ -276,7 +259,7 @@ $(document).ready(function () {
     });
 
     $('#btnSavePersonal').button().click(function(){
-        if( userId != null ){
+        if( userId != null  ){
             var person = {};
             person['id'] = userId;
             person['fname'] =  $('#fname').val();
@@ -284,7 +267,7 @@ $(document).ready(function () {
             person['gender'] =  $('#gender').prop("selectedIndex" );
             person['priSport'] = $('#sports').val();
             person['height'] =  $('#height').val();
-            person['city'] = $('#city').val();;
+            person['city'] = $('#city').val();
             person['address'] = $('#address').val();
             person['zipcode'] = $('#zipcode').val();
             person['email'] = $('#email').val();
@@ -303,6 +286,8 @@ $(document).ready(function () {
                 $('#zipcode').val(data.zipcode);
                 $('#sports').val(data.priSport);
             });
+        }else{
+            alert( "bad input");
         }
     });
 
@@ -326,12 +311,21 @@ $(document).ready(function () {
         traening.comments = $('#comments').val();
         traening.place = $('#place').val();
         traening.percievedIntensity = $('#percievedIntensity').val();
-        /*TODO make these two similar into one function for filling out the form*/
-        var req;
-        req = gapi.client.trvagten.insertTraening(traening);
-        req.execute(function( data ){
-            fillTraining(data);
-        });
+        /*save or update the training session*/
+        if($('#traeningId').val() == null ){
+            var req;
+            req = gapi.client.trvagten.insertTraening(traening);
+            req.execute(function( data ){
+                fillTraining(data);
+            });
+        }else{
+            var req;
+            req = gapi.client.trvagten.updateTraening(traening);
+            req.execute(function( data ){
+                fillTraining(data);
+            });
+        }
+
     });
 
     $('#trType').button();
@@ -344,13 +338,61 @@ $(document).ready(function () {
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
-        req.execute(test = function (data) {
-
+        req.execute(function (data) {
                 fillTraining(data.items[0]);
-
         });
+    });
+
+    $('#datePicker3').datepicker();
+    $('#datepicker3').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
+    $('#datepicker3').datepicker({ dateFormat:"dd/mm/yy" });
+
+    $('#datePicker4').datepicker();
+    $('#datepicker4').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
+    $('#datepicker4').datepicker({ dateFormat:"dd/mm/yy" });
 
 
+    $('#getTraning').button().click(function(){
+        /*empty the table*/
+        $( "#tblTrSessions tbody").empty();
+        /*Fill it again with new data*/
+        var dateString3 = $('#datepicker3').val().split("/");
+        var dateString4 = $('#datepicker4').val().split("/");
+        var dateFrom = dateString3[2] + dateString3[1] + dateString3[0];
+        var dateTo = dateString4[2] + dateString4[1] + dateString4[0];
+        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        req.execute(function (data) {
+            data.items.sort(function (a, b) {
+                return parseInt(a.doneDate) - parseInt(b.doneDate)
+            });
+            for( i=0; i < data.items.length; i++){
+                $( "#tblTrSessions tbody" ).append( "<tr>" +
+                    "<td>" + data.items[i].doneDate + "</td>" +
+                    "<td>" + data.items[i].trainingType + "</td>" +
+                    "<td>" + data.items[i].totalTimeMin + "</td>" +
+                    "<td>" + data.items[i].maxTime + "</td>" +
+                    "<td>" + data.items[i].atTime + "</td>" +
+                    "<td>" + data.items[i].subAtTime + "</td>" +
+                    "<td>" + data.items[i].ig + "</td>" +
+                    "<td>" + data.items[i].power + "</td>" +
+                    "<td>" + data.items[i].fs + "</td>" +
+                    "<td>" + data.items[i].distance + "</td>" +
+                    "<td>" + data.items[i].energy + "</td>" +
+                    "<td>" + data.items[i].place + "</td>" +
+                    "<td>" + data.items[i].percievedIntensity + "</td>" +
+                    "<td>" + data.items[i].comments + "</td>" +
+                    "</tr>" );
+            }
+        });
+        $("#trSessions").dialog("open");
+    });
+
+    $( "#trSessions" ).dialog({
+        autoOpen:false,
+        hide:"explode",
+        height:300,
+        width:1200,
+        modal:true
     });
 
 
