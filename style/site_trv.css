@@ -297,6 +297,10 @@ td, th {
     padding: 5px;
 }
 
+th, thead{
+    background-color: #dcdcdc;
+}
+
 tr:hover {
     background-color: #dcdcdc;
 }
@@ -397,4 +401,8 @@ select{
     border: thin solid #d3d3d3;
     border-radius: 4px;
     font-size: 110%;
+}
+
+.flat{
+   border-width: 0px;
 }
