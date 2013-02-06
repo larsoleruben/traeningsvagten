@@ -405,6 +405,7 @@ $(document).ready(function () {
             data.items.sort(function (a, b) {
                 return parseInt(a.doneDate) - parseInt(b.doneDate)
             });
+            /*TODO make the rainingtype into the strings and not the index :-) */
             for( i=0; i < data.items.length; i++){
                 $( "#tblTrSessions tbody" ).append( "<tr>" +
                     "<td>" + data.items[i].doneDate + "</td>" +
@@ -919,6 +920,7 @@ var lpad = function (value, padding) {
 }
 
 /*input validation made simple*/
+/*TODO make it more generic with the lengt and min and max of the numbers.*/
 var validateInput;
 validateInput = function (className) {
     var isNok = false;
