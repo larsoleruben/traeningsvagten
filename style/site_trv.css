@@ -91,6 +91,11 @@ h1 {
     background-color: #efe5d0;
 }
 
+#paypal{
+    position: relative;
+    top: -330px;
+    left: 550px;
+}
 
 h2 {
     font-size: 130%;
@@ -405,4 +410,11 @@ select{
 
 .flat{
    border-width: 0px;
+}
+
+.inputError{
+    color: red;
+    font-weight: bold;
+    border-width: 5px;
+    border-color: red;
 }

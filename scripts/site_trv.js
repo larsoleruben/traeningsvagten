@@ -238,9 +238,10 @@ $(document).ready(function () {
     });
 
     //saving the personal measurements for one day
-    $('#saveMeasBtn').button().click(function(){
-        var dateString = $('#datepicker1').val().split("/");
-        var measurements = {};
+    $('#saveMeasBtn').button().click(function () {
+        if (validateInput("measurements")) {
+            var dateString = $('#datepicker1').val().split("/");
+            var measurements = {};
             measurements['id'] = $('#measId').val();
             measurements['userId'] = userId;
             measurements['measDate'] = dateString[2] + dateString[1] + dateString[0];
@@ -248,23 +249,26 @@ $(document).ready(function () {
             measurements['stomac'] = $('#stomac').val();
             measurements['fatPtc'] = $('#fatPtc').val();
 
-        if($('#measId')== ""){
-            var req = gapi.client.trvagten.insertMeasurements(measurements );
-        }else{
-            var req = gapi.client.trvagten.updateMeasurements(measurements );
+            if ($('#measId') == "") {
+                var req = gapi.client.trvagten.insertMeasurements(measurements);
+            } else {
+                var req = gapi.client.trvagten.updateMeasurements(measurements);
+            }
+            req.execute(function (measurements) {
+                $('#measId').val(measurements['id']);
+                $('#datepicker1').val(toNormalDate(measurements.measDate));
+                $('#weight').val(measurements.weight);
+                $('#stomac').val(measurements.stomac);
+                $('#fatPtc').val(measurements.fatPtc);
+                var dateFromObj = new Date();
+                dateFromObj.setDate(dag.getDate() - 14);
+                var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
+                var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
+                getPersonalMeasurements(dateFrom, dateTo, false);
+            });
+        } else {
+            $('#inputValidatorDialog').dialog("open");
         }
-        req.execute( function(measurements ){
-            $('#measId').val(measurements['id']);
-            $('#datepicker1').val( toNormalDate(measurements.measDate));
-            $('#weight').val( measurements.weight);
-            $('#stomac').val(measurements.stomac);
-            $('#fatPtc').val(measurements.fatPtc);
-            var dateFromObj = new Date();
-            dateFromObj.setDate(dag.getDate()-14);
-            var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
-            var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
-            getPersonalMeasurements(dateFrom, dateTo, false);
-        });
 
     });
 
@@ -276,7 +280,7 @@ $(document).ready(function () {
     });
 
     $('#btnSavePersonal').button().click(function(){
-        if( userId != null  ){
+        if( userId != null  && validateInput("personal")   ){
             var person = {};
             person['id'] = userId;
             person['fname'] =  $('#fname').val();
@@ -304,43 +308,48 @@ $(document).ready(function () {
                 $('#sports').val(data.priSport);
             });
         }else{
-            alert( "log ind først");
+            //alert( "log ind først");
+            $('#inputValidatorDialog').dialog("open");
         }
     });
 
     /*All the save training stuff from here*/
-    $('#saveTraeningBtn').button().click(function(){
-        var dateString = $('#datepicker2').val().split("/");
-        var traening = {};
-        traening.id = $('#traeningId').val();
-        traening.userId = userId;
-        traening.doneDate = dateString[2] + dateString[1] + dateString[0];
-        traening.trainingType = $('#traeningType').prop("selectedIndex");
-        traening.totalTimeMin = $('#total').val();
-        traening.maxTime = $('#max').val();
-        traening.atTime = $('#at').val();
-        traening.subAtTime = $('#subAt').val();
-        traening.fs =  $('#fs').val();
-        traening.power = $('#power').val();
-        traening.ig = $('#ig').val();
-        traening.distance = $('#dist').val();
-        traening.energy = $('#UsedEnergy').val();
-        traening.comments = $('#comments').val();
-        traening.place = $('#place').val();
-        traening.percievedIntensity = $('#percievedIntensity').val();
-        /*save or update the training session*/
-        if($('#traeningId').val() == null ){
-            var req;
-            req = gapi.client.trvagten.insertTraening(traening);
-            req.execute(function( data ){
-                fillTraining(data);
-            });
-        }else{
-            var req;
-            req = gapi.client.trvagten.updateTraening(traening);
-            req.execute(function( data ){
-                fillTraining(data);
-            });
+    $('#saveTraeningBtn').button().click(function () {
+        if (validateInput("training")) {
+            var dateString = $('#datepicker2').val().split("/");
+            var traening = {};
+            traening.id = $('#traeningId').val();
+            traening.userId = userId;
+            traening.doneDate = dateString[2] + dateString[1] + dateString[0];
+            traening.trainingType = $('#traeningType').prop("selectedIndex");
+            traening.totalTimeMin = $('#total').val();
+            traening.maxTime = $('#max').val();
+            traening.atTime = $('#at').val();
+            traening.subAtTime = $('#subAt').val();
+            traening.fs = $('#fs').val();
+            traening.power = $('#power').val();
+            traening.ig = $('#ig').val();
+            traening.distance = $('#dist').val();
+            traening.energy = $('#UsedEnergy').val();
+            traening.comments = $('#comments').val();
+            traening.place = $('#place').val();
+            traening.percievedIntensity = $('#percievedIntensity').val();
+            /*save or update the training session*/
+            if ($('#traeningId').val() == null) {
+                var req;
+                req = gapi.client.trvagten.insertTraening(traening);
+                req.execute(function (data) {
+                    fillTraining(data);
+                });
+            } else {
+                var req;
+                req = gapi.client.trvagten.updateTraening(traening);
+                req.execute(function (data) {
+                    fillTraining(data);
+                });
+            }
+        } else {
+            $('#inputValidatorDialog').dialog("open");
         }
 
     });
@@ -901,9 +910,28 @@ var lpad = function (value, padding) {
 /*input validation made simple*/
 var validateInput;
 validateInput = function (className) {
-    $("."+className).each(function (index) {
-        if( this.hasAttribute("digits")){
+    var isNok = false;
+    $("." + className).each(function (index) {
+        $(this).removeClass("inputError"); //reset the class to normal
+        if (this.hasAttribute("digits")) { //must be a number
+            if( isNaN($(this).val())){
+                $(this).addClass("inputError");
+                isNok = true;
+            }else
+            { //is a number OK, but is it too big
+                if( parseFloat($(this).val())> 100000){
+                    $(this).addClass("inputError");
+                    isNok = true;
+                }
+            }
 
+        } else {  //is not a number, must be text
+            if ($(this).val().length > 50) {
+                isNok = true;
+                $(this).addClass("inputError");
+            }
         }
     });
+
+    return !isNok;
 };
