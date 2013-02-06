@@ -22,10 +22,26 @@ var userId = null; //is set on the first log in and by authentication
 //todays date
 var dag;
 
+//plots
+var plot1;
+var plot2;
+var plot3;
+
 /*Start the load function to set everything up*/
 $(document).ready(function () {
 
     var test =  { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
+
+    //initialising empty plots
+    plot1 = $.plot($("#graphWeight"),[[0,0]], {
+        grid:{borderWidth:0}
+    });
+    plot2 = $.plot($("#graphStomac"), [[0,0]], {
+        grid:{borderWidth:0}
+    });
+    plot3 = $.plot($("#graphFat"), [[0,0]], {
+        grid:{borderWidth:0}
+    });
 
     /* Start load function Declarations */
 
@@ -243,12 +259,13 @@ $(document).ready(function () {
             $('#weight').val( measurements.weight);
             $('#stomac').val(measurements.stomac);
             $('#fatPtc').val(measurements.fatPtc);
+            var dateFromObj = new Date();
+            dateFromObj.setDate(dag.getDate()-14);
+            var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
+            var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
+            getPersonalMeasurements(dateFrom, dateTo, false);
         });
-        var dateFromObj = new Date();
-        dateFromObj.setDate(dag.getDate()-14);
-        var dateFrom = dateFromObj.getFullYear()+lpad(dateFromObj.getMonth()+1,2)+ lpad(dateFromObj.getDate(),2); //getting the last two weeks
-        var dateTo = parseInt(dag.getFullYear()+lpad(dag.getMonth()+1,2)+ lpad(dag.getDate(),2)) //todays date in the format
-        getPersonalMeasurements(dateFrom, dateTo, false);
+
     });
 
     /*Autehnticate by clicking the Google logo image*/
@@ -747,15 +764,17 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
             d2.push([i, data.items[i].stomac]);
             d3.push([i, data.items[i].fatPtc]);
         }
-        $.plot($("#graphWeight"), [d1 ], {
-            grid:{borderWidth:0}
-        }).draw();
-        $.plot($("#graphStomac"), [d2 ], {
-            grid:{borderWidth:0}
-        }).draw();
-        $.plot($("#graphFat"), [d3 ], {
-            grid:{borderWidth:0}
-        }).draw();
+        plot1.setData( [d1] );
+        plot2.setData( [d2] );
+        plot3.setData( [d3] );
+
+        plot1.setupGrid();
+        plot2.setupGrid();
+        plot3.setupGrid();
+        plot1.draw();
+        plot2.draw();
+        plot3.draw();
+
 
         //should the personal measurements form be updated?
         if (doUpdate) {
@@ -881,6 +900,10 @@ var lpad = function (value, padding) {
 
 /*input validation made simple*/
 var validateInput;
-validateInput = function (input, type) {
+validateInput = function (className) {
+    $("."+className).each(function (index) {
+        if( this.hasAttribute("digits")){
 
+        }
+    });
 };
