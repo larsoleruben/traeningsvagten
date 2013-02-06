@@ -51,13 +51,19 @@ $(document).ready(function () {
     /*End load function Declarations*/
 
     /*initialize visibility setting*/
-    $('#personalDetails').hide();
-    $('#measurements').hide();
-    $('#weigtGraph').hide();
+    $('#personalDetails').show();
+    $('#measurements').show();
+    $('#weigtGraph').show();
     $('#traeningLeft').hide();
     $('#traeningCenter').hide();
     $('#traeningGraph').hide();
-    $('#food').addClass("selected");
+    $('#searchFood').hide();
+    $('#consumedToday').hide();
+    $('#tableDigesting').hide();
+    $('#dashboard').addClass("selected");
+    $('#food').removeClass("selected");
+    $('#traening').removeClass("selected");
+    $('#loading').hide();
 
 
     $(document).tooltip();
@@ -281,6 +287,7 @@ $(document).ready(function () {
 
     $('#btnSavePersonal').button().click(function(){
         if( userId != null  && validateInput("personal")   ){
+            $('#personalDetails').mask("Loading...",1000);
             var person = {};
             person['id'] = userId;
             person['fname'] =  $('#fname').val();
@@ -306,9 +313,11 @@ $(document).ready(function () {
                 $('#address').val(data.address);
                 $('#zipcode').val(data.zipcode);
                 $('#sports').val(data.priSport);
+                $('#personalDetails').unmask();
             });
         }else{
             //alert( "log ind først");
+            $('#personalDetails').unmask();
             $('#inputValidatorDialog').dialog("open");
         }
     });
@@ -433,7 +442,7 @@ $(document).ready(function () {
     $('#inputValidatorDialog').dialog({
         autoOpen:false,
         hide:"explode",
-        height:300,
+        height:200,
         width:300,
         modal:true
     });
@@ -741,6 +750,7 @@ function loggedIn(data) {
 //get the user from the database if it exists
 function getPersonal(user ){
     var req = gapi.client.trvagten.getPerson({'id':userId });
+    $('#personalDetails').mask("Loading...",1000);
     try{
     req.execute(function (data) {
         if( data.id ){
@@ -753,11 +763,12 @@ function getPersonal(user ){
             $('#address').val(data.address);
             $('#zipcode').val(data.zipcode);
             $('#sports').val(data.priSport);
+            $('#personalDetails').unmask();
         }
     });
     }catch ( err ){
         console.error( err.toString());
-
+        $('#personalDetails').unmask();
     }
 
 }

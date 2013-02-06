@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css"
           href="scripts/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css">
     <link rel="stylesheet" type="text/css" href="style/site_trv.css">
+    <link rel="stylesheet" href="style/jquery.loadmask.css" type="text/css" />
 </head>
 <body>
 <!--
@@ -15,6 +16,9 @@
     <h1 id="ucHeader">Under construction</h1>
 </div>
 -->
+
+<!--thing with loader gif  -->
+<div id="loading"><img id="imgLoading" src="images/logo/ajax-loader" alt="loading logo"></div>
 <!--input validator popup dialog inputValidatorDialog -->
 <div id="inputValidatorDialog" title="Upps noget gik galt">
     <p class="inputError">Du har skrevet fejl i et felt eller mangler at udfylde et obligatorisk felt</p>
@@ -85,7 +89,7 @@
             <table id="personalData" class="tblForInputs">
                 <tr>
                     <td><label id="lblEmail" for="email">Email:</label></td>
-                    <td><input id="email" readonly="readonly" type="email" placeholder="your@mail.com" class="sections personal"/></td>
+                    <td><input id="email" readonly="readonly" type="email" placeholder="your@mail.com" class="sections personal flat"/></td>
                 </tr>
                 <tr>
                     <td><label id="lblFname" for="fname">Fornavn:</label></td>
@@ -432,15 +436,18 @@
     </div>
 </div>
 <footer class="roundCorners">
-    &copy; 2012, Kalorievagten v. Lars Christoffersen
+    &copy; 2012, Kalorievagten v. <a href="mailto:l.christoffersen@traeningsvagten.dk?Subject=From net app">Lars Christoffersen</a>
     <br>
     All trademarks and registered trademarks appearing on
     this site are the property of their respective owners.
+
 </footer>
 <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-1.8.3.js"></script>
 <script src="scripts/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
 <script src="scripts/jquery.flot.js"></script>
 <script src="scripts/site_trv.js"></script>
+<script src="scripts/jquery.loadmask.min.js"></script>
+
 <!--
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }

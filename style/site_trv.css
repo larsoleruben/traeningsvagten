@@ -410,6 +410,7 @@ select{
 
 .flat{
    border-width: 0px;
+   color: #d3d3d3;
 }
 
 .inputError{
@@ -418,3 +419,8 @@ select{
     border-width: 5px;
     border-color: red;
 }
+
+#loading{
+    opacity: 0.5;
+}
+
