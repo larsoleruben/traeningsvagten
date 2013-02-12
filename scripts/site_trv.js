@@ -237,9 +237,11 @@ $(document).ready(function () {
             consumed.push( item );
         });
         food.consumed = JSON.stringify(consumed);
+        $('#consumedToday').mask("Loading...",500);
         var req = gapi.client.trvagten.insertFood( food );
         req.execute( function( foodData ){
             var test = foodData;
+            $('#consumedToday').unmask();
         });
     });
 
@@ -344,20 +346,24 @@ $(document).ready(function () {
             traening.place = $('#place').val();
             traening.percievedIntensity = $('#percievedIntensity').val();
             /*save or update the training session*/
+            $('#traeningCenter').mask("Loading...",1000);
             if ($('#traeningId').val() == null) {
                 var req;
                 req = gapi.client.trvagten.insertTraening(traening);
                 req.execute(function (data) {
                     fillTraining(data);
+                    $('#traeningCenter').unmask();
                 });
             } else {
                 var req;
                 req = gapi.client.trvagten.updateTraening(traening);
                 req.execute(function (data) {
                     fillTraining(data);
+                    $('#traeningCenter').unmask();
                 });
             }
         } else {
+            $('#traeningCenter').unmask();
             $('#inputValidatorDialog').dialog("open");
         }
 
@@ -373,12 +379,15 @@ $(document).ready(function () {
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        $('#traeningCenter').mask("Loading...",500);
         req.execute(function (data) {
             if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
+                $('#traeningCenter').unmask();
             }else{
                 $('#traeningId').val("");
                 emptyTraining();
+                $('#traeningCenter').unmask();
             }
         });
     });
@@ -409,7 +418,7 @@ $(document).ready(function () {
             for( i=0; i < data.items.length; i++){
                 $( "#tblTrSessions tbody" ).append( "<tr>" +
                     "<td>" + data.items[i].doneDate + "</td>" +
-                    "<td>" + data.items[i].trainingType + "</td>" +
+                    "<td>" + $('#traeningType option')[parseInt(data.items[i].trainingType)].innerHTML  + "</td>" +
                     "<td>" + data.items[i].totalTimeMin + "</td>" +
                     "<td>" + data.items[i].maxTime + "</td>" +
                     "<td>" + data.items[i].atTime + "</td>" +
@@ -535,6 +544,7 @@ function updateFood(foodValues) {
             + singleObject.FoodId + " value='"
             + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
+    $('#searchFood').unmask();
 }
 
 
@@ -734,13 +744,16 @@ function loggedIn(data) {
         var initDateString = $('#datepicker').val().split("/");
         getFood(initDateString[2] + initDateString[1] + initDateString[0]);
         //initialize the traening section
+        $('#traeningCenter').mask("Loading...",500);
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateTo, 'dateTo':dateTo });
         req.execute(function (data) {
             if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
+                $('#traeningCenter').unmask();
             }else{
                 $('#traeningId').val("");
                 emptyTraining();
+                $('#traeningCenter').unmask();
             }
         });
 
@@ -775,6 +788,7 @@ function getPersonal(user ){
 }
 //get the measurements for the last 30 days, if they are available
 function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
+    $('#measurements').mask("Loading...",1000);
     var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
     req.execute(function (data) {
         var d1 = [];
@@ -810,6 +824,7 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
             $('#stomac').val(latestMeas.stomac);
             $('#fatPtc').val(latestMeas.fatPtc);
         }
+        $('#measurements').unmask();
     });
 }
 
@@ -845,22 +860,7 @@ function getTraining( dateFrom, dateTo ){
 
 function fillTraining(data) {
     /*empty first*/
-    $('#traeningId').val("");
-    //$('#datepicker2').val(0);
-    $('#traeningType').prop("selectedIndex", 0);
-    $('#total').val(0);
-    $('#max').val(0);
-    $('#at').val(0);
-    $('#subAt').val(0);
-    $('#ig').val(0);
-    $('#power').val(0);
-    $('#ig').val(0);
-    $('#fs').val(0);
-    $('#dist').val(0);
-    $('#UsedEnergy').val(0);
-    $('#place').val("");
-    $('#comments').val("");
-    $('#percievedIntensity').val(0);
+   emptyTraining();
     /*Fill in the collected values*/
     if (data) {
         $('#traeningId').val(data.id);
