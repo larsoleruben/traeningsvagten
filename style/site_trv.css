@@ -2,8 +2,9 @@
 body {
     background-color: #efe5d0;
     font-family:      Georgia, "Times New Roman", Times, serif;
-    margin:           0px;
+    /*margin:           0px;*/
     font-size: 80%;
+    overflow-x: hidden;
 }
 
 input.text {
@@ -27,7 +28,9 @@ fieldset {
 }
 
 #all {
-    width: 1000px;
+    width: 980px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
 
@@ -154,7 +157,7 @@ nav ul li {
 section#searchFood {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    /*width: 30%;*/
     padding: 15px;
     vertical-align: top;
 }
@@ -163,12 +166,12 @@ section#searchFood {
 section#consumedToday {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    /*width: 30%;*/
     padding: 15px;
     vertical-align: top;
 }
 
-aside#tableDigesting {
+section#tableDigesting {
     display: table-cell;
     background-color: #fefefe;
     padding: 15px;
@@ -178,7 +181,7 @@ aside#tableDigesting {
 section#personalDetails {
     display: table-cell;
     background-color: #fefefe;
-    width: 40%;
+    /*width: 40%;*/
     padding: 15px;
     vertical-align: top;
 }
@@ -187,12 +190,12 @@ section#personalDetails {
 section#measurements {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    /*width: 30%;*/
     padding: 15px;
     vertical-align: top;
 }
 
-aside#weigtGraph {
+section#weigtGraph {
     display: table-cell;
     background-color: #fefefe;
     padding: 15px;
@@ -205,7 +208,7 @@ aside#weigtGraph {
 section#traeningLeft {
     display: table-cell;
     background-color: #fefefe;
-    width: 40%;
+    /*width: 40%;*/
     padding: 15px;
     vertical-align: top;
 }
@@ -213,12 +216,12 @@ section#traeningLeft {
 section#traeningCenter {
     display: table-cell;
     background-color: #fefefe;
-    width: 30%;
+    /*width: 30%;*/
     padding: 15px;
     vertical-align: top;
 }
 
-aside#traeningGraph {
+section#traeningGraph {
     display: table-cell;
     background-color: #fefefe;
     padding: 15px;

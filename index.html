@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="description" content="hold øje med din træning og tab dig med kalorievagten og træningsvagten">
     <meta name="author" content="Lars Ole R Christoffersen">
-    <meta name="keywords" content="kalorie fødevarer mad næringsindhold vægt træning fedtprocent google login">
+    <meta name="keywords" content="kalorie fødevarer mad næringsindhold vægt træning fedtprocent google login madlog">
     <!--This is a first attempt of some html5 application-->
     <title>Træningsvagten/Kalorievagten</title>
     <link rel="stylesheet" type="text/css"
@@ -19,12 +19,15 @@
 </div>
 -->
 
+<div id="checkForIe" title="Browser not supporting HTML5">
+    <p>Sorry, you browser does not support the latest cutting edge HTML5 technology. Use the newest version og Chrome, Safari of Firefox</p>
+</div>
+
 <!--input validator popup dialog inputValidatorDialog -->
 <div id="inputValidatorDialog" title="Upps noget gik galt">
     <p class="inputError">Du har skrevet fejl i et felt eller mangler at udfylde et obligatorisk felt</p>
 </div>
-
-
+<!--Dialog for the amount of food eaten -->
 <div id="dialog-form" title="Tilføj til dag">
     <p class="validateTips"></p>
 
@@ -61,6 +64,7 @@
         <li id="dashboard">Dashboard</li>
         <li id="food">Food</li>
         <li id="traening">Training</li>
+        <li id="oldMsieBrowser" class="inputError">Your browser is not supported, use CHROME, SAFARI or FireFox</li>
     </ul>
 </nav>
 
@@ -290,7 +294,7 @@
         </section>
         <!--Food middle section ends here -->
         <!--Traening right section starts here -->
-        <aside id="traeningGraph" class="roundCorners">
+        <section id="traeningGraph" class="roundCorners">
             <h3>Download/se træninger</h3>
             <table id="tblTraining">
                 <tr>
@@ -327,10 +331,10 @@
                     <tbody></tbody>
                 </table>
             </div>
-        </aside>
+        </section>
         <!--Traening right section ends here -->
         <!--Personal right section starts here -->
-        <aside id="weigtGraph" class="roundCorners">
+        <section id="weigtGraph" class="roundCorners">
             <h2>Grafer</h2>
             Vægt:
             <div id="graphWeight"></div>
@@ -340,10 +344,10 @@
             <br>
             Fedprocent:
             <div id="graphFat"></div>
-        </aside>
+        </section>
         <!--Personal right section ends here -->
         <!--Food right section starts here -->
-        <aside id="tableDigesting" class="roundCorners">
+        <section id="tableDigesting" class="roundCorners">
             <h2>Information og total indtag</h2>
             <table id="consumedTable">
                 <caption>
@@ -431,7 +435,7 @@
                 </tr>
 
             </table>
-        </aside>
+        </section>
         <!--Food right section ends here -->
     </div>
 </div>
@@ -448,16 +452,16 @@
 <script src="scripts/site_trv.js"></script>
 <script src="scripts/jquery.loadmask.min.js"></script>
 
-<!--
+
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
 </script>
--->
 
+<!--
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "http://localhost:8888/_ah/api"}  }
 </script>
-
+-->
 </div>
 </body>
 </html>

@@ -31,7 +31,6 @@ var plot3;
 $(document).ready(function () {
 
     var test =  { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
-
     //initialising empty plots
     plot1 = $.plot($("#graphWeight"),[[0,0]], {
         grid:{borderWidth:0}
@@ -64,6 +63,8 @@ $(document).ready(function () {
     $('#food').removeClass("selected");
     $('#traening').removeClass("selected");
     $('#loading').hide();
+    /*Show if the browser is not supported*/
+    $('#oldMsieBrowser').hide();
 
 
     $(document).tooltip();
@@ -456,6 +457,24 @@ $(document).ready(function () {
         width:300,
         modal:true
     });
+
+    /*Browser validation dialog*/
+    $('#checkForIe').dialog(
+        {
+            autoOpen:false,
+            hide:"explode",
+            height:200,
+            width:300,
+            modal:true
+        }
+    )
+
+    if ( $.browser.msie ) {
+        if( parseInt($.browser.version.substr(0,2)) < 10 ){
+            $('#checkForIe').dialog("open");
+            $('#oldMsieBrowser').toggle();
+        }
+    }
 
 });
 
