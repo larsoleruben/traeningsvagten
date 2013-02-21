@@ -289,7 +289,7 @@ table#consumedTable {
     margin-right: 5px;
     border: thin solid #696969;
     border-collapse: collapse;
-    min-width: 200px;
+    min-width: 240px;
 }
 
 table.tblForInputs{
@@ -414,6 +414,12 @@ select{
 .flat{
    border-width: 0px;
    color: #d3d3d3;
+}
+
+.shortInput{
+    width: 50px;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 
 .inputError{

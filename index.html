@@ -277,7 +277,10 @@
         <section id="consumedToday" class="roundCorners">
             <h2>Alt hvad du har spist idag</h2>
             <label id="dp" for="datepicker">Dato</label>
+
             <input class="sections" id="datepicker" type="text" readonly/>
+            <label class="shortInput" id="foodId" for="foodDayId">Id:</label>
+            <input readonly class="flat shortInput" id="foodDayId" type="text"/>
 
             <p>
                 <label id="totalLabel">Spist i dag</label>
@@ -348,7 +351,7 @@
         <!--Personal right section ends here -->
         <!--Food right section starts here -->
         <section id="tableDigesting" class="roundCorners">
-            <h2>Information og total indtag</h2>
+            <h2>Mad information og sum af indhold</h2>
             <table id="consumedTable">
                 <caption>
                     Test på det du har spist.
@@ -452,16 +455,16 @@
 <script src="scripts/site_trv.js"></script>
 <script src="scripts/jquery.loadmask.min.js"></script>
 
-
+<!--
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
 </script>
+-->
 
-<!--
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     { "client": {}, "googleapis.config": { root: "http://localhost:8888/_ah/api"}  }
 </script>
--->
+
 </div>
 </body>
 </html>

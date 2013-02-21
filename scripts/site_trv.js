@@ -10,13 +10,13 @@
 var focusedInput = null;
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
-var totConsumedOBJ = { 'totEnergy':0,'totFat':0, 'totCarbo':0, 'totProtein':0,'totAlcohol':0,'totFiber':0,'totCholesterol':0,'totSatFat':0,
-                       'totMonoUnsatFat':0,'totSodium':0,'totPotassium':0,'totMagnesium':0,'totIron':0, 'totWater':0,'totAmount':0 }  //array to hold daily consumption of food
+var totConsumedOBJ = { 'totEnergy':0, 'totFat':0, 'totCarbo':0, 'totProtein':0, 'totAlcohol':0, 'totFiber':0, 'totCholesterol':0, 'totSatFat':0,
+    'totMonoUnsatFat':0, 'totSodium':0, 'totPotassium':0, 'totMagnesium':0, 'totIron':0, 'totWater':0, 'totAmount':0 }  //array to hold daily consumption of food
 
 /*Google authentication stuff*/
 var clientId = "175552442718.apps.googleusercontent.com";
 var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
-var scopes = ["https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile" ];
+var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
 var userId = null; //is set on the first log in and by authentication
 
 //todays date
@@ -30,15 +30,28 @@ var plot3;
 /*Start the load function to set everything up*/
 $(document).ready(function () {
 
-    var test =  { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
+    if ($.browser.msie) {
+        if (parseInt($.browser.version.substr(0, 2)) < 10) {
+            $('#checkForIe').dialog("open");
+            $('#oldMsieBrowser').toggle();
+        }
+    }
+
+    //var test =  { "client": {}, "googleapis.config": { root: "https://datavagten.appspot.com/_ah/api"  }  }
     //initialising empty plots
-    plot1 = $.plot($("#graphWeight"),[[0,0]], {
+    plot1 = $.plot($("#graphWeight"), [
+        [0, 0]
+    ], {
         grid:{borderWidth:0}
     });
-    plot2 = $.plot($("#graphStomac"), [[0,0]], {
+    plot2 = $.plot($("#graphStomac"), [
+        [0, 0]
+    ], {
         grid:{borderWidth:0}
     });
-    plot3 = $.plot($("#graphFat"), [[0,0]], {
+    plot3 = $.plot($("#graphFat"), [
+        [0, 0]
+    ], {
         grid:{borderWidth:0}
     });
 
@@ -147,24 +160,24 @@ $(document).ready(function () {
 
     $("#addSelected").button()
         .click(function () {
-            if(focusedInput != null){
-               openDialog( $(focusedInput) );
+            if (focusedInput != null) {
+                openDialog($(focusedInput));
             }
         });
     /*End modal popup form*/
 
     //setting up the datepicker for food
-    $('#datepicker').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
-    $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
+    $('#datepicker').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
+    $("#datepicker").datepicker({ dateFormat:"dd/mm/yy" });
     //Catching the datepicker change events
-    $('#datepicker').change(function(){
+    $('#datepicker').change(function () {
         var counter = 0;
         var rows = $("#consumedTable tr:gt(0)"); // skip the header row
-        rows.each(function(index) {
+        rows.each(function (index) {
             this.cells[1].innerHTML = "0.00";
         });
         var keys = Object.keys(totConsumedOBJ);
-        for( var i=keys.length;i--;){
+        for (var i = keys.length; i--;) {
             totConsumedOBJ[keys[i]] = 0;
         }
         var dateString = $('#datepicker').val().split("/");
@@ -174,35 +187,42 @@ $(document).ready(function () {
 
 
     //setting up the datepicker1 personal measurements
-    $('#datepicker1').val( lpad(dag.getDate(),2) + '/' + lpad(dag.getMonth()+1,2) + '/' + dag.getFullYear());
-    $('#datepicker1').datepicker({ dateFormat: "dd/mm/yy" });
+    $('#datepicker1').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
+    $('#datepicker1').datepicker({ dateFormat:"dd/mm/yy" });
 
     //Catching the datepicker 1 change events
-    $('#datepicker1').change(function(){
+    $('#datepicker1').change(function () {
         var dateString = $('#datepicker1').val().split("/");
         //The same date both to and from
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
-        req.execute(function (data) {
-           if( data.items && data.items.length > 0){
-               $('#measId').val(data.items[0].id);
-               $('#datepicker1').val(toNormalDate(data.items[0].measDate));
-               $('#weight').val(data.items[0].weight);
-               $('#stomac').val(data.items[0].stomac);
-               $('#fatPtc').val(data.items[0].fatPtc);
-           }else //reset everything to zero except the datepicker field
-           {
-               $('#measId').val("");
-               $('#weight').val("");
-               $('#stomac').val("");
-               $('#fatPtc').val("");
-           }
-        });
+        $('#measurements').mask("Loading...", 100);
+        try {
+            req.execute(function (data) {
+                if (data.items && data.items.length > 0) {
+                    $('#measId').val(data.items[0].id);
+                    $('#datepicker1').val(toNormalDate(data.items[0].measDate));
+                    $('#weight').val(data.items[0].weight);
+                    $('#stomac').val(data.items[0].stomac);
+                    $('#fatPtc').val(data.items[0].fatPtc);
+                    $('#personalDetails').unmask();
+                } else //reset everything to zero except the datepicker field
+                {
+                    $('#measId').val("");
+                    $('#weight').val("");
+                    $('#stomac').val("");
+                    $('#fatPtc').val("");
+                }
+            });
+        } catch (err) {
+            console.error(err.toString());
+            $('#measurements').unmask();
+        }
     });
 
     $('#search').keypress(function (e) {
-        if (e.keyCode == $.ui.keyCode.ENTER ){
+        if (e.keyCode == $.ui.keyCode.ENTER) {
             e.preventDefault();
             queryFood($('#search').val());
         }
@@ -222,12 +242,12 @@ $(document).ready(function () {
         $('#search').focus();
     });
 
-    $('#saveDayButton').button().click(function(){
+    $('#saveDayButton').button().click(function () {
         //declaring the objects for the json string
         var consumed = []; //array to hold the consumed objects
         var food = {}; //object for hold the consumed array and other id's
         var dateString = $('#datepicker').val().split("/");
-        food.id = dateString[2] + dateString[1] + dateString[0];
+        food.id = $('#foodDayId').val();
         food.userId = userId;
         food.foodDate = dateString[2] + dateString[1] + dateString[0];
         $(".inDayList").each(function (index) {
@@ -235,15 +255,24 @@ $(document).ready(function () {
             item.foodId = $(this).attr("id");
             item.foodWeight = $(this).attr("amount");
             item.foodName = $(this).val();
-            consumed.push( item );
+            consumed.push(item);
         });
-        food.consumed = JSON.stringify(consumed);
-        $('#consumedToday').mask("Loading...",500);
-        var req = gapi.client.trvagten.insertFood( food );
-        req.execute( function( foodData ){
-            var test = foodData;
+        food.consumed = JSON.stringify(consumed)
+        $('#consumedToday').mask("Saving...", 500);
+        if ($('#foodDayId').val() != null) {
+            var req = gapi.client.trvagten.insertFood(food);
+        } else {
+            var req = gapi.client.trvagten.updateFood(food);
+        }
+        try {
+            req.execute(function (foodData) {
+                $('#foodDayId').val(foodData.id);
+                $('#consumedToday').unmask();
+            });
+        } catch (err) {
+            console.error(err.toString());
             $('#consumedToday').unmask();
-        });
+        }
     });
 
     //saving the personal measurements for one day
@@ -263,18 +292,23 @@ $(document).ready(function () {
             } else {
                 var req = gapi.client.trvagten.updateMeasurements(measurements);
             }
-            req.execute(function (measurements) {
-                $('#measId').val(measurements['id']);
-                $('#datepicker1').val(toNormalDate(measurements.measDate));
-                $('#weight').val(measurements.weight);
-                $('#stomac').val(measurements.stomac);
-                $('#fatPtc').val(measurements.fatPtc);
-                var dateFromObj = new Date();
-                dateFromObj.setDate(dag.getDate() - 14);
-                var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
-                var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
-                getPersonalMeasurements(dateFrom, dateTo, false);
-            });
+            try {
+                req.execute(function (measurements) {
+                    $('#measId').val(measurements['id']);
+                    $('#datepicker1').val(toNormalDate(measurements.measDate));
+                    $('#weight').val(measurements.weight);
+                    $('#stomac').val(measurements.stomac);
+                    $('#fatPtc').val(measurements.fatPtc);
+                    var dateFromObj = new Date();
+                    dateFromObj.setDate(dag.getDate() - 14);
+                    var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
+                    var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
+                    getPersonalMeasurements(dateFrom, dateTo, false);
+                });
+            } catch (err) {
+                console.error(err.toString());
+                $('#measurements').unmask();
+            }
         } else {
             $('#inputValidatorDialog').dialog("open");
         }
@@ -282,22 +316,22 @@ $(document).ready(function () {
     });
 
     /*Autehnticate by clicking the Google logo image*/
-    $('a#loginAref').click(function(){
-        gapi.auth.authorize({client_id: clientId,
-            scope: scopes, immediate: false}, handleAuthResult);
+    $('a#loginAref').click(function () {
+        gapi.auth.authorize({client_id:clientId,
+            scope:scopes, immediate:false}, handleAuthResult);
         return false;
     });
 
-    $('#btnSavePersonal').button().click(function(){
-        if( userId != null  && validateInput("personal")   ){
-            $('#personalDetails').mask("Loading...",1000);
+    $('#btnSavePersonal').button().click(function () {
+        if (userId != null && validateInput("personal")) {
+            $('#personalDetails').mask("Loading...", 1000);
             var person = {};
             person['id'] = userId;
-            person['fname'] =  $('#fname').val();
+            person['fname'] = $('#fname').val();
             person['lname'] = $('#lastname').val();
-            person['gender'] =  $('#gender').prop("selectedIndex" );
+            person['gender'] = $('#gender').prop("selectedIndex");
             person['priSport'] = $('#sports').val();
-            person['height'] =  $('#height').val();
+            person['height'] = $('#height').val();
             person['city'] = $('#city').val();
             person['address'] = $('#address').val();
             person['zipcode'] = $('#zipcode').val();
@@ -305,20 +339,25 @@ $(document).ready(function () {
 
             var req;
             //req = gapi.client.traeningsvagten.person.insert(person);
-            req = gapi.client.trvagten.insertPerson(person);
-            req.execute(function (data) {
-                $('#email').val(data.email);
-                $('#fname').val(data.fname);
-                $('#lastname').val(data.lname);
-                $('#gender').prop("selectedIndex", parseInt(data.gender));
-                $('#height').val(data.height);
-                $('#city').val( data.city);
-                $('#address').val(data.address);
-                $('#zipcode').val(data.zipcode);
-                $('#sports').val(data.priSport);
+            try {
+                req = gapi.client.trvagten.insertPerson(person);
+                req.execute(function (data) {
+                    $('#personalDetails').unmask();
+                    $('#email').val(data.email);
+                    $('#fname').val(data.fname);
+                    $('#lastname').val(data.lname);
+                    $('#gender').prop("selectedIndex", parseInt(data.gender));
+                    $('#height').val(data.height);
+                    $('#city').val(data.city);
+                    $('#address').val(data.address);
+                    $('#zipcode').val(data.zipcode);
+                    $('#sports').val(data.priSport);
+                });
+            } catch (err) {
+                console.error(err.toString());
                 $('#personalDetails').unmask();
-            });
-        }else{
+            }
+        } else {
             //alert( "log ind først");
             $('#personalDetails').unmask();
             $('#inputValidatorDialog').dialog("open");
@@ -347,20 +386,20 @@ $(document).ready(function () {
             traening.place = $('#place').val();
             traening.percievedIntensity = $('#percievedIntensity').val();
             /*save or update the training session*/
-            $('#traeningCenter').mask("Loading...",1000);
+            $('#traeningCenter').mask("Loading...", 1000);
             if ($('#traeningId').val() == null) {
                 var req;
                 req = gapi.client.trvagten.insertTraening(traening);
                 req.execute(function (data) {
-                    fillTraining(data);
                     $('#traeningCenter').unmask();
+                    fillTraining(data);
                 });
             } else {
                 var req;
                 req = gapi.client.trvagten.updateTraening(traening);
                 req.execute(function (data) {
-                    fillTraining(data);
                     $('#traeningCenter').unmask();
+                    fillTraining(data);
                 });
             }
         } else {
@@ -380,15 +419,14 @@ $(document).ready(function () {
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
-        $('#traeningCenter').mask("Loading...",500);
+        $('#traeningCenter').mask("Loading...", 500);
         req.execute(function (data) {
+            $('#traeningCenter').unmask();
             if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
-                $('#traeningCenter').unmask();
-            }else{
+            } else {
                 $('#traeningId').val("");
                 emptyTraining();
-                $('#traeningCenter').unmask();
             }
         });
     });
@@ -402,9 +440,9 @@ $(document).ready(function () {
     $('#datepicker4').datepicker({ dateFormat:"dd/mm/yy" });
 
 
-    $('#getTraning').button().click(function(){
+    $('#getTraning').button().click(function () {
         /*empty the table*/
-        $( "#tblTrSessions tbody").empty();
+        $("#tblTrSessions tbody").empty();
         /*Fill it again with new data*/
         var dateString3 = $('#datepicker3').val().split("/");
         var dateString4 = $('#datepicker4').val().split("/");
@@ -416,10 +454,10 @@ $(document).ready(function () {
                 return parseInt(a.doneDate) - parseInt(b.doneDate)
             });
             /*TODO make the rainingtype into the strings and not the index :-) */
-            for( i=0; i < data.items.length; i++){
-                $( "#tblTrSessions tbody" ).append( "<tr>" +
+            for (i = 0; i < data.items.length; i++) {
+                $("#tblTrSessions tbody").append("<tr>" +
                     "<td>" + data.items[i].doneDate + "</td>" +
-                    "<td>" + $('#traeningType option')[parseInt(data.items[i].trainingType)].innerHTML  + "</td>" +
+                    "<td>" + $('#traeningType option')[parseInt(data.items[i].trainingType)].innerHTML + "</td>" +
                     "<td>" + data.items[i].totalTimeMin + "</td>" +
                     "<td>" + data.items[i].maxTime + "</td>" +
                     "<td>" + data.items[i].atTime + "</td>" +
@@ -432,13 +470,13 @@ $(document).ready(function () {
                     "<td>" + data.items[i].place + "</td>" +
                     "<td>" + data.items[i].percievedIntensity + "</td>" +
                     "<td>" + data.items[i].comments + "</td>" +
-                    "</tr>" );
+                    "</tr>");
             }
         });
         $("#trSessions").dialog("open");
     });
 
-    $( "#trSessions" ).dialog({
+    $("#trSessions").dialog({
         autoOpen:false,
         hide:"explode",
         height:300,
@@ -468,13 +506,6 @@ $(document).ready(function () {
             modal:true
         }
     )
-
-    if ( $.browser.msie ) {
-        if( parseInt($.browser.version.substr(0,2)) < 10 ){
-            $('#checkForIe').dialog("open");
-            $('#oldMsieBrowser').toggle();
-        }
-    }
 
 });
 
@@ -633,17 +664,16 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
 }
 
 
-
 /*Get the double click event from the results of the query*/
 function addFunction(selObj) {
     //alert( $(selectedObject).attr("id") );
-    if($(selObj).attr("position") != null){
+    if ($(selObj).attr("position") != null) {
         openDialog($(selObj));
-    }else{
+    } else {
         //Remove the element and li from the DOM
         var dateString = $('#datepicker').val().split("/");
-        getNutrients($(selObj).attr("id"),"-"+parseInt($(selObj).attr("amount")),dateString[2] + dateString[1] + dateString[0]);
-        $("#remove_"+$(selObj).attr("id")).remove();
+        getNutrients($(selObj).attr("id"), "-" + parseInt($(selObj).attr("amount")), dateString[2] + dateString[1] + dateString[0]);
+        $("#remove_" + $(selObj).attr("id")).remove();
     }
 
 }
@@ -705,7 +735,7 @@ function addToDay(amount) {
             var foodText = $(curSelFoodObj).val();
             foodText = lpad(amount, 3) + "g " + foodText;
             $(curSelFoodObj).val(foodText);
-            $(curSelFoodObj).addClass( "inDayList" );
+            $(curSelFoodObj).addClass("inDayList");
             $('#listDay').append($("<li id=remove_" + $(curSelFoodObj).attr("id") + "></li>")
                 .html(curSelFoodObj));
             var dateString = $('#datepicker').val().split("/");
@@ -716,7 +746,7 @@ function addToDay(amount) {
     }
 }
 
-function captureLastFocusedInput( fip ){
+function captureLastFocusedInput(fip) {
     focusedInput = fip;
 }
 
@@ -724,7 +754,7 @@ function captureLastFocusedInput( fip ){
 function loadGapi() {
     // Set the API key
     gapi.client.setApiKey(apiKey);
-    window.setTimeout(checkAuth,1000);
+    window.setTimeout(checkAuth, 1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
     gapi.client.load('trvagten', 'v1');
@@ -732,8 +762,8 @@ function loadGapi() {
 
 /*Check if we are autehnticated yet*/
 function checkAuth() {
-        gapi.auth.authorize({client_id: clientId,
-            scope: scopes, immediate: true}, handleAuthResult);
+    gapi.auth.authorize({client_id:clientId,
+        scope:scopes, immediate:true}, handleAuthResult);
 }
 
 function handleAuthResult(authResult) {
@@ -741,7 +771,7 @@ function handleAuthResult(authResult) {
     if (authResult) {
         //authorizeText.html("Logget ind med Google!");
         var token = gapi.auth.getToken();
-        $.getJSON('https://www.googleapis.com/oauth2/v1/tokeninfo?&access_token='+token.access_token, loggedIn);
+        $.getJSON('https://www.googleapis.com/oauth2/v1/tokeninfo?&access_token=' + token.access_token, loggedIn);
     } else {
         authorizeText.html("Log ind med Google!");
     }
@@ -763,13 +793,13 @@ function loggedIn(data) {
         var initDateString = $('#datepicker').val().split("/");
         getFood(initDateString[2] + initDateString[1] + initDateString[0]);
         //initialize the traening section
-        $('#traeningCenter').mask("Loading...",500);
+        $('#traeningCenter').mask("Loading...", 500);
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateTo, 'dateTo':dateTo });
         req.execute(function (data) {
             if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
                 $('#traeningCenter').unmask();
-            }else{
+            } else {
                 $('#traeningId').val("");
                 emptyTraining();
                 $('#traeningCenter').unmask();
@@ -781,33 +811,33 @@ function loggedIn(data) {
     }
 }
 //get the user from the database if it exists
-function getPersonal(user ){
+function getPersonal(user) {
     var req = gapi.client.trvagten.getPerson({'id':userId });
-    $('#personalDetails').mask("Loading...",1000);
-    try{
-    req.execute(function (data) {
-        if( data.id ){
-            $('#email').val(data.email);
-            $('#fname').val(data.fname);
-            $('#lastname').val(data.lname);
-            $('#gender').prop("selectedIndex",parseInt(data.gender));
-            $('#height').val(data.height);
-            $('#city').val( data.city);
-            $('#address').val(data.address);
-            $('#zipcode').val(data.zipcode);
-            $('#sports').val(data.priSport);
+    $('#personalDetails').mask("Loading...", 1000);
+    try {
+        req.execute(function (data) {
             $('#personalDetails').unmask();
-        }
-    });
-    }catch ( err ){
-        console.error( err.toString());
+            if (data.id) {
+                $('#email').val(data.email);
+                $('#fname').val(data.fname);
+                $('#lastname').val(data.lname);
+                $('#gender').prop("selectedIndex", parseInt(data.gender));
+                $('#height').val(data.height);
+                $('#city').val(data.city);
+                $('#address').val(data.address);
+                $('#zipcode').val(data.zipcode);
+                $('#sports').val(data.priSport);
+            }
+        });
+    } catch (err) {
         $('#personalDetails').unmask();
+        console.error(err.toString());
     }
 
 }
 //get the measurements for the last 30 days, if they are available
 function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
-    $('#measurements').mask("Loading...",1000);
+    $('#measurements').mask("Load & Save", 100);
     var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
     req.execute(function (data) {
         var d1 = [];
@@ -818,9 +848,9 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
             d2.push([i, data.items[i].stomac]);
             d3.push([i, data.items[i].fatPtc]);
         }
-        plot1.setData( [d1] );
-        plot2.setData( [d2] );
-        plot3.setData( [d3] );
+        plot1.setData([d1]);
+        plot2.setData([d2]);
+        plot3.setData([d3]);
 
         plot1.setupGrid();
         plot2.setupGrid();
@@ -849,37 +879,50 @@ function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
 
 //get food consumption for on day and fill the list and the consumption table.
 function getFood(date) {
+    /*Clean up the fields*/
     $('#listDay').empty();
+    $('#foodDayId').val("");
+    /*NOTE, the id is not the ID, but translated to foodDate in the endpoint.
+     * Thisd is done due to problems of updating the google API
+     * TODO make this the right way, id should be foodDate as in the database*/
     var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
-    req.execute(function (data) {
-        if (data.consumed) {
-            var cons = JSON.parse(data.consumed.value);
-            if (cons) {
-                for (i = 0; i < cons.length; i++) {
-                    getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
+    $('#consumedToday').mask("Loading...", 500);
+    try {
+        req.execute(function (data) {
+            $('#consumedToday').unmask();
+            if (data.consumed) {
+                $('#foodDayId').val(data.id);
+                var cons = JSON.parse(data.consumed.value);
+                if (cons) {
+                    for (i = 0; i < cons.length; i++) {
+                        getNutrients(cons[i].foodId, cons[i].foodWeight, cons[i].foodDate);
 
-                    $('#listDay').append($("<li id=remove_" + cons[i].foodId + " ></li>")
-                        .html("<input readonly type='text' class='invisible inDayList' id="
-                        + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
-                        + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                        $('#listDay').append($("<li id=remove_" + cons[i].foodId + " ></li>")
+                            .html("<input readonly type='text' class='invisible inDayList' id="
+                            + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
+                            + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                    }
                 }
             }
-        }
 
-    });
+        });
+    } catch (err) {
+        $('#consumedToday').unmask();
+        console.error(err.toString());
+    }
 }
 
 /*for download*/
-function getTraining( dateFrom, dateTo ){
-    var req = gapi.client.trvagten.listTraening( {'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo } );
-    req.execute(test = function(data){
-        alert( data.items.length);
+function getTraining(dateFrom, dateTo) {
+    var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+    req.execute(test = function (data) {
+        alert(data.items.length);
     });
 }
 
 function fillTraining(data) {
     /*empty first*/
-   emptyTraining();
+    emptyTraining();
     /*Fill in the collected values*/
     if (data) {
         $('#traeningId').val(data.id);
@@ -901,7 +944,7 @@ function fillTraining(data) {
     }
 }
 
-function emptyTraining(){
+function emptyTraining() {
     $('#traeningId').val("");
     $('#traeningType').prop("selectedIndex", 0);
     $('#total').val(0);
@@ -925,8 +968,8 @@ function emptyTraining(){
 /************************************************************************************************************************/
 
 //Convert a YYYYMMDD date to a DD/MM/YYYY date
-function toNormalDate( storeDate ){
-    return storeDate.toString().substr(6, 2) +"/"+storeDate.toString().substr(4, 2)+"/"+storeDate.toString().substr(0, 4)
+function toNormalDate(storeDate) {
+    return storeDate.toString().substr(6, 2) + "/" + storeDate.toString().substr(4, 2) + "/" + storeDate.toString().substr(0, 4)
 }
 
 //utility function to pad a number with leading zero's
@@ -946,12 +989,11 @@ validateInput = function (className) {
     $("." + className).each(function (index) {
         $(this).removeClass("inputError"); //reset the class to normal
         if (this.hasAttribute("digits")) { //must be a number
-            if( isNaN($(this).val())){
+            if (isNaN($(this).val())) {
                 $(this).addClass("inputError");
                 isNok = true;
-            }else
-            { //is a number OK, but is it too big
-                if( parseFloat($(this).val())> 100000){
+            } else { //is a number OK, but is it too big
+                if (parseFloat($(this).val()) > 100000) {
                     $(this).addClass("inputError");
                     isNok = true;
                 }
