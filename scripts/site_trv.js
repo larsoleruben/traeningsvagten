@@ -17,6 +17,8 @@ var totConsumedOBJ = { 'totEnergy':0, 'totFat':0, 'totCarbo':0, 'totProtein':0, 
 var clientId = "175552442718.apps.googleusercontent.com";
 var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
+var ROOT = "http://localhost:8888/_ah/api";
+//var ROOT = "https://datavagten.appspot.com/_ah/api";
 var userId = null; //is set on the first log in and by authentication
 
 //todays date
@@ -200,13 +202,13 @@ $(document).ready(function () {
         $('#measurements').mask("Loading...", 100);
         try {
             req.execute(function (data) {
+                $('#measurements').unmask();
                 if (data.items && data.items.length > 0) {
                     $('#measId').val(data.items[0].id);
                     $('#datepicker1').val(toNormalDate(data.items[0].measDate));
                     $('#weight').val(data.items[0].weight);
                     $('#stomac').val(data.items[0].stomac);
                     $('#fatPtc').val(data.items[0].fatPtc);
-                    $('#personalDetails').unmask();
                 } else //reset everything to zero except the datepicker field
                 {
                     $('#measId').val("");
@@ -293,6 +295,7 @@ $(document).ready(function () {
                 var req = gapi.client.trvagten.updateMeasurements(measurements);
             }
             try {
+                $('#measurements').mask("Saving...", 100);
                 req.execute(function (measurements) {
                     $('#measId').val(measurements['id']);
                     $('#datepicker1').val(toNormalDate(measurements.measDate));
@@ -303,6 +306,7 @@ $(document).ready(function () {
                     dateFromObj.setDate(dag.getDate() - 14);
                     var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
                     var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
+                    $('#measurements').unmask();
                     getPersonalMeasurements(dateFrom, dateTo, false);
                 });
             } catch (err) {
@@ -449,31 +453,45 @@ $(document).ready(function () {
         var dateFrom = dateString3[2] + dateString3[1] + dateString3[0];
         var dateTo = dateString4[2] + dateString4[1] + dateString4[0];
         var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
-        req.execute(function (data) {
-            data.items.sort(function (a, b) {
-                return parseInt(a.doneDate) - parseInt(b.doneDate)
+        $('#trSessions').mask("Loading....", 100);
+        try {
+            req.execute(function (data) {
+                $('#trSessions').unmask();
+                data.items.sort(function (a, b) {
+                    return parseInt(a.doneDate) - parseInt(b.doneDate)
+                });
+                var dlFile = "Download data from "+ $('#datepicker3').val() + " to "+$('#datepicker4').val()+"\n";
+                dlFile += 'Dato,Type,Total Tid,Tid i Max Zone, Tid i AT Zone, Tid i Sub At Zone, Tid i Intensiv Grundtræning Zone, Tid med Power, Funktionel Styrketræning gentagelser' +
+                    ' Distance, Energi, Sted, Intensitet, Kommnetarer \n';
+                for (i = 0; i < data.items.length; i++) {
+                    $("#tblTrSessions tbody").append("<tr>" +
+                        "<td>" + data.items[i].doneDate + "</td>" +
+                        "<td>" + $('#traeningType option')[parseInt(data.items[i].trainingType)].innerHTML + "</td>" +
+                        "<td>" + data.items[i].totalTimeMin + "</td>" +
+                        "<td>" + data.items[i].maxTime + "</td>" +
+                        "<td>" + data.items[i].atTime + "</td>" +
+                        "<td>" + data.items[i].subAtTime + "</td>" +
+                        "<td>" + data.items[i].ig + "</td>" +
+                        "<td>" + data.items[i].power + "</td>" +
+                        "<td>" + data.items[i].fs + "</td>" +
+                        "<td>" + data.items[i].distance + "</td>" +
+                        "<td>" + data.items[i].energy + "</td>" +
+                        "<td>" + data.items[i].place + "</td>" +
+                        "<td>" + data.items[i].percievedIntensity + "</td>" +
+                        "<td>" + data.items[i].comments + "</td>" +
+                        "</tr>");
+                    dlFile = dlFile + data.items[i].doneDate +','+ data.items[i].totalTimeMin+','+data.items[i].maxTime+','+data.items[i].atTime+','+data.items[i].subAtTime
+                                    + ','+data.items[i].ig+','+data.items[i].power+','+data.items[i].fs+','+data.items[i].distance+','+data.items[i].energy+','+data.items[i].place
+                                    +','+data.items[i].percievedIntensity+','+data.items[i].comments+'\n';
+                }
+                var dlData="<a href='data:text;charset=utf-8,"+ encodeURI(dlFile)+"' >Download dine data og gem som .csv fil</a>";
+                $('#dlLink').html( dlData);
             });
-            /*TODO make the rainingtype into the strings and not the index :-) */
-            for (i = 0; i < data.items.length; i++) {
-                $("#tblTrSessions tbody").append("<tr>" +
-                    "<td>" + data.items[i].doneDate + "</td>" +
-                    "<td>" + $('#traeningType option')[parseInt(data.items[i].trainingType)].innerHTML + "</td>" +
-                    "<td>" + data.items[i].totalTimeMin + "</td>" +
-                    "<td>" + data.items[i].maxTime + "</td>" +
-                    "<td>" + data.items[i].atTime + "</td>" +
-                    "<td>" + data.items[i].subAtTime + "</td>" +
-                    "<td>" + data.items[i].ig + "</td>" +
-                    "<td>" + data.items[i].power + "</td>" +
-                    "<td>" + data.items[i].fs + "</td>" +
-                    "<td>" + data.items[i].distance + "</td>" +
-                    "<td>" + data.items[i].energy + "</td>" +
-                    "<td>" + data.items[i].place + "</td>" +
-                    "<td>" + data.items[i].percievedIntensity + "</td>" +
-                    "<td>" + data.items[i].comments + "</td>" +
-                    "</tr>");
-            }
-        });
-        $("#trSessions").dialog("open");
+            $("#trSessions").dialog("open");
+        } catch (err) {
+            $('#trSessions').mask("Loading....", 100);
+            console.error(err.toString());
+        }
     });
 
     $("#trSessions").dialog({
@@ -757,7 +775,8 @@ function loadGapi() {
     window.setTimeout(checkAuth, 1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
-    gapi.client.load('trvagten', 'v1');
+    //gapi.client.load('trvagten', 'v1');
+    gapi.client.load('trvagten', 'v1', function(){}, ROOT);
 }
 
 /*Check if we are autehnticated yet*/
@@ -837,7 +856,7 @@ function getPersonal(user) {
 }
 //get the measurements for the last 30 days, if they are available
 function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
-    $('#measurements').mask("Load & Save", 100);
+    $('#measurements').mask("Loading...", 100);
     var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
     req.execute(function (data) {
         var d1 = [];
