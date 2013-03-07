@@ -433,3 +433,9 @@ select{
     opacity: 0.5;
 }
 
+
+.ui-tooltip {
+    background: #ffff99;
+    opacity: 0.75;
+}
+

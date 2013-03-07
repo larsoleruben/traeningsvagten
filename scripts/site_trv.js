@@ -82,7 +82,14 @@ $(document).ready(function () {
     $('#oldMsieBrowser').hide();
 
 
-    $(document).tooltip();
+    $(function () {
+        $(document).tooltip({
+            position:{
+                my:"center bottom-20",
+                at:"center top",
+            }
+        });
+    });
 
     $('#search').focus();
 
@@ -527,7 +534,9 @@ $(document).ready(function () {
 
 });
 
-/*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP*/
+/***********************************************************************************************************************/
+/*End the on ducument load stuff Starting of stand alone functions, which the need to be due to JSONP                   */
+/***********************************************************************************************************************/
 
 /* object to contain all the stuff from one days consumption. */
 function objDailyConsumed(food_id, food_name, food_amount) {
@@ -608,7 +617,7 @@ function updateFood(foodValues) {
     for (var i = 0; i < foodValues.length; i++) {
         var singleObject = foodValues[i];
         $('#list').append($("<li></li>")
-            .html("<input readonly type='text' class='invisible' position=" + i + " id="
+            .html("<input readonly type='text' class='invisible' title='Dobbelklik for at tilføje' position=" + i + " id="
             + singleObject.FoodId + " value='"
             + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
