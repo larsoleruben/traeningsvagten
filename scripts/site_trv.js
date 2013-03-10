@@ -86,7 +86,7 @@ $(document).ready(function () {
         $(document).tooltip({
             position:{
                 my:"center bottom-20",
-                at:"center top",
+                at:"center top"
             }
         });
     });
@@ -347,6 +347,7 @@ $(document).ready(function () {
             person['address'] = $('#address').val();
             person['zipcode'] = $('#zipcode').val();
             person['email'] = $('#email').val();
+            person['restMetabolism'] = $('#restMetabolism').val();
 
             var req;
             //req = gapi.client.traeningsvagten.person.insert(person);
@@ -363,6 +364,7 @@ $(document).ready(function () {
                     $('#address').val(data.address);
                     $('#zipcode').val(data.zipcode);
                     $('#sports').val(data.priSport);
+                    $('#restMetabolism').val(data.restMetabolism);
                 });
             } catch (err) {
                 console.error(err.toString());
@@ -855,6 +857,7 @@ function getPersonal(user) {
                 $('#address').val(data.address);
                 $('#zipcode').val(data.zipcode);
                 $('#sports').val(data.priSport);
+                $('#restMetabolism').val(data.restMetabolism);
             }
         });
     } catch (err) {
