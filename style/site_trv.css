@@ -437,5 +437,6 @@ select{
 .ui-tooltip {
     background: #ffff99;
     opacity: 0.75;
+    border-radius: 5px;
 }
 
