@@ -17,7 +17,7 @@ var totConsumedOBJ = { 'totEnergy':0, 'totFat':0, 'totCarbo':0, 'totProtein':0, 
 var clientId = "175552442718.apps.googleusercontent.com";
 var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
-var ROOT = "http://localhost:8888/_ah/api";
+var ROOT = "http://localhost:8888/_ah/api";  //select the appropiate root, test or production
 //var ROOT = "https://datavagten.appspot.com/_ah/api";
 var userId = null; //is set on the first log in and by authentication
 
@@ -418,7 +418,7 @@ $(document).ready(function () {
         } else {
             $('#traeningCenter').unmask();
             $('#inputValidatorDialog').dialog("open");
-        }
+    }
 
     });
 

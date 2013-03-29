@@ -422,12 +422,7 @@ select{
     margin-left: 4px;
 }
 
-.inputError{
-    color: red;
-    font-weight: bold;
-    border-width: 5px;
-    border-color: red;
-}
+
 
 #loading{
     opacity: 0.5;
