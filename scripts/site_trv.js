@@ -869,43 +869,51 @@ function getPersonal(user) {
 //get the measurements for the last 30 days, if they are available
 function getPersonalMeasurements(dateFrom, dateTo, doUpdate) {
     $('#measurements').mask("Loading...", 100);
-    var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+    var req = gapi.client.trvagten.listMeasurements({'userId': userId, 'dateFrom': dateFrom, 'dateTo': dateTo });
     req.execute(function (data) {
-        var d1 = [];
-        var d2 = [];
-        var d3 = [];
-        for (i = 0; i < data.items.length; i++) {
-            d1.push([i, data.items[i].weight]);
-            d2.push([i, data.items[i].stomac]);
-            d3.push([i, data.items[i].fatPtc]);
-        }
-        plot1.setData([d1]);
-        plot2.setData([d2]);
-        plot3.setData([d3]);
+        try {
+            var d1 = [];
+            var d2 = [];
+            var d3 = [];
 
-        plot1.setupGrid();
-        plot2.setupGrid();
-        plot3.setupGrid();
-        plot1.draw();
-        plot2.draw();
-        plot3.draw();
+            for (i = 0; i < data.items.length; i++) {
+                d1.push([i, data.items[i].weight]);
+                d2.push([i, data.items[i].stomac]);
+                d3.push([i, data.items[i].fatPtc]);
+            }
+            plot1.setData([d1]);
+            plot2.setData([d2]);
+            plot3.setData([d3]);
+
+            plot1.setupGrid();
+            plot2.setupGrid();
+            plot3.setupGrid();
+            plot1.draw();
+            plot2.draw();
+            plot3.draw();
 
 
-        //should the personal measurements form be updated?
-        if (doUpdate) {
-            data.items.sort(function (a, b) {
-                return parseInt(a.measDate) - parseInt(b.measDate)
-            });
-            var latestMeas = data.items[data.items.length - 1];
-            //set the form with the latest figures if there are any for this day (maybe).
-            $('#measId').val(latestMeas.id);
-            $('#datepicker1').val(toNormalDate(latestMeas.measDate));
-            $('#weight').val(latestMeas.weight);
-            $('#stomac').val(latestMeas.stomac);
-            $('#fatPtc').val(latestMeas.fatPtc);
+            //should the personal measurements form be updated?
+
+            if (doUpdate && data.items.length > 0) {
+                data.items.sort(function (a, b) {
+                    return parseInt(a.measDate) - parseInt(b.measDate)
+                });
+                var latestMeas = data.items[data.items.length - 1];
+                //set the form with the latest figures if there are any for this day (maybe).
+                $('#measId').val(latestMeas.id);
+                $('#datepicker1').val(toNormalDate(latestMeas.measDate));
+                $('#weight').val(latestMeas.weight);
+                $('#stomac').val(latestMeas.stomac);
+                $('#fatPtc').val(latestMeas.fatPtc);
+            }
+        } catch (err) {
+            $('#measurements').unmask();
+            console.error(err.toString());
         }
         $('#measurements').unmask();
     });
+
 }
 
 //get food consumption for on day and fill the list and the consumption table.
@@ -914,7 +922,7 @@ function getFood(date) {
     $('#listDay').empty();
     $('#foodDayId').val("");
     /*NOTE, the id is not the ID, but translated to foodDate in the endpoint.
-     * Thisd is done due to problems of updating the google API
+     * This is done due to problems of updating the google API
      * TODO make this the right way, id should be foodDate as in the database*/
     var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
     $('#consumedToday').mask("Loading...", 500);
@@ -1013,7 +1021,7 @@ var lpad = function (value, padding) {
 }
 
 /*input validation made simple*/
-/*TODO make it more generic with the lengt and min and max of the numbers.*/
+/*TODO make it more generic with the length and min and max of the numbers.*/
 var validateInput;
 validateInput = function (className) {
     var isNok = false;
