@@ -17,8 +17,8 @@ var totConsumedOBJ = { 'totEnergy':0, 'totFat':0, 'totCarbo':0, 'totProtein':0, 
 var clientId = "175552442718.apps.googleusercontent.com";
 var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
-var ROOT = "http://localhost:8888/_ah/api";  //select the appropiate root, test or production
-//var ROOT = "https://datavagten.appspot.com/_ah/api";
+//var ROOT = "http://localhost:8888/_ah/api";  //select the appropiate root, test or production
+var ROOT = "https://datavagten.appspot.com/_ah/api";
 var userId = null; //is set on the first log in and by authentication
 
 //todays date
@@ -648,11 +648,11 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
                 $('#satfat').html(totConsumedOBJ.totSatFat.toFixed(2).toString());
             case "0005":
                 totConsumedOBJ.totMonoUnsatFat += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#monounsatfat').html(totConsumedOBJ.totSatFat.toFixed(2).toString());
+                $('#monounsatfat').html(totConsumedOBJ.totMonoUnsatFat.toFixed(2).toString());
                 break;
             case "0007":
                 totConsumedOBJ.totCarbo += parseFloat(nutrients[i].BestLoc) * amount;
-                $('#carbohydrates').html(totConsumedOBJ.totMonoUnsatFat.toFixed(2).toString());
+                $('#carbohydrates').html(totConsumedOBJ.totCarbo.toFixed(2).toString());
                 break;
             case "0010":
                 totConsumedOBJ.totFiber += parseFloat(nutrients[i].BestLoc) * amount;
