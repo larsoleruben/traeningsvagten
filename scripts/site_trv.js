@@ -10,12 +10,12 @@
 var focusedInput = null;
 /*Currently selected object when choosing the element of the day*/
 var curSelFoodObj = null;
-var totConsumedOBJ = { 'totEnergy':0, 'totFat':0, 'totCarbo':0, 'totProtein':0, 'totAlcohol':0, 'totFiber':0, 'totCholesterol':0, 'totSatFat':0,
-    'totMonoUnsatFat':0, 'totSodium':0, 'totPotassium':0, 'totMagnesium':0, 'totIron':0, 'totWater':0, 'totAmount':0 }  //array to hold daily consumption of food
+var totConsumedOBJ = { 'totEnergy': 0, 'totFat': 0, 'totCarbo': 0, 'totProtein': 0, 'totAlcohol': 0, 'totFiber': 0, 'totCholesterol': 0, 'totSatFat': 0,
+    'totMonoUnsatFat': 0, 'totSodium': 0, 'totPotassium': 0, 'totMagnesium': 0, 'totIron': 0, 'totWater': 0, 'totAmount': 0 };  //array to hold daily consumption of food
 
 /*Google authentication stuff*/
 var clientId = "175552442718.apps.googleusercontent.com";
-var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
+//var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
 //var ROOT = "http://localhost:8888/_ah/api";  //select the appropiate root, test or production
 var ROOT = "https://datavagten.appspot.com/_ah/api";
@@ -44,17 +44,17 @@ $(document).ready(function () {
     plot1 = $.plot($("#graphWeight"), [
         [0, 0]
     ], {
-        grid:{borderWidth:0}
+        grid: {borderWidth: 0}
     });
     plot2 = $.plot($("#graphStomac"), [
         [0, 0]
     ], {
-        grid:{borderWidth:0}
+        grid: {borderWidth: 0}
     });
     plot3 = $.plot($("#graphFat"), [
         [0, 0]
     ], {
-        grid:{borderWidth:0}
+        grid: {borderWidth: 0}
     });
 
     /* Start load function Declarations */
@@ -84,9 +84,9 @@ $(document).ready(function () {
 
     $(function () {
         $(document).tooltip({
-            position:{
-                my:"center bottom-20",
-                at:"center top"
+            position: {
+                my: "center bottom-20",
+                at: "center top"
             }
         });
     });
@@ -145,13 +145,13 @@ $(document).ready(function () {
 
     /*setting up the dialog popup form*/
     $("#dialog-form").dialog({
-        autoOpen:false,
-        hide:"explode",
-        height:300,
-        width:250,
-        modal:true,
-        buttons:{
-            "Tilføj:":function () {
+        autoOpen: false,
+        hide: "explode",
+        height: 300,
+        width: 250,
+        modal: true,
+        buttons: {
+            "Tilføj:": function () {
                 if (checkInput($('#amount').val(), "num")) {
                     //new way with ipad compatible list boxes
                     addToDay(parseFloat($('#amount').val()));
@@ -159,7 +159,7 @@ $(document).ready(function () {
                     $(this).dialog("close");
                 }
             },
-            Cancel:function () {
+            Cancel: function () {
                 $('.validateTips').html("");
                 $('#search').focus().val("");
                 $(this).dialog("close");
@@ -177,7 +177,7 @@ $(document).ready(function () {
 
     //setting up the datepicker for food
     $('#datepicker').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
-    $("#datepicker").datepicker({ dateFormat:"dd/mm/yy" });
+    $("#datepicker").datepicker({ dateFormat: "dd/mm/yy" });
     //Catching the datepicker change events
     $('#datepicker').change(function () {
         var counter = 0;
@@ -185,8 +185,9 @@ $(document).ready(function () {
         rows.each(function (index) {
             this.cells[1].innerHTML = "0.00";
         });
-        var keys = Object.keys(totConsumedOBJ);
-        for (var i = keys.length; i--;) {
+        var i, keys;
+        keys = Object.keys(totConsumedOBJ);
+        for (i = keys.length; i--;) {
             totConsumedOBJ[keys[i]] = 0;
         }
         var dateString = $('#datepicker').val().split("/");
@@ -197,7 +198,7 @@ $(document).ready(function () {
 
     //setting up the datepicker1 personal measurements
     $('#datepicker1').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
-    $('#datepicker1').datepicker({ dateFormat:"dd/mm/yy" });
+    $('#datepicker1').datepicker({ dateFormat: "dd/mm/yy" });
 
     //Catching the datepicker 1 change events
     $('#datepicker1').change(function () {
@@ -205,7 +206,7 @@ $(document).ready(function () {
         //The same date both to and from
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
-        var req = gapi.client.trvagten.listMeasurements({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        var req = gapi.client.trvagten.listMeasurements({'userId': userId, 'dateFrom': dateFrom, 'dateTo': dateTo });
         $('#measurements').mask("Loading...", 100);
         try {
             req.execute(function (data) {
@@ -266,12 +267,13 @@ $(document).ready(function () {
             item.foodName = $(this).val();
             consumed.push(item);
         });
-        food.consumed = JSON.stringify(consumed)
+        food.consumed = JSON.stringify(consumed);
         $('#consumedToday').mask("Saving...", 500);
+        var req;
         if ($('#foodDayId').val() != null) {
-            var req = gapi.client.trvagten.insertFood(food);
+            req = gapi.client.trvagten.insertFood(food);
         } else {
-            var req = gapi.client.trvagten.updateFood(food);
+            req = gapi.client.trvagten.updateFood(food);
         }
         try {
             req.execute(function (foodData) {
@@ -312,7 +314,7 @@ $(document).ready(function () {
                     var dateFromObj = new Date();
                     dateFromObj.setDate(dag.getDate() - 14);
                     var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
-                    var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
+                    var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)); //todays date in the format
                     $('#measurements').unmask();
                     getPersonalMeasurements(dateFrom, dateTo, false);
                 });
@@ -328,8 +330,8 @@ $(document).ready(function () {
 
     /*Autehnticate by clicking the Google logo image*/
     $('a#loginAref').click(function () {
-        gapi.auth.authorize({client_id:clientId,
-            scope:scopes, immediate:false}, handleAuthResult);
+        gapi.auth.authorize({client_id: clientId,
+            scope: scopes, immediate: false}, handleAuthResult);
         return false;
     });
 
@@ -418,7 +420,7 @@ $(document).ready(function () {
         } else {
             $('#traeningCenter').unmask();
             $('#inputValidatorDialog').dialog("open");
-    }
+        }
 
     });
 
@@ -426,12 +428,12 @@ $(document).ready(function () {
     //setting up the datepicker1 traening measurements
     $('#datePicker2').datepicker();
     $('#datepicker2').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
-    $('#datepicker2').datepicker({ dateFormat:"dd/mm/yy" });
+    $('#datepicker2').datepicker({ dateFormat: "dd/mm/yy" });
     $('#datepicker2').change(function () {
         var dateString = $('#datepicker2').val().split("/");
         var dateFrom = dateString[2] + dateString[1] + dateString[0];
         var dateTo = dateString[2] + dateString[1] + dateString[0];
-        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        var req = gapi.client.trvagten.listTraening({'userId': userId, 'dateFrom': dateFrom, 'dateTo': dateTo });
         $('#traeningCenter').mask("Loading...", 500);
         req.execute(function (data) {
             $('#traeningCenter').unmask();
@@ -446,11 +448,11 @@ $(document).ready(function () {
 
     $('#datePicker3').datepicker();
     $('#datepicker3').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
-    $('#datepicker3').datepicker({ dateFormat:"dd/mm/yy" });
+    $('#datepicker3').datepicker({ dateFormat: "dd/mm/yy" });
 
     $('#datePicker4').datepicker();
     $('#datepicker4').val(lpad(dag.getDate(), 2) + '/' + lpad(dag.getMonth() + 1, 2) + '/' + dag.getFullYear());
-    $('#datepicker4').datepicker({ dateFormat:"dd/mm/yy" });
+    $('#datepicker4').datepicker({ dateFormat: "dd/mm/yy" });
 
 
     $('#getTraning').button().click(function () {
@@ -461,7 +463,7 @@ $(document).ready(function () {
         var dateString4 = $('#datepicker4').val().split("/");
         var dateFrom = dateString3[2] + dateString3[1] + dateString3[0];
         var dateTo = dateString4[2] + dateString4[1] + dateString4[0];
-        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+        var req = gapi.client.trvagten.listTraening({'userId': userId, 'dateFrom': dateFrom, 'dateTo': dateTo });
         $('#trSessions').mask("Loading....", 100);
         try {
             req.execute(function (data) {
@@ -469,7 +471,7 @@ $(document).ready(function () {
                 data.items.sort(function (a, b) {
                     return parseInt(a.doneDate) - parseInt(b.doneDate)
                 });
-                var dlFile = "Download data from "+ $('#datepicker3').val() + " to "+$('#datepicker4').val()+"\n";
+                var dlFile = "Download data from " + $('#datepicker3').val() + " to " + $('#datepicker4').val() + "\n";
                 dlFile += 'Dato,Type,Total Tid,Tid i Max Zone, Tid i AT Zone, Tid i Sub At Zone, Tid i Intensiv Grundtræning Zone, Tid med Power, Funktionel Styrketræning gentagelser' +
                     ' Distance, Energi, Sted, Intensitet, Kommnetarer \n';
                 for (i = 0; i < data.items.length; i++) {
@@ -489,12 +491,12 @@ $(document).ready(function () {
                         "<td>" + data.items[i].percievedIntensity + "</td>" +
                         "<td>" + data.items[i].comments + "</td>" +
                         "</tr>");
-                    dlFile = dlFile + data.items[i].doneDate +','+ data.items[i].totalTimeMin+','+data.items[i].maxTime+','+data.items[i].atTime+','+data.items[i].subAtTime
-                                    + ','+data.items[i].ig+','+data.items[i].power+','+data.items[i].fs+','+data.items[i].distance+','+data.items[i].energy+','+data.items[i].place
-                                    +','+data.items[i].percievedIntensity+','+data.items[i].comments+'\n';
+                    dlFile = dlFile + data.items[i].doneDate + ',' + data.items[i].totalTimeMin + ',' + data.items[i].maxTime + ',' + data.items[i].atTime + ',' + data.items[i].subAtTime
+                        + ',' + data.items[i].ig + ',' + data.items[i].power + ',' + data.items[i].fs + ',' + data.items[i].distance + ',' + data.items[i].energy + ',' + data.items[i].place
+                        + ',' + data.items[i].percievedIntensity + ',' + data.items[i].comments + '\n';
                 }
-                var dlData="<a href='data:text;charset=utf-8,"+ encodeURI(dlFile)+"' >Download dine data og gem som .csv fil</a>";
-                $('#dlLink').html( dlData);
+                var dlData = "<a href='data:text;charset=utf-8," + encodeURI(dlFile) + "' >Download dine data og gem som .csv fil</a>";
+                $('#dlLink').html(dlData);
             });
             $("#trSessions").dialog("open");
         } catch (err) {
@@ -504,11 +506,11 @@ $(document).ready(function () {
     });
 
     $("#trSessions").dialog({
-        autoOpen:false,
-        hide:"explode",
-        height:300,
-        width:1200,
-        modal:true
+        autoOpen: false,
+        hide: "explode",
+        height: 300,
+        width: 1200,
+        modal: true
     });
 
     /*End All the save training stuff from here*/
@@ -516,21 +518,21 @@ $(document).ready(function () {
     /*validation dialog*/
 
     $('#inputValidatorDialog').dialog({
-        autoOpen:false,
-        hide:"explode",
-        height:200,
-        width:300,
-        modal:true
+        autoOpen: false,
+        hide: "explode",
+        height: 200,
+        width: 300,
+        modal: true
     });
 
     /*Browser validation dialog*/
     $('#checkForIe').dialog(
         {
-            autoOpen:false,
-            hide:"explode",
-            height:200,
-            width:300,
-            modal:true
+            autoOpen: false,
+            hide: "explode",
+            height: 200,
+            width: 300,
+            modal: true
         }
     )
 
@@ -620,8 +622,8 @@ function updateFood(foodValues) {
         var singleObject = foodValues[i];
         $('#list').append($("<li></li>")
             .html("<input readonly type='text' class='invisible' title='Dobbelklik for at tilføje' position=" + i + " id="
-            + singleObject.FoodId + " value='"
-            + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                + singleObject.FoodId + " value='"
+                + singleObject.DanName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
     }
     $('#searchFood').unmask();
 }
@@ -646,6 +648,7 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
             case "0004":
                 totConsumedOBJ.totSatFat += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#satfat').html(totConsumedOBJ.totSatFat.toFixed(2).toString());
+                break;
             case "0005":
                 totConsumedOBJ.totMonoUnsatFat += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#monounsatfat').html(totConsumedOBJ.totMonoUnsatFat.toFixed(2).toString());
@@ -657,7 +660,7 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
             case "0010":
                 totConsumedOBJ.totFiber += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#fiber').html(totConsumedOBJ.totFiber.toFixed(2).toString());
-                break
+                break;
             case "0011":
                 totConsumedOBJ.totAlcohol += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#alcohol').html(totConsumedOBJ.totAlcohol.toFixed(2).toString());
@@ -677,6 +680,7 @@ function updateNutrients(nutrients, foodAmount, foodDate) {
             case "0057":
                 totConsumedOBJ.totPotassium += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#potassium').html(totConsumedOBJ.totPotassium.toFixed(2).toString());
+                break;
             case "0059":
                 totConsumedOBJ.totMagnesium += parseFloat(nutrients[i].BestLoc) * amount;
                 $('#magnesium').html(totConsumedOBJ.totMagnesium.toFixed(2).toString());
@@ -782,18 +786,19 @@ function captureLastFocusedInput(fip) {
 /*the authentication stuff first load the google authentication API*/
 function loadGapi() {
     // Set the API key
-    gapi.client.setApiKey(apiKey);
+    //gapi.client.setApiKey(apiKey);
     window.setTimeout(checkAuth, 1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
     //gapi.client.load('trvagten', 'v1');
-    gapi.client.load('trvagten', 'v1', function(){}, ROOT);
+    gapi.client.load('trvagten', 'v1', function () {
+    }, ROOT);
 }
 
 /*Check if we are autehnticated yet*/
 function checkAuth() {
-    gapi.auth.authorize({client_id:clientId,
-        scope:scopes, immediate:true}, handleAuthResult);
+    gapi.auth.authorize({client_id: clientId,
+        scope: scopes, immediate: true}, handleAuthResult);
 }
 
 function handleAuthResult(authResult) {
@@ -817,14 +822,14 @@ function loggedIn(data) {
         var dateFromObj = new Date();
         dateFromObj.setDate(dag.getDate() - 14);
         var dateFrom = dateFromObj.getFullYear() + lpad(dateFromObj.getMonth() + 1, 2) + lpad(dateFromObj.getDate(), 2); //getting the last two weeks
-        var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)) //todays date in the format
+        var dateTo = parseInt(dag.getFullYear() + lpad(dag.getMonth() + 1, 2) + lpad(dag.getDate(), 2)); //todays date in the format
         getPersonalMeasurements(dateFrom, dateTo, true);
         //initialize the food selection for the actual day;
         var initDateString = $('#datepicker').val().split("/");
         getFood(initDateString[2] + initDateString[1] + initDateString[0]);
         //initialize the traening section
         $('#traeningCenter').mask("Loading...", 500);
-        var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateTo, 'dateTo':dateTo });
+        var req = gapi.client.trvagten.listTraening({'userId': userId, 'dateFrom': dateTo, 'dateTo': dateTo });
         req.execute(function (data) {
             if (data.items && data.items.length == 1) {
                 fillTraining(data.items[0]);
@@ -842,7 +847,7 @@ function loggedIn(data) {
 }
 //get the user from the database if it exists
 function getPersonal(user) {
-    var req = gapi.client.trvagten.getPerson({'id':userId });
+    var req = gapi.client.trvagten.getPerson({'id': userId });
     $('#personalDetails').mask("Loading...", 1000);
     try {
         req.execute(function (data) {
@@ -924,7 +929,7 @@ function getFood(date) {
     /*NOTE, the id is not the ID, but translated to foodDate in the endpoint.
      * This is done due to problems of updating the google API
      * TODO make this the right way, id should be foodDate as in the database*/
-    var req = gapi.client.trvagten.getFood({'id':date, 'userId':userId});
+    var req = gapi.client.trvagten.getFood({'id': date, 'userId': userId});
     $('#consumedToday').mask("Loading...", 500);
     try {
         req.execute(function (data) {
@@ -938,8 +943,8 @@ function getFood(date) {
 
                         $('#listDay').append($("<li id=remove_" + cons[i].foodId + " ></li>")
                             .html("<input readonly type='text' class='invisible inDayList' id="
-                            + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
-                            + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
+                                + cons[i].foodId + " amount=" + cons[i].foodWeight + " value='"
+                                + cons[i].foodName + "' ondblclick=addFunction(this); onkeydown='eventFunction(event)' onfocus='captureLastFocusedInput(this)';   ></input>"));
                     }
                 }
             }
@@ -953,7 +958,7 @@ function getFood(date) {
 
 /*for download*/
 function getTraining(dateFrom, dateTo) {
-    var req = gapi.client.trvagten.listTraening({'userId':userId, 'dateFrom':dateFrom, 'dateTo':dateTo });
+    var req = gapi.client.trvagten.listTraening({'userId': userId, 'dateFrom': dateFrom, 'dateTo': dateTo });
     req.execute(test = function (data) {
         alert(data.items.length);
     });
@@ -1018,7 +1023,7 @@ var lpad = function (value, padding) {
         zeroes += "0";
     }
     return (zeroes + value).slice(padding * -1);
-}
+};
 
 /*input validation made simple*/
 /*TODO make it more generic with the length and min and max of the numbers.*/
