@@ -14,7 +14,7 @@ var totConsumedOBJ = { 'totEnergy': 0, 'totFat': 0, 'totCarbo': 0, 'totProtein':
     'totMonoUnsatFat': 0, 'totSodium': 0, 'totPotassium': 0, 'totMagnesium': 0, 'totIron': 0, 'totWater': 0, 'totAmount': 0 };  //array to hold daily consumption of food
 
 /*Google authentication stuff*/
-var clientId = "175552442718.apps.googleusercontent.com";
+var clientId = "175552442718-vkbo9tgk57oscftecsiq66u0cd9ifibv.apps.googleusercontent.com";
 //var apiKey = 'AIzaSyCR1g1KlqQBGLbu7c4BmknWCD3X7_Tu0Jk';
 var scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" ];
 //var ROOT = "http://localhost:8888/_ah/api";  //select the appropiate root, test or production
@@ -790,7 +790,7 @@ function loadGapi() {
     window.setTimeout(checkAuth, 1000);
     // Set: name of service, version and callback function
     //gapi.client.load('traeningsvagten', 'v1', getPersons);
-    //gapi.client.load('trvagten', 'v1');
+    //gapi.client.load('datavagten', 'v1');
     gapi.client.load('trvagten', 'v1', function () {
     }, ROOT);
 }
